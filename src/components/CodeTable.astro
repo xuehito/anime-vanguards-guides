@@ -10,7 +10,6 @@ interface Props {
   codes: CodeEntry[];
   emptyLabel?: string;
   showNew?: boolean;
-  /** Enable "Copy all" toolbar button for active lists */
   copyAll?: boolean;
   tableId?: string;
 }
@@ -38,6 +37,7 @@ const allCodesPayload = codes.map((c) => c.code).join('\n');
             type="button"
             class="btn btn--primary copy-all-btn"
             data-codes={allCodesPayload}
+            data-count={String(codes.length)}
             aria-label="Copy all active codes"
           >
             Copy all active
@@ -88,6 +88,16 @@ const allCodesPayload = codes.map((c) => c.code).join('\n');
 }
 
 <script>
+  declare function gtag(...args: unknown[]): void;
+
+  function track(name: string, params: Record<string, unknown>) {
+    try {
+      if (typeof gtag === 'function') gtag('event', name, params);
+    } catch {
+      /* ignore */
+    }
+  }
+
   async function copyText(text: string) {
     try {
       await navigator.clipboard.writeText(text);
@@ -139,7 +149,8 @@ const allCodesPayload = codes.map((c) => c.code).join('\n');
         const ok = await copyText(code);
         if (ok) {
           flashButton(btn, 'Copied!');
-          showToast('Copied. Next: invest rewards wisely → open Tier list.');
+          track('copy_code', { code_name: code });
+          showToast('Copied. Next: invest rewards wisely → open Tier list or Traits.');
         }
       });
     });
@@ -149,12 +160,13 @@ const allCodesPayload = codes.map((c) => c.code).join('\n');
       btn.dataset.bound = '1';
       btn.addEventListener('click', async () => {
         const codes = btn.dataset.codes ?? '';
+        const count = Number(btn.dataset.count ?? '0');
         const ok = await copyText(codes);
         if (ok) {
           flashButton(btn, 'All copied!');
-          const n = codes.split('\n').filter(Boolean).length;
+          track('copy_all', { code_count: count });
           showToast(
-            `${n} codes copied (one per line). Redeem in-game, then check the tier list.`,
+            `${count} codes copied (one per line). Redeem in-game, then check traits / tier list.`,
           );
         }
       });

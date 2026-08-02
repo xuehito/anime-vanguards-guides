@@ -7,8 +7,7 @@ interface Link {
 }
 
 interface Props {
-  /** Current page type to exclude from related */
-  current?: 'hub' | 'codes' | 'tier-list' | 'beginner' | 'guide' | string;
+  current?: string;
   heading?: string;
 }
 
@@ -37,6 +36,27 @@ const all: (Link & { id: string })[] = [
     tag: 'Meta',
   },
   {
+    id: 'traits',
+    href: '/anime-vanguards/traits/',
+    title: 'Traits & rerolls',
+    blurb: 'Where free code rerolls should go first.',
+    tag: 'Power',
+  },
+  {
+    id: 'evolve',
+    href: '/anime-vanguards/evolve/',
+    title: 'Evolution priority',
+    blurb: 'Who to evolve before you farm for a week.',
+    tag: 'Progress',
+  },
+  {
+    id: 'event',
+    href: '/anime-vanguards/event/',
+    title: 'Event playbook',
+    blurb: 'Limited content order: free rewards first.',
+    tag: 'Limited',
+  },
+  {
     id: 'hub',
     href: '/anime-vanguards/',
     title: 'Game hub',
@@ -45,7 +65,21 @@ const all: (Link & { id: string })[] = [
   },
 ];
 
-const links = all.filter((l) => l.id !== current).slice(0, 3);
+// Prefer contextual next steps depending on current page
+const preference: Record<string, string[]> = {
+  codes: ['traits', 'tier-list', 'beginner'],
+  beginner: ['codes', 'evolve', 'tier-list'],
+  'tier-list': ['traits', 'evolve', 'codes'],
+  traits: ['codes', 'tier-list', 'evolve'],
+  evolve: ['traits', 'tier-list', 'event'],
+  event: ['codes', 'tier-list', 'traits'],
+  hub: ['codes', 'beginner', 'tier-list'],
+  guide: ['codes', 'tier-list', 'beginner'],
+};
+
+const order = preference[current ?? 'guide'] ?? preference.guide;
+const byId = Object.fromEntries(all.map((l) => [l.id, l]));
+const links = order.map((id) => byId[id]).filter(Boolean).filter((l) => l.id !== current);
 ---
 
 {
@@ -54,7 +88,7 @@ const links = all.filter((l) => l.id !== current).slice(0, 3);
       <h2 id="related-heading">{heading}</h2>
       <div class="card-grid related__grid">
         {links.map((l) => (
-          <a class="card" href={l.href} data-related={l.id}>
+          <a class="card related-link" href={l.href} data-related={l.id}>
             <h3 class="related__title">{l.title}</h3>
             <p>{l.blurb}</p>
             {l.tag && <span class="tag">{l.tag}</span>}
@@ -64,3 +98,25 @@ const links = all.filter((l) => l.id !== current).slice(0, 3);
     </section>
   )
 }
+
+<script>
+  function trackRelated() {
+    document.querySelectorAll<HTMLAnchorElement>('a.related-link').forEach((a) => {
+      if (a.dataset.gaBound) return;
+      a.dataset.gaBound = '1';
+      a.addEventListener('click', () => {
+        const id = a.dataset.related ?? 'unknown';
+        // @ts-expect-error gtag optional
+        if (typeof gtag === 'function') {
+          // @ts-expect-error gtag
+          gtag('event', 'click_related', {
+            related_id: id,
+            link_url: a.href,
+          });
+        }
+      });
+    });
+  }
+  trackRelated();
+  document.addEventListener('astro:page-load', trackRelated);
+</script>

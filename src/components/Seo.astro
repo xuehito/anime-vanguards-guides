@@ -5,6 +5,7 @@ interface Props {
   canonical?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  image?: string;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   canonical,
   type = 'website',
   noindex = false,
+  image = '/og.png',
 } = Astro.props;
 
 const siteName = 'AV Guides';
@@ -20,6 +22,7 @@ const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 const canonicalURL = canonical
   ? new URL(canonical, Astro.site)
   : new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
 ---
 
 <meta charset="utf-8" />
@@ -33,8 +36,12 @@ const canonicalURL = canonical
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={siteName} />
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />

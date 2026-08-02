@@ -2,15 +2,21 @@
 const path = Astro.url.pathname;
 
 const links = [
-  { href: '/anime-vanguards/', label: 'Hub' },
   { href: '/anime-vanguards/codes/', label: 'Codes' },
-  { href: '/anime-vanguards/tier-list/', label: 'Tier List' },
+  { href: '/anime-vanguards/tier-list/', label: 'Tier' },
+  { href: '/anime-vanguards/traits/', label: 'Traits' },
   { href: '/anime-vanguards/beginner-guide/', label: 'Beginner' },
+  { href: '/anime-vanguards/', label: 'More' },
 ];
 
 function isCurrent(href: string) {
   if (href === '/anime-vanguards/') {
-    return path === '/anime-vanguards/' || path === '/anime-vanguards';
+    return (
+      path === '/anime-vanguards/' ||
+      path === '/anime-vanguards' ||
+      path.includes('/evolve') ||
+      path.includes('/event')
+    );
   }
   return path === href || path.startsWith(href);
 }

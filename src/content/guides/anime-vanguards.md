@@ -20,6 +20,9 @@ This site is an **unofficial** English guide hub focused on fast answers:
 - [All working codes →](/anime-vanguards/codes/)
 - [Unit tier list →](/anime-vanguards/tier-list/)
 - [Beginner guide →](/anime-vanguards/beginner-guide/)
+- [Traits & rerolls →](/anime-vanguards/traits/)
+- [Evolution priority →](/anime-vanguards/evolve/)
+- [Event playbook →](/anime-vanguards/event/)
 
 ### Official resources
 

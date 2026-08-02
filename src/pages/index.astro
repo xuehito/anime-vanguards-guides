@@ -38,25 +38,28 @@ const path = [
     href: '/anime-vanguards/codes/',
     title: 'Grab codes',
     blurb: 'Copy free Trait Rerolls and currency in under a minute.',
+    id: 'codes',
   },
   {
     step: '2',
     href: '/anime-vanguards/beginner-guide/',
     title: 'Learn the loop',
     blurb: 'What to farm first — and what not to waste gems on.',
+    id: 'beginner',
   },
   {
     step: '3',
     href: '/anime-vanguards/tier-list/',
     title: 'Pick investments',
     blurb: 'Who is worth Traits, evolution mats, and banners.',
+    id: 'tier-list',
   },
 ];
 ---
 
 <BaseLayout
   title="Anime Vanguards Codes & Tier List (2026) | Free Rewards Guide"
-  description="Working Anime Vanguards codes with copy buttons, Update 14.x unit tier list, and a beginner path for Roblox. Updated regularly."
+  description="Working Anime Vanguards codes with copy buttons, Update 14.x unit tier list, traits, evolve, and event guides for Roblox."
   wide
 >
   <section class="hero prose">
@@ -80,7 +83,7 @@ const path = [
       {
         path.map((p) => (
           <li>
-            <a class="path-card" href={p.href}>
+            <a class="path-card start-path-link" href={p.href} data-path={p.id}>
               <span class="path-card__step">{p.step}</span>
               <span class="path-card__title">{p.title}</span>
               <span class="path-card__blurb">{p.blurb}</span>
@@ -121,3 +124,22 @@ const path = [
     </p>
   </section>
 </BaseLayout>
+
+<script>
+  function bindStartPath() {
+    document.querySelectorAll<HTMLAnchorElement>('a.start-path-link').forEach((a) => {
+      if (a.dataset.gaBound) return;
+      a.dataset.gaBound = '1';
+      a.addEventListener('click', () => {
+        const id = a.dataset.path ?? 'unknown';
+        // @ts-expect-error gtag optional
+        if (typeof gtag === 'function') {
+          // @ts-expect-error gtag
+          gtag('event', 'click_start_path', { path_id: id });
+        }
+      });
+    });
+  }
+  bindStartPath();
+  document.addEventListener('astro:page-load', bindStartPath);
+</script>

@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
 import CodeTable from '../components/CodeTable.astro';
 import RelatedGuides from '../components/RelatedGuides.astro';
+import JsonLd from '../components/JsonLd.astro';
 
 interface CodeEntry {
   code: string;
@@ -35,13 +36,75 @@ const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString('en-US',
   day: 'numeric',
 });
 
-const relatedCurrent =
-  type === 'codes' || type === 'tier-list' || type === 'beginner' || type === 'hub'
-    ? type
-    : 'guide';
+const relatedTypes = new Set([
+  'hub',
+  'codes',
+  'tier-list',
+  'beginner',
+  'traits',
+  'evolve',
+  'event',
+]);
+const relatedCurrent = type && relatedTypes.has(type) ? type : 'guide';
+
+const codesFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Do Anime Vanguards codes expire?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Most event and milestone codes expire after a short window. Redeem as soon as you can.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are Anime Vanguards codes case-sensitive?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Usually yes. Use the Copy button and paste exactly into the in-game Codes panel.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why doesn’t an Anime Vanguards code work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Common reasons: already redeemed, expired, wrong spelling, level requirement not met, or an old server. Rejoin a fresh server and try again.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is this codes list official?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. This is an unofficial fan site. Codes originate from the developers; we aggregate them for faster redeeming.',
+      },
+    },
+  ],
+};
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: updated,
+  author: { '@type': 'Organization', name: 'AV Guides' },
+  publisher: { '@type': 'Organization', name: 'AV Guides', url: 'https://animevanguards.co/' },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, Astro.site).href,
+  },
+};
 ---
 
 <BaseLayout title={title} description={description} type="article">
+  <JsonLd data={articleLd} />
+  {type === 'codes' && <JsonLd data={codesFaq} />}
+
   <article class="prose">
     <header>
       <h1>{title}</h1>
@@ -84,14 +147,18 @@ const relatedCurrent =
             <ol class="after-redeem__list">
               <li>
                 Put free Trait Rerolls on a unit you will actually main — see the{' '}
-                <a href="/anime-vanguards/tier-list/">tier list</a>.
+                <a href="/anime-vanguards/tier-list/">tier list</a> and{' '}
+                <a href="/anime-vanguards/traits/">traits guide</a>.
               </li>
               <li>
                 New account? Follow the{' '}
                 <a href="/anime-vanguards/beginner-guide/">beginner path</a> before
                 spending gems.
               </li>
-              <li>Come back after the next update — codes drop around patches.</li>
+              <li>
+                Playing a limited mode? Read the{' '}
+                <a href="/anime-vanguards/event/">event playbook</a>.
+              </li>
             </ol>
           </div>
         </section>
