@@ -67,7 +67,7 @@ Set `SITE` so sitemap + canonical tags are correct:
 
 ```bash
 # local / CI
-SITE=https://yourdomain.com npm run build
+SITE=https://animevanguards.co npm run build
 ```
 
 ### Vercel
@@ -75,7 +75,7 @@ SITE=https://yourdomain.com npm run build
 1. Import the Git repo.
 2. Framework: **Astro** (or Other).
 3. Build: `npm run build` · Output: `dist`
-4. Env: `SITE=https://your-production-domain`
+4. Env: `SITE=https://animevanguards.co`
 
 `vercel.json` already adds basic security + long-cache headers for assets.
 
@@ -84,7 +84,7 @@ SITE=https://yourdomain.com npm run build
 1. New project → connect repo.
 2. Build command: `npm run build`
 3. Build output directory: `dist`
-4. Env var: `SITE=https://your-production-domain`
+4. Env var: `SITE=https://animevanguards.co`
 5. Node version: **22** (see `package.json` engines)
 
 `public/_headers` is copied into `dist` for CF header rules.
@@ -95,10 +95,12 @@ Same `dist/` artifact works on both. Point DNS (or use one host + the other as p
 
 ## Ads (later)
 
-1. Placeholder slots: `src/components/AdSlot.astro` (leaderboard / in-article / footer).
-2. When AdSense (or similar) is approved, add the loader script in `BaseLayout.astro` and paste `<ins class="adsbygoogle">` inside `AdSlot`.
-3. Keep Privacy Policy + Disclaimer updated.
-4. Reserved min-heights reduce CLS when ads load.
+Ad slots are **hidden by default** (no placeholders on the page).
+
+1. Slots stay wired in layouts via `AdSlot` (leaderboard / in-article / footer).
+2. Enable with env: `PUBLIC_ADS_ENABLED=true`
+3. When AdSense is approved, add the loader script in `BaseLayout.astro` and paste `<ins class="adsbygoogle">` inside `AdSlot`.
+4. Keep Privacy Policy + Disclaimer updated.
 
 ## SEO checklist
 
@@ -106,7 +108,8 @@ Same `dist/` artifact works on both. Point DNS (or use one host + the other as p
 - [x] Canonical + Open Graph basics
 - [x] `sitemap` integration (`@astrojs/sitemap`)
 - [x] `robots.txt`
-- [ ] Search Console + real domain in `SITE` / `robots.txt`
+- [x] Domain: `animevanguards.co` in `SITE` / `robots.txt`
+- [ ] Search Console verification after DNS is live
 - [ ] Replace contact email before launch
 
 ## License / affiliation
