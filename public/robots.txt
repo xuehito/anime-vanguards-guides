@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://animevanguards.co/sitemap.xml
 Sitemap: https://animevanguards.co/sitemap-index.xml
