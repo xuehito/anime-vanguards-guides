@@ -19,13 +19,21 @@ npm run build    # → dist/
 npm run preview  # preview production build
 ```
 
+## Ops (Route A)
+
+Full checklists:
+
+- Human: [`docs/ops-checklist.md`](docs/ops-checklist.md)
+- Agent skill: `/av-guides-site` → `.grok/skills/av-guides-site/references/ops-checklist.md`
+
 ## Update content (daily ops)
 
 | Task | File |
 |------|------|
-| Active / expired codes | `src/content/guides/anime-vanguards-codes.md` (YAML frontmatter) |
+| Active codes + archive by update | `src/content/guides/anime-vanguards-codes.md` (YAML frontmatter) |
+| Home patch / hot bar | `src/components/VersionHotBar.astro` |
 | Tier list prose | `src/content/guides/anime-vanguards-tier-list.md` |
-| Beginner guide | `src/content/guides/anime-vanguards-beginner-guide.md` |
+| Beginner / traits / evolve / event | `src/content/guides/anime-vanguards-*.md` |
 | Hub page | `src/content/guides/anime-vanguards.md` |
 
 For codes, edit only the frontmatter arrays:
