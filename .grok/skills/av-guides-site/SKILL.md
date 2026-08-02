@@ -46,18 +46,20 @@ Human copy: `docs/ops-checklist.md`
 
 ### When user says「更新 codes / 有新码 / sync codes」
 
-Execute **§1 Daily codes sync** in `references/ops-checklist.md` end-to-end:
+**Prefer automated script first:**
 
-1. Compare sources: Wiki Codes + Discord (+ changelog if patch day)
-2. Edit `src/content/guides/anime-vanguards-codes.md`:
-   - `updated: YYYY-MM-DD` (today)
-   - refresh `activeCodes` (only working)
-   - move dead codes into `archivedByUpdate` under the right Update title
-   - bump `title` month if needed; keep `patch` aligned
-3. `npm run build` must pass
-4. Commit + `git push origin main`
-5. `gh run watch` until success
-6. Smoke live Codes page (Last checked + active list)
+```bash
+cd /Users/starx/anime-vanguards-guides
+npm run sync:codes:dry    # preview
+npm run sync:codes        # write MD from Wiki active table
+npm run build
+```
+
+Then commit + push **or** let user merge the daily PR from `Sync codes from Wiki` workflow.
+
+If script fails or Discord has codes Wiki lacks: fall back to manual edit per `references/ops-checklist.md` §1.
+
+Scheduled automation: `.github/workflows/sync-codes.yml` (daily 12:00 UTC → PR on branch `chore/sync-codes-wiki`).
 
 ### When user says「周运营 / 每周检查 / weekly ops」
 

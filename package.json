@@ -10,7 +10,9 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/copy-sitemap.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync:codes": "node scripts/sync-codes-from-wiki.mjs",
+    "sync:codes:dry": "node scripts/sync-codes-from-wiki.mjs --dry-run"
   },
 
   "dependencies": {

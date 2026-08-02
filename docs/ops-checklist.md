@@ -6,14 +6,26 @@
 
 ---
 
-## 每日 / 有新码
+## 自动同步（方案 2）
 
-1. 对照 [Wiki Codes](https://wiki.vanguards.gg/Codes) + [Discord](https://discord.com/invite/animevanguards)
-2. 编辑 `src/content/guides/anime-vanguards-codes.md`
-   - 更新 `updated`、`activeCodes`
-   - 失效码移入 `archivedByUpdate`（按 Update 分组）
-   - 跨月改 `title` 里的月份
-3. `npm run build` → commit → `git push origin main`
+| 项 | 说明 |
+|----|------|
+| 脚本 | `npm run sync:codes` / `npm run sync:codes:dry` |
+| 定时 | GitHub Action `Sync codes from Wiki` — 每天 **12:00 UTC** |
+| 行为 | 抓 Wiki active 表 → 有 diff 则开 PR（**不直接推 main**） |
+| 手动 | Actions → Sync codes from Wiki → Run workflow |
+
+你需要做的：有 PR 时 **Review → Merge**，merge 后走原有 Cloudflare 部署。
+
+---
+
+## 每日 / 有新码（人工或 Agent）
+
+1. 对照 [Wiki Codes](https://wiki.vanguards.gg/Codes) + [Discord](https://discord.com/invite/animevanguards)  
+   或本地：`npm run sync:codes:dry` 看 diff
+2. 自动改：`npm run sync:codes` 或等定时 PR  
+   手动改：`src/content/guides/anime-vanguards-codes.md`
+3. `npm run build` → commit → `git push origin main`（或 merge PR）
 4. 等 GitHub Actions 绿
 5. 打开 https://animevanguards.co/anime-vanguards/codes/ 确认
 

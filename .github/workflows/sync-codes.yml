@@ -1,0 +1,77 @@
+# Daily sync of active codes from official Wiki → open PR if changed.
+# Manual: Actions → Sync codes from Wiki → Run workflow
+
+name: Sync codes from Wiki
+
+on:
+  schedule:
+    # 12:00 UTC daily (~ evening CN / morning US-ish depending on season)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-codes-wiki
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install (lockfile)
+        run: npm ci
+
+      - name: Sync codes from Wiki
+        id: sync
+        run: node scripts/sync-codes-from-wiki.mjs
+
+      - name: Verify build still works
+        if: steps.sync.outputs.changed == 'true'
+        run: npm run build
+        env:
+          SITE: https://animevanguards.co
+
+      - name: Create Pull Request
+        if: steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore(codes): sync active list from Wiki
+
+            Automated diff vs https://wiki.vanguards.gg/Codes
+            added=${{ steps.sync.outputs.added }} removed=${{ steps.sync.outputs.removed }}
+          title: 'chore(codes): sync active codes from Wiki'
+          body: |
+            ## Automated codes sync
+
+            Source: [wiki.vanguards.gg/Codes](https://wiki.vanguards.gg/Codes) (active table only).
+
+            | | |
+            |---|---|
+            | Added | `${{ steps.sync.outputs.added }}` (`${{ steps.sync.outputs.added_codes }}`) |
+            | Removed → archive | `${{ steps.sync.outputs.removed }}` (`${{ steps.sync.outputs.removed_codes }}`) |
+
+            ### Review checklist
+            - [ ] Spot-check rewards / level requirements vs Wiki
+            - [ ] Confirm removed codes should not stay active
+            - [ ] Merge to deploy via existing Cloudflare workflow
+
+            *Bot does not invent codes. If the Wiki parse fails, this job errors and does not open an empty wipe PR.*
+          branch: chore/sync-codes-wiki
+          delete-branch: true
+          labels: |
+            automated
+            codes

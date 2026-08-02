@@ -10,19 +10,18 @@ activeCodes:
   - code: "1DayL8"
     rewards: "500 Trait Rerolls"
     requirement: "Level 30"
-    new: true
   - code: "HeavyEyes"
     rewards: "50 Memoria Shards, 50 Extermination Tokens"
     requirement: "Level 30"
-    new: true
   - code: "ExecutionPart2"
-    rewards: "50 Trait Rerolls, 20 Copycat Tokens"
+    rewards: "50 Trait Rerolls, 20 Extermination Tokens"
     requirement: "Level 30"
-    new: true
-  - code: "kat"
-    rewards: "Meme / freebies"
-    requirement: "—"
 archivedByUpdate:
+  - update: "Auto-archived 2026-08-02 (Update 14.0)"
+    codes:
+      - code: "kat"
+        rewards: "Meme / freebies"
+        requirement: "—"
   - update: "Update 14.0 Part 1"
     codes:
       - code: "LateBP"

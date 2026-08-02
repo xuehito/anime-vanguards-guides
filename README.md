@@ -26,6 +26,15 @@ Full checklists:
 - Human: [`docs/ops-checklist.md`](docs/ops-checklist.md)
 - Agent skill: `/av-guides-site` → `.grok/skills/av-guides-site/references/ops-checklist.md`
 
+### Auto codes sync (Wiki → PR)
+
+```bash
+npm run sync:codes:dry   # preview
+npm run sync:codes       # write activeCodes from Wiki
+```
+
+GitHub Action **Sync codes from Wiki** runs daily at **12:00 UTC** and opens a PR if the active list changed. Merge the PR to deploy.
+
 ## Update content (daily ops)
 
 | Task | File |

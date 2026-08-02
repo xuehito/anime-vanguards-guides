@@ -21,7 +21,19 @@
 
 ## 1. 日常 / 有新码时（15～30 分钟）
 
-### 1.1 对照清单
+### 1.0 自动路径（优先）
+
+```bash
+cd /Users/starx/anime-vanguards-guides
+npm run sync:codes:dry   # 只打印 Wiki 结果与是否有变更
+npm run sync:codes       # 写回 anime-vanguards-codes.md
+npm run build
+# 然后 commit/push，或等待/合并 GitHub PR「chore(codes): sync active codes from Wiki」
+```
+
+定时：`.github/workflows/sync-codes.yml` 每天 12:00 UTC → **开 PR 不直推 main**。
+
+### 1.1 对照清单（人工）
 
 - [ ] 打开 Wiki Codes active 表 + Discord codes 频道
 - [ ] 列出：新增 active、已失效、奖励/等级是否变化
