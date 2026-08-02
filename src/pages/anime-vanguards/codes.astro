@@ -5,7 +5,16 @@ import GuideLayout from '../../layouts/GuideLayout.astro';
 const entry = await getEntry('guides', 'anime-vanguards-codes');
 if (!entry) throw new Error('Missing content: anime-vanguards-codes');
 const { Content } = await render(entry);
-const { title, description, updated, type, activeCodes, expiredCodes } = entry.data;
+const {
+  title,
+  description,
+  updated,
+  type,
+  patch,
+  activeCodes,
+  expiredCodes,
+  archivedByUpdate,
+} = entry.data;
 ---
 
 <GuideLayout
@@ -13,8 +22,10 @@ const { title, description, updated, type, activeCodes, expiredCodes } = entry.d
   description={description}
   updated={updated}
   type={type}
+  patch={patch}
   activeCodes={activeCodes}
   expiredCodes={expiredCodes}
+  archivedByUpdate={archivedByUpdate}
 >
   <Content />
 </GuideLayout>

@@ -4,6 +4,8 @@ import AdSlot from '../components/AdSlot.astro';
 import CodeTable from '../components/CodeTable.astro';
 import RelatedGuides from '../components/RelatedGuides.astro';
 import JsonLd from '../components/JsonLd.astro';
+import SourceStrip from '../components/SourceStrip.astro';
+import CodesArchive from '../components/CodesArchive.astro';
 
 interface CodeEntry {
   code: string;
@@ -12,13 +14,20 @@ interface CodeEntry {
   new?: boolean;
 }
 
+interface ArchiveGroup {
+  update: string;
+  codes: CodeEntry[];
+}
+
 interface Props {
   title: string;
   description: string;
   updated: string;
   type?: string;
+  patch?: string;
   activeCodes?: CodeEntry[];
   expiredCodes?: CodeEntry[];
+  archivedByUpdate?: ArchiveGroup[];
 }
 
 const {
@@ -26,8 +35,10 @@ const {
   description,
   updated,
   type,
+  patch,
   activeCodes = [],
   expiredCodes = [],
+  archivedByUpdate = [],
 } = Astro.props;
 
 const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', {
@@ -46,6 +57,9 @@ const relatedTypes = new Set([
   'event',
 ]);
 const relatedCurrent = type && relatedTypes.has(type) ? type : 'guide';
+
+const sourceContext =
+  type === 'codes' ? 'codes' : type === 'tier-list' ? 'tier' : 'general';
 
 const codesFaq = {
   '@context': 'https://schema.org',
@@ -80,7 +94,7 @@ const codesFaq = {
       name: 'Is this codes list official?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. This is an unofficial fan site. Codes originate from the developers; we aggregate them for faster redeeming.',
+        text: 'No. This is an unofficial fan site. Codes originate from the developers; full archives also live on the official Wiki Codes page.',
       },
     },
   ],
@@ -93,7 +107,11 @@ const articleLd = {
   description,
   dateModified: updated,
   author: { '@type': 'Organization', name: 'AV Guides' },
-  publisher: { '@type': 'Organization', name: 'AV Guides', url: 'https://animevanguards.co/' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'AV Guides',
+    url: 'https://animevanguards.co/',
+  },
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': new URL(Astro.url.pathname, Astro.site).href,
@@ -115,16 +133,22 @@ const articleLd = {
             <span class="badge badge--accent">{activeCodes.length} active codes</span>
           )
         }
-        {type === 'tier-list' && <span class="badge">Update 14.x meta</span>}
+        {
+          (type === 'tier-list' || patch) && (
+            <span class="badge">{patch ?? 'Update 14.x meta'}</span>
+          )
+        }
       </div>
       {
         type === 'codes' && (
           <p class="trust-line">
-            Community-verified list · Redeem ASAP (codes expire) · Unofficial fan guide
+            Fast redeem list · Cross-check Wiki/Discord · Unofficial fan guide
           </p>
         )
       }
     </header>
+
+    <SourceStrip context={sourceContext} />
 
     <AdSlot slot="leaderboard" />
 
@@ -172,13 +196,21 @@ const articleLd = {
     </div>
 
     {
-      type === 'codes' && expiredCodes.length > 0 && (
-        <section id="expired-codes" aria-labelledby="expired-heading">
-          <h2 id="expired-heading">Expired codes</h2>
-          <p>These no longer work. Listed so you can avoid wasting time.</p>
-          <CodeTable codes={expiredCodes} showNew={false} tableId="expired-codes-table" />
-        </section>
+      type === 'codes' && archivedByUpdate.length > 0 && (
+        <CodesArchive groups={archivedByUpdate} />
       )
+    }
+
+    {
+      type === 'codes' &&
+        archivedByUpdate.length === 0 &&
+        expiredCodes.length > 0 && (
+          <section id="expired-codes" aria-labelledby="expired-heading">
+            <h2 id="expired-heading">Expired codes</h2>
+            <p>These no longer work. Listed so you can avoid wasting time.</p>
+            <CodeTable codes={expiredCodes} showNew={false} tableId="expired-codes-table" />
+          </section>
+        )
     }
 
     <RelatedGuides current={relatedCurrent} />

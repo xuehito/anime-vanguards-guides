@@ -8,6 +8,11 @@ const codeEntry = z.object({
   new: z.boolean().optional(),
 });
 
+const archiveGroup = z.object({
+  update: z.string(),
+  codes: z.array(codeEntry),
+});
+
 const guides = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/guides' }),
   schema: z.object({
@@ -24,9 +29,14 @@ const guides = defineCollection({
     /** Order on hub / home (lower = first) */
     order: z.number().default(99),
     draft: z.boolean().default(false),
+    /** Optional patch label shown in UI */
+    patch: z.string().optional(),
     /** For type=codes only */
     activeCodes: z.array(codeEntry).optional(),
+    /** Flat expired list (optional if using archive) */
     expiredCodes: z.array(codeEntry).optional(),
+    /** Wiki-style archive grouped by update */
+    archivedByUpdate: z.array(archiveGroup).optional(),
   }),
 });
 

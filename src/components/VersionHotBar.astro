@@ -1,0 +1,79 @@
+---
+/**
+ * Patch + "what to do this week" — inspired by wiki home / official changelog.
+ */
+interface Props {
+  version?: string;
+  versionNote?: string;
+}
+
+const {
+  version = 'Update 14.0 P2',
+  versionNote = 'Extermination Event era — new units, Memoria, Familiars',
+} = Astro.props;
+
+const hot = [
+  {
+    href: '/anime-vanguards/codes/',
+    title: 'Redeem codes',
+    blurb: 'Free rerolls before you spend gems',
+    tag: 'Do first',
+  },
+  {
+    href: '/anime-vanguards/event/',
+    title: 'Event playbook',
+    blurb: 'Free track first, then hard content',
+    tag: 'Limited',
+  },
+  {
+    href: '/anime-vanguards/traits/',
+    title: 'Spend rerolls',
+    blurb: 'Main DPS only — not fillers',
+    tag: 'Power',
+  },
+  {
+    href: '/anime-vanguards/tier-list/',
+    title: 'Investment tier',
+    blurb: 'Who is worth mats this patch',
+    tag: 'Meta',
+  },
+];
+---
+
+<section class="version-hot" aria-labelledby="version-hot-heading">
+  <div class="version-hot__banner">
+    <div>
+      <p class="version-hot__kicker">Current patch focus</p>
+      <h2 id="version-hot-heading" class="version-hot__title">{version}</h2>
+      <p class="version-hot__note">{versionNote}</p>
+    </div>
+    <div class="version-hot__official">
+      <a
+        class="btn"
+        href="https://vanguards.gg/changelog"
+        rel="noopener noreferrer"
+        target="_blank">Changelog</a
+      >
+      <a
+        class="btn"
+        href="https://wiki.vanguards.gg/Anime_Vanguards_Wiki"
+        rel="noopener noreferrer"
+        target="_blank">Wiki home</a
+      >
+    </div>
+  </div>
+  <p class="version-hot__hot-label">Hot this week</p>
+  <ul class="version-hot__grid">
+    {
+      hot.map((h) => (
+        <li>
+          <a class="version-hot__card" href={h.href}>
+            <span class="tag">{h.tag}</span>
+            <span class="version-hot__card-title">{h.title}</span>
+            <span class="version-hot__card-blurb">{h.blurb}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

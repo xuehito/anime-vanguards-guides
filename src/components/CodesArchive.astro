@@ -1,0 +1,66 @@
+---
+interface CodeEntry {
+  code: string;
+  rewards: string;
+  requirement?: string;
+}
+
+interface ArchiveGroup {
+  update: string;
+  codes: CodeEntry[];
+}
+
+interface Props {
+  groups: ArchiveGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+{
+  groups.length > 0 && (
+    <section id="codes-archive" class="codes-archive" aria-labelledby="archive-heading">
+      <h2 id="archive-heading">Archived by update</h2>
+      <p>
+        Expired or historical codes, grouped like the official Wiki archive. Use this to check if a
+        code you found online already died — not to re-redeem.
+      </p>
+      {groups.map((g, i) => (
+        <details class="archive-group" open={i === 0}>
+          <summary>
+            <span class="archive-group__title">{g.update}</span>
+            <span class="badge">{g.codes.length} codes</span>
+          </summary>
+          <div class="codes-table-wrap">
+            <table class="codes-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Rewards</th>
+                  <th>Req.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {g.codes.map((row) => (
+                  <tr>
+                    <td>
+                      <span class="code-cell">{row.code}</span>
+                    </td>
+                    <td>{row.rewards}</td>
+                    <td class="req">{row.requirement ?? '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      ))}
+      <p class="archive-more">
+        Full historical list:{' '}
+        <a href="https://wiki.vanguards.gg/Codes" rel="noopener noreferrer" target="_blank">
+          wiki.vanguards.gg/Codes
+        </a>
+      </p>
+    </section>
+  )
+}

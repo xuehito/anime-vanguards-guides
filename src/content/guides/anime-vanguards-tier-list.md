@@ -5,11 +5,12 @@ label: "Tier list"
 updated: "2026-08-02"
 type: tier-list
 order: 3
+patch: "Update 14.x"
 ---
 
 **Patch focus: Update 14.x overall meta** (investment priority across Story and common endgame).
 
-This list answers: *where should free code rewards and banner gems go?* Meta shifts every update — re-check after big patches on the [official wiki tier list](https://wiki.vanguards.gg/Tier_List) and Discord.
+This list answers: *where should free code rewards and banner gems go?* For the **authoritative ranked list** (competitive included), use the [official Wiki Tier List](https://wiki.vanguards.gg/Tier_List). We focus on **how to invest**, not mirroring every nameplate.
 
 New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beginner guide](/anime-vanguards/beginner-guide/).
 
@@ -23,11 +24,11 @@ New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beg
 | **B** | Situational | Keep if traits are good |
 | **C** | Skip long-term | Early fillers only |
 
-Names use common community labels. In-game names may include evolution form suffixes.
+In-game names often include evolution form suffixes. Open Wiki unit pages for kits and mats.
 
 ## SS — prioritize hard
 
-**Who:** Top Secret / Vanguard DPS and map-wide utility from recent banners.
+**Who:** Top Secret / Vanguard DPS and map-wide utility from recent banners (Update 14 examples on Wiki: [Cursed Copycat (Pure)](https://wiki.vanguards.gg/Cursed_Copycat_(Pure)), [Awakened Sibling (Restricted)](https://wiki.vanguards.gg/Awakened_Sibling_(Restricted))).
 
 **Why invest**
 
@@ -37,9 +38,11 @@ Names use common community labels. In-game names may include evolution form suff
 
 **Account fit:** Any account that owns them. Do not sit on SS with default traits if you have free rerolls.
 
+**Data:** Full rankings → [Wiki Tier List](https://wiki.vanguards.gg/Tier_List)
+
 ## S — excellent mains
 
-**Who:** Strong single-target or AoE specialists; supports that amp / slow / utility.
+**Who:** Strong single-target or AoE specialists; supports that amp / slow / utility. Recent mid-tier headlines on Wiki also include units like [Divine General (Adaptation)](https://wiki.vanguards.gg/Divine_General_(Adaptation)) — always re-check the live tier page after patches.
 
 **Why invest**
 

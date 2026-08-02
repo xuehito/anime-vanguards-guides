@@ -5,6 +5,7 @@ label: "Codes"
 updated: "2026-08-02"
 type: codes
 order: 2
+patch: "Update 14.0"
 activeCodes:
   - code: "1DayL8"
     rewards: "500 Trait Rerolls"
@@ -21,22 +22,49 @@ activeCodes:
   - code: "kat"
     rewards: "Meme / freebies"
     requirement: "—"
-expiredCodes:
-  - code: "LateBP"
-    rewards: "500 Trait Rerolls"
-    requirement: "Level 30"
-  - code: "WhoopsieDaisy"
-    rewards: "Freebies"
-    requirement: "Level 30"
-  - code: "LagGone"
-    rewards: "1,000 RR, 200,000 IcedTea, 100 Summer Capsules"
-    requirement: "Level 30"
-  - code: "13.5"
-    rewards: "50 Trait Rerolls, 5,000 Iced Teas"
-    requirement: "Level 30"
-  - code: "EternalAdversaries"
-    rewards: "50 Memoria Shards, 5,000 Iced Teas"
-    requirement: "Level 30"
+archivedByUpdate:
+  - update: "Update 14.0 Part 1"
+    codes:
+      - code: "LateBP"
+        rewards: "500 Trait Rerolls"
+        requirement: "Level 30"
+      - code: "WhoopsieDaisy"
+        rewards: "100 Memoria Shards"
+        requirement: "Level 30"
+      - code: "PowerOfLove"
+        rewards: "50 Trait Rerolls, 50 Memoria Shards"
+        requirement: "Level 30"
+      - code: "EEPart1"
+        rewards: "50 Trait Rerolls, 5,000 Gems, 50 Gambler's Tokens"
+        requirement: "Level 30"
+      - code: "BPSoon"
+        rewards: "50 Memoria Shards, 50 Green Essence"
+        requirement: "Level 30"
+  - update: "Update 13.5"
+    codes:
+      - code: "LagGone"
+        rewards: "1,000 Trait Rerolls, 200,000 IcedTea, 100 Summer Capsules"
+        requirement: "Level 30"
+      - code: "13.5"
+        rewards: "50 Trait Rerolls, 5,000 Iced Teas"
+        requirement: "Level 30"
+      - code: "EternalAdversaries"
+        rewards: "50 Memoria Shards, 5,000 Iced Teas"
+        requirement: "Level 30"
+      - code: "Gambler"
+        rewards: "50 Trait Rerolls, 50 Memoria Shards, 5 Rainbow Essence"
+        requirement: "Level 30"
+  - update: "Update 13.0"
+    codes:
+      - code: "DMCAFree"
+        rewards: "1,500 Trait Rerolls"
+        requirement: "Level 30"
+      - code: "223"
+        rewards: "50 Trait Rerolls, 50 Green Essence"
+        requirement: "Level 30"
+      - code: "Liberation"
+        rewards: "50 Memoria Shards, 5 Rainbow Essence"
+        requirement: "Level 30"
 ---
 
 ## How to redeem Anime Vanguards codes
@@ -51,9 +79,13 @@ Some codes require **Level 10** or **Level 30**. Level up in Story mode before r
 
 ## Where new codes come from
 
-Developers post codes mainly in the [official Discord](https://discord.com/invite/animevanguards) (announcements / codes channels), and sometimes on socials around updates and milestones.
+Primary sources (we re-check when patches drop):
 
-We re-check this page when major updates drop. If a code fails in-game, treat the game as the source of truth.
+- [Official Discord](https://discord.com/invite/animevanguards)
+- [Wiki Codes](https://wiki.vanguards.gg/Codes) (full archive)
+- [Official Changelog](https://vanguards.gg/changelog)
+
+If a code fails in-game, the **game client** is the source of truth.
 
 ## FAQ
 
@@ -67,8 +99,8 @@ Usually yes. Use the **Copy** button and paste exactly.
 
 ### Why doesn't a code work?
 
-Common reasons: already redeemed, expired, wrong spelling, not high enough level, or you're on an old server (rejoin a fresh server and try again).
+Common reasons: already redeemed, expired, wrong spelling, not high enough level, or an old server (rejoin a fresh server and try again).
 
 ### Is this list official?
 
-No. This is an unofficial fan site. Codes originate from the developers; we only aggregate and format them for faster redeeming.
+No. This is an unofficial fan site for fast redeem + next steps. Codes come from the developers; full history also lives on the [official Wiki Codes page](https://wiki.vanguards.gg/Codes).

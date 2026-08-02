@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
+import VersionHotBar from '../components/VersionHotBar.astro';
+import SourceStrip from '../components/SourceStrip.astro';
 
 const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -70,9 +72,17 @@ const path = [
     <h1>Anime Vanguards Codes, Tier List &amp; Guides</h1>
     <p>
       Fast English hub for <strong>Anime Vanguards</strong> on Roblox. Redeem working
-      codes, see who to invest in, and start strong between matches.
+      codes, see who to invest in, and start strong between matches. Official data lives on
+      the Wiki and Changelog — we turn it into a session path.
     </p>
   </section>
+
+  <VersionHotBar
+    version="Update 14.0 P2"
+    versionNote="Extermination Event era — redeem codes, clear free event rewards, then invest rerolls."
+  />
+
+  <SourceStrip context="general" />
 
   <section class="start-here" aria-labelledby="start-heading">
     <div class="start-here__head">
