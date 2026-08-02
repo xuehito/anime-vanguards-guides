@@ -24,7 +24,18 @@ const guides = defineCollection({
     updated: z.string(),
     /** Guide kind for templates */
     type: z
-      .enum(['hub', 'codes', 'tier-list', 'beginner', 'traits', 'evolve', 'event', 'guide'])
+      .enum([
+        'hub',
+        'codes',
+        'tier-list',
+        'beginner',
+        'traits',
+        'trait-odds',
+        'evolve',
+        'event',
+        'trading',
+        'guide',
+      ])
       .default('guide'),
     /** Order on hub / home (lower = first) */
     order: z.number().default(99),

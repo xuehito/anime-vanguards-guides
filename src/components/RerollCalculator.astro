@@ -1,0 +1,185 @@
+---
+/**
+ * Client-side Trait Reroll odds planner.
+ * Rates are user-selected planning presets — NOT official game probabilities.
+ */
+---
+
+<section class="calc" id="reroll-calculator" aria-labelledby="calc-heading">
+  <h2 id="calc-heading">Reroll odds calculator</h2>
+  <p class="calc__disclaimer">
+    <strong>Planning tool only.</strong> Official trait rates are not published here. Presets are
+    <em>illustrative</em> so you can think about bank size — always treat in-game rolls as random.
+  </p>
+
+  <form class="calc__form" id="reroll-form">
+    <div class="calc__field">
+      <label for="rate-preset">Target rarity (illustrative)</label>
+      <select id="rate-preset" name="rate-preset">
+        <option value="0.05">Solid / common-good (~5% example)</option>
+        <option value="0.02">Strong niche (~2% example)</option>
+        <option value="0.005" selected>Ultra chase / Monarch-class talk (~0.5% example)</option>
+        <option value="0.001">Nightmare chase (~0.1% example)</option>
+        <option value="custom">Custom percent…</option>
+      </select>
+    </div>
+
+    <div class="calc__field" id="custom-rate-wrap" hidden>
+      <label for="custom-rate">Custom chance per reroll (%)</label>
+      <input
+        id="custom-rate"
+        name="custom-rate"
+        type="number"
+        min="0.01"
+        max="50"
+        step="0.01"
+        value="0.5"
+        inputmode="decimal"
+      />
+    </div>
+
+    <div class="calc__field">
+      <label for="rerolls">Rerolls you have (or plan to use)</label>
+      <input
+        id="rerolls"
+        name="rerolls"
+        type="number"
+        min="1"
+        max="100000"
+        step="1"
+        value="100"
+        inputmode="numeric"
+      />
+    </div>
+
+    <button type="submit" class="btn btn--primary calc__submit">Calculate</button>
+  </form>
+
+  <div class="calc__results" id="calc-results" hidden>
+    <h3 class="calc__results-title">Results</h3>
+    <ul class="calc__stats">
+      <li>
+        <span class="calc__stat-label">Chance of ≥1 success</span>
+        <span class="calc__stat-value" id="out-at-least-one">—</span>
+      </li>
+      <li>
+        <span class="calc__stat-label">Expected rerolls for first success</span>
+        <span class="calc__stat-value" id="out-expected">—</span>
+      </li>
+      <li>
+        <span class="calc__stat-label">Rerolls for ~50% chance</span>
+        <span class="calc__stat-value" id="out-p50">—</span>
+      </li>
+      <li>
+        <span class="calc__stat-label">Rerolls for ~90% chance</span>
+        <span class="calc__stat-value" id="out-p90">—</span>
+      </li>
+    </ul>
+    <p class="calc__note" id="out-note"></p>
+    <p class="calc__next">
+      Free rerolls:{' '}
+      <a href="/anime-vanguards/codes/">codes</a>
+      · Who to spend on:{' '}
+      <a href="/anime-vanguards/traits/">traits guide</a>
+      ·{' '}
+      <a href="/anime-vanguards/tier-list/">tier list</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  function clamp(n: number, lo: number, hi: number) {
+    return Math.min(hi, Math.max(lo, n));
+  }
+
+  function rollsForChance(p: number, target: number) {
+    if (p <= 0 || p >= 1) return Infinity;
+    return Math.ceil(Math.log(1 - target) / Math.log(1 - p));
+  }
+
+  function formatPct(x: number) {
+    if (!Number.isFinite(x)) return '—';
+    if (x >= 0.9995) return '>99.9%';
+    if (x < 0.0001) return '<0.01%';
+    return `${(x * 100).toFixed(2)}%`;
+  }
+
+  function formatInt(n: number) {
+    if (!Number.isFinite(n) || n > 1e9) return '—';
+    return Math.round(n).toLocaleString('en-US');
+  }
+
+  function getP(): number {
+    const preset = (document.getElementById('rate-preset') as HTMLSelectElement).value;
+    if (preset === 'custom') {
+      const raw = Number((document.getElementById('custom-rate') as HTMLInputElement).value);
+      return clamp(raw / 100, 0.0001, 0.5);
+    }
+    return Number(preset);
+  }
+
+  function runCalc(e?: Event) {
+    e?.preventDefault();
+    const p = getP();
+    const n = clamp(
+      Math.floor(Number((document.getElementById('rerolls') as HTMLInputElement).value) || 0),
+      1,
+      100000,
+    );
+
+    const atLeastOne = 1 - Math.pow(1 - p, n);
+    const expected = 1 / p;
+    const p50 = rollsForChance(p, 0.5);
+    const p90 = rollsForChance(p, 0.9);
+
+    const results = document.getElementById('calc-results');
+    if (results) results.hidden = false;
+
+    const el1 = document.getElementById('out-at-least-one');
+    const el2 = document.getElementById('out-expected');
+    const el3 = document.getElementById('out-p50');
+    const el4 = document.getElementById('out-p90');
+    const note = document.getElementById('out-note');
+
+    if (el1) el1.textContent = formatPct(atLeastOne);
+    if (el2) el2.textContent = `~${formatInt(expected)}`;
+    if (el3) el3.textContent = `~${formatInt(p50)}`;
+    if (el4) el4.textContent = `~${formatInt(p90)}`;
+    if (note) {
+      note.textContent = `Using p = ${(p * 100).toFixed(3)}% per independent reroll and n = ${n}. Independent Bernoulli model — real pools may differ.`;
+    }
+
+    try {
+      // @ts-expect-error gtag optional
+      if (typeof gtag === 'function') {
+        // @ts-expect-error gtag
+        gtag('event', 'reroll_calc', {
+          rate: p,
+          rerolls: n,
+          chance: Math.round(atLeastOne * 10000) / 10000,
+        });
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function bind() {
+    const form = document.getElementById('reroll-form') as HTMLFormElement | null;
+    const preset = document.getElementById('rate-preset') as HTMLSelectElement | null;
+    const customWrap = document.getElementById('custom-rate-wrap');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+
+    preset?.addEventListener('change', () => {
+      if (customWrap) customWrap.hidden = preset.value !== 'custom';
+    });
+
+    form.addEventListener('submit', runCalc);
+    // first paint
+    runCalc();
+  }
+
+  bind();
+  document.addEventListener('astro:page-load', bind);
+</script>

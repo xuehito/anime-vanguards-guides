@@ -4,8 +4,8 @@ const path = Astro.url.pathname;
 const links = [
   { href: '/anime-vanguards/codes/', label: 'Codes' },
   { href: '/anime-vanguards/tier-list/', label: 'Tier' },
-  { href: '/anime-vanguards/traits/', label: 'Traits' },
-  { href: '/anime-vanguards/beginner-guide/', label: 'Beginner' },
+  { href: '/anime-vanguards/trait-reroll-odds/', label: 'Rerolls' },
+  { href: '/anime-vanguards/trading/', label: 'Trade' },
   { href: '/anime-vanguards/', label: 'More' },
 ];
 
@@ -15,7 +15,9 @@ function isCurrent(href: string) {
       path === '/anime-vanguards/' ||
       path === '/anime-vanguards' ||
       path.includes('/evolve') ||
-      path.includes('/event')
+      path.includes('/event') ||
+      path.includes('/beginner') ||
+      path.includes('/traits/')
     );
   }
   return path === href || path.startsWith(href);

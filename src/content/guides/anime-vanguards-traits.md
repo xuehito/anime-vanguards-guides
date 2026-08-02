@@ -9,6 +9,8 @@ order: 5
 
 **Traits** are one of the biggest power levers after unit rarity. Free **Trait Rerolls** from [codes](/anime-vanguards/codes/) are premium — this guide is about not wasting them.
 
+Wondering *how many* rerolls for a chase trait? Use the [**reroll odds calculator**](/anime-vanguards/trait-reroll-odds/).
+
 ## What traits do (simple version)
 
 Each unit can roll a trait that modifies damage, utility, economy, or survivability. A strong unit with a bad trait often underperforms a slightly worse unit with a great trait.

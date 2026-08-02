@@ -43,6 +43,20 @@ const all: (Link & { id: string })[] = [
     tag: 'Power',
   },
   {
+    id: 'trait-odds',
+    href: '/anime-vanguards/trait-reroll-odds/',
+    title: 'Reroll odds calculator',
+    blurb: 'How many RR for a chase trait — planning math.',
+    tag: 'Tools',
+  },
+  {
+    id: 'trading',
+    href: '/anime-vanguards/trading/',
+    title: 'Trading guide',
+    blurb: 'Rules, WFL checklist, trait loss, scam safety.',
+    tag: 'Trade',
+  },
+  {
     id: 'evolve',
     href: '/anime-vanguards/evolve/',
     title: 'Evolution priority',
@@ -65,16 +79,17 @@ const all: (Link & { id: string })[] = [
   },
 ];
 
-// Prefer contextual next steps depending on current page
 const preference: Record<string, string[]> = {
-  codes: ['traits', 'tier-list', 'beginner'],
-  beginner: ['codes', 'evolve', 'tier-list'],
-  'tier-list': ['traits', 'evolve', 'codes'],
-  traits: ['codes', 'tier-list', 'evolve'],
+  codes: ['trait-odds', 'traits', 'tier-list'],
+  beginner: ['codes', 'traits', 'tier-list'],
+  'tier-list': ['traits', 'trait-odds', 'codes'],
+  traits: ['trait-odds', 'codes', 'tier-list'],
+  'trait-odds': ['traits', 'codes', 'trading'],
+  trading: ['tier-list', 'trait-odds', 'codes'],
   evolve: ['traits', 'tier-list', 'event'],
   event: ['codes', 'tier-list', 'traits'],
-  hub: ['codes', 'beginner', 'tier-list'],
-  guide: ['codes', 'tier-list', 'beginner'],
+  hub: ['codes', 'trait-odds', 'trading'],
+  guide: ['codes', 'trait-odds', 'trading'],
 };
 
 const order = preference[current ?? 'guide'] ?? preference.guide;

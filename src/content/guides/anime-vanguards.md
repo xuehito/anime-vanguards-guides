@@ -21,6 +21,8 @@ This site is an **unofficial** English guide hub focused on fast answers:
 - [Unit tier list →](/anime-vanguards/tier-list/)
 - [Beginner guide →](/anime-vanguards/beginner-guide/)
 - [Traits & rerolls →](/anime-vanguards/traits/)
+- [Reroll odds calculator →](/anime-vanguards/trait-reroll-odds/)
+- [Trading guide →](/anime-vanguards/trading/)
 - [Evolution priority →](/anime-vanguards/evolve/)
 - [Event playbook →](/anime-vanguards/event/)
 
