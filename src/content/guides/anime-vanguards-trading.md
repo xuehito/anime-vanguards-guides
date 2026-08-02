@@ -8,10 +8,9 @@ order: 8
 patch: "Check in-game"
 ---
 
-Reddit is full of **“WFL?”**, **“Ainz value?”**, and **“do traits stay when traded?”**  
-This page is a **rules + safety checklist**, not a live price API and **not a trade marketplace**.
+This page is a **rules + safety checklist** for trading — not a live price list and **not a trade marketplace**.
 
-Always verify current rules in-game and on the [official Wiki](https://wiki.vanguards.gg/) / Discord. Trading has been **disabled or restricted** after exploits in the past — if trade UI is gone, this page is reference only.
+Always verify current rules in-game and on the [official Wiki](https://wiki.vanguards.gg/) / Discord. Trading has been **disabled or restricted** after exploits in the past — if the trade UI is gone, treat this as reference only.
 
 ## Safety first
 
@@ -24,15 +23,15 @@ Always verify current rules in-game and on the [official Wiki](https://wiki.vang
 
 **We do not broker trades, buy units, or host RMT.** For unit stats use the Wiki; for community value boards use third-party value sites **at your own risk**.
 
-## Rules players usually care about (verify live)
+## Rules to verify in-game
 
-These themes show up constantly on r/AnimeVanguard — **patch notes can override them**:
+Patch notes can change any of these — confirm live before trading:
 
-1. **Level gate** — many posts cite needing a high level (often discussed as ~50+) before trading unlocks.  
-2. **Limited / unobtainable focus** — tradeable pool is often **limited** units, not every farmable unit.  
-3. **Traits on trade** — many players report **traits do not safely transfer** the way you hope (or are stripped). Never trade assuming Monarch survives.  
-4. **Currency / RR exploits** — trading rerolls or currency has been abused before; expect locks, wipes, or bans if systems are bugged.  
-5. **Shiny / dupe value** — event 2x shiny periods can crash or inflate specific shinies; “value last month” is often wrong.
+1. **Level gate** — trading may require a high account level (commonly discussed around level 50+).  
+2. **Limited / unobtainable focus** — the tradeable pool is often **limited** units, not every farmable unit.  
+3. **Traits on trade** — traits may be **stripped or not transfer** safely. Never assume a Monarch roll survives a trade.  
+4. **Currency / RR exploits** — trading rerolls or currency has been abused before; expect locks or bans if systems are bugged.  
+5. **Shiny / dupe value** — event 2x shiny windows can inflate or crash specific shinies; old prices go stale fast.
 
 For exact lists (what is tradeable today), prefer Wiki / in-game index over any fan site.
 
@@ -72,24 +71,24 @@ For named units, open the [Wiki unit page](https://wiki.vanguards.gg/Unit_List) 
 
 Optional third-party value browsers exist in the ecosystem (search “Anime Vanguards value list”). Treat them as **rumor + spreadsheet**, not law.
 
-## Common Reddit questions
+## Common questions
 
-### “Should I trade shiny X for Y + Z?”
+### Should I trade shiny X for Y + Z?
 
-Check: (1) team hole you fill, (2) limited status, (3) trait loss, (4) whether Y/Z are still good on [tier list](/anime-vanguards/tier-list/).  
-If you need a **playable account**, prefer units you will place every run over screenshot flex.
+Check: (1) team hole you fill, (2) limited status, (3) trait loss, (4) whether Y/Z are still good on the [tier list](/anime-vanguards/tier-list/).  
+If you need a **playable account**, prefer units you will place every run over flex screenshots.
 
-### “Do traded units keep traits?”
+### Do traded units keep traits?
 
 Do **not** assume yes. Plan as if traits are lost unless the current patch notes explicitly say otherwise.
 
-### “Can I trade trait rerolls?”
+### Can I trade trait rerolls?
 
 Even when currency trade exists, it has been **exploit-prone**. Prefer earning RR via [codes](/anime-vanguards/codes/), quests, and events. See [reroll odds](/anime-vanguards/trait-reroll-odds/) before dumping thousands on a chase trait.
 
-### “Why did trading get disabled?”
+### Why does trading get disabled sometimes?
 
-Community posts have blamed **currency duplication / reroll bugs** and mass economy damage. When that happens, expect freezes and false-positive ban drama — stay away from “too good” offers.
+Past incidents involved **currency or reroll bugs** and economy damage. When that happens, expect freezes — stay away from “too good” offers.
 
 ## Fair-play alternatives to trading
 

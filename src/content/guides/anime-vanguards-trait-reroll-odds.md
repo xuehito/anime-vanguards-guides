@@ -8,8 +8,7 @@ order: 5
 patch: "Update 14.x"
 ---
 
-Players on Reddit constantly ask: **“How many trait rerolls for Monarch?”** and **“Should I dump RR on unit A or B?”**  
-This page is a **planning aid** — not official rates from the developers.
+This page is a **planning aid** for Trait Rerolls — not official drop rates from the developers.
 
 Use the calculator above, then read the decision rules below. Free rerolls: [codes](/anime-vanguards/codes/). Priority who to trait: [traits guide](/anime-vanguards/traits/).
 
@@ -26,17 +25,17 @@ Formula (independent rolls):
 
 ### Presets are illustrative
 
-Community chat talks about ultra-rare traits (often nicknamed **Monarch**-class) as *much* harder than “good enough” traits. We expose **example percents** so you can bank sensibly:
+Ultra-rare traits (often nicknamed **Monarch**-class) are much harder to hit than “good enough” traits. The presets below are **example percents** so you can plan a bank size:
 
-- **~5%** — “solid” planning tier  
+- **~5%** — solid / usable planning tier  
 - **~2%** — strong niche  
-- **~0.5%** — ultra chase talk  
-- **~0.1%** — nightmare chase  
-- **Custom** — paste a rate you believe from your own tests  
+- **~0.5%** — ultra chase  
+- **~0.1%** — extreme chase  
+- **Custom** — enter a rate from your own tests  
 
-If the real pool is different, change the custom %. **Do not treat presets as datamined truth.**
+If the real pool differs, use custom %. **Do not treat presets as official datamined rates.**
 
-## Practical banking rules (from how people actually play)
+## Practical banking rules
 
 1. **Main DPS first** — only long-term units deserve chase banks.  
 2. **Stop at “good enough”** early — clear content, then chase cosmetics/meta traits.  
