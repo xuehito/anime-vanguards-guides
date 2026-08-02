@@ -1,0 +1,13 @@
+---
+import { getEntry, render } from 'astro:content';
+import GuideLayout from '../../layouts/GuideLayout.astro';
+
+const entry = await getEntry('guides', 'anime-vanguards-tier-list');
+if (!entry) throw new Error('Missing content: anime-vanguards-tier-list');
+const { Content } = await render(entry);
+const { title, description, updated, type } = entry.data;
+---
+
+<GuideLayout title={title} description={description} updated={updated} type={type}>
+  <Content />
+</GuideLayout>

@@ -1,0 +1,88 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AdSlot from '../components/AdSlot.astro';
+import CodeTable from '../components/CodeTable.astro';
+
+interface CodeEntry {
+  code: string;
+  rewards: string;
+  requirement?: string;
+  new?: boolean;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+  type?: string;
+  activeCodes?: CodeEntry[];
+  expiredCodes?: CodeEntry[];
+}
+
+const {
+  title,
+  description,
+  updated,
+  type,
+  activeCodes = [],
+  expiredCodes = [],
+} = Astro.props;
+
+const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description} type="article">
+  <article class="prose">
+    <header>
+      <h1>{title}</h1>
+      <div class="meta">
+        <span class="badge">Updated {updatedLabel}</span>
+        {
+          type === 'codes' && (
+            <span class="badge">{activeCodes.length} active codes</span>
+          )
+        }
+      </div>
+    </header>
+
+    <AdSlot slot="leaderboard" />
+
+    {
+      type === 'codes' && (
+        <section id="active-codes" aria-labelledby="active-heading">
+          <h2 id="active-heading">Active Anime Vanguards codes</h2>
+          <p>
+            Tap <strong>Copy</strong>, then paste in-game. Codes are case-sensitive.
+            Always redeem new codes quickly — they expire.
+          </p>
+          <div class="codes-toolbar">
+            <span class="badge">Source: official Discord (community verified)</span>
+          </div>
+          <CodeTable codes={activeCodes} emptyLabel="No active codes right now. Check back soon." />
+        </section>
+      )
+    }
+
+    <AdSlot slot="in-article" />
+
+    <div class="guide-body">
+      <slot />
+    </div>
+
+    {
+      type === 'codes' && expiredCodes.length > 0 && (
+        <section id="expired-codes" aria-labelledby="expired-heading">
+          <h2 id="expired-heading">Expired codes</h2>
+          <p>These no longer work. Listed so you can avoid wasting time.</p>
+          <CodeTable codes={expiredCodes} showNew={false} />
+        </section>
+      )
+    }
+
+    <AdSlot slot="footer" />
+  </article>
+</BaseLayout>

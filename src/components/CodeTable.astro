@@ -1,0 +1,92 @@
+---
+interface CodeEntry {
+  code: string;
+  rewards: string;
+  requirement?: string;
+  new?: boolean;
+}
+
+interface Props {
+  codes: CodeEntry[];
+  emptyLabel?: string;
+  showNew?: boolean;
+}
+
+const { codes, emptyLabel = 'No codes listed.', showNew = true } = Astro.props;
+---
+
+{
+  codes.length === 0 ? (
+    <p class="callout">{emptyLabel}</p>
+  ) : (
+    <div class="codes-table-wrap">
+      <table class="codes-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Rewards</th>
+            <th>Req.</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {codes.map((row) => (
+            <tr>
+              <td>
+                <span class="code-cell">{row.code}</span>
+                {showNew && row.new && (
+                  <span class="badge badge--new" style="margin-left:0.4rem">
+                    NEW
+                  </span>
+                )}
+              </td>
+              <td>{row.rewards}</td>
+              <td class="req">{row.requirement ?? '—'}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn--primary copy-btn"
+                  data-code={row.code}
+                  aria-label={`Copy code ${row.code}`}
+                >
+                  Copy
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<script>
+  function bindCopyButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', async () => {
+        const code = btn.dataset.code ?? '';
+        try {
+          await navigator.clipboard.writeText(code);
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = code;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+        const prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = prev;
+          btn.classList.remove('is-copied');
+        }, 1400);
+      });
+    });
+  }
+  bindCopyButtons();
+  document.addEventListener('astro:page-load', bindCopyButtons);
+</script>

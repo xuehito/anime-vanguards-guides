@@ -1,0 +1,465 @@
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #12161f;
+  --bg-card: #161b26;
+  --border: #243044;
+  --text: #e8edf5;
+  --text-muted: #9aa8bc;
+  --accent: #7c5cff;
+  --accent-hover: #947aff;
+  --success: #3dd68c;
+  --warning: #f5b942;
+  --danger: #ff6b7a;
+  --new: #ff8a3d;
+  --radius: 12px;
+  --max: 760px;
+  --max-wide: 960px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans',
+    sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --ad-min-h: 90px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-hover);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ——— Layout ——— */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 13, 18, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header__inner {
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--accent-hover);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  font-size: 0.92rem;
+}
+
+.nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.nav a:hover,
+.nav a[aria-current='page'] {
+  color: var(--text);
+}
+
+.main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 3rem;
+}
+
+.main--wide {
+  max-width: var(--max-wide);
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  padding: 2rem 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.site-footer__inner {
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+}
+
+.site-footer a {
+  color: var(--text-muted);
+}
+
+.site-footer a:hover {
+  color: var(--text);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
+/* ——— Typography (prose) ——— */
+.prose h1 {
+  font-size: clamp(1.65rem, 4vw, 2.1rem);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+}
+
+.prose h2 {
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.prose h2:first-of-type {
+  border-top: none;
+  margin-top: 1.25rem;
+}
+
+.prose h3 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  color: var(--text-muted);
+}
+
+.prose strong {
+  color: var(--text);
+}
+
+.prose li {
+  margin: 0.35rem 0;
+}
+
+.prose ul {
+  padding-left: 1.25rem;
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1em 0.4em;
+}
+
+.prose a {
+  text-underline-offset: 2px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.badge--new {
+  border-color: color-mix(in srgb, var(--new) 50%, var(--border));
+  color: var(--new);
+}
+
+/* ——— Cards / home ——— */
+.hero {
+  margin-bottom: 2rem;
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 42rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.2rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+  color: var(--text);
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.card .tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--accent-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ——— Codes table ——— */
+.codes-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.codes-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  /* Reserve height rhythm for CLS / ads nearby */
+  margin: 0 0 1.5rem;
+}
+
+.codes-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.codes-table th,
+.codes-table td {
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.codes-table th {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.codes-table tr:last-child td {
+  border-bottom: none;
+}
+
+.codes-table tr:hover td {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.code-cell {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.req {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg-elevated));
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn.is-copied {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+/* ——— Ad slots (reserve space = better CLS for AdSense later) ——— */
+.ad-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ad-min-h);
+  margin: 1.25rem 0;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ad-slot--leaderboard {
+  min-height: 90px;
+}
+
+.ad-slot--in-article {
+  min-height: 250px;
+}
+
+.ad-slot--footer {
+  min-height: 90px;
+}
+
+.ad-slot[data-live='true'] {
+  border-style: solid;
+  background: transparent;
+  color: transparent;
+  font-size: 0;
+}
+
+/* ——— Callouts ——— */
+.callout {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 1.25rem 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.callout strong {
+  color: var(--text);
+}
+
+.tier-block {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.tier-block h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.tier-block ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--text-muted);
+}
+
+/* ——— Legal short pages ——— */
+.legal .prose p {
+  max-width: 40rem;
+}
+
+@media (max-width: 560px) {
+  .codes-table th:nth-child(3),
+  .codes-table td:nth-child(3) {
+    /* keep req visible but allow wrap */
+  }
+
+  .btn {
+    padding: 0.45rem 0.65rem;
+  }
+}

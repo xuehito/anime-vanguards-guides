@@ -1,0 +1,33 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  wide?: boolean;
+}
+
+const { title, description, type = 'website', wide = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Seo title={title} description={description} type={type} />
+    <!-- Future AdSense: uncomment when approved
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXX"
+      crossorigin="anonymous"></script>
+    -->
+  </head>
+  <body>
+    <Header />
+    <main class:list={['main', wide && 'main--wide']}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

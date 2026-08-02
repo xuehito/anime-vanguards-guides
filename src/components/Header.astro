@@ -1,0 +1,32 @@
+---
+const path = Astro.url.pathname;
+
+const links = [
+  { href: '/anime-vanguards/', label: 'Hub' },
+  { href: '/anime-vanguards/codes/', label: 'Codes' },
+  { href: '/anime-vanguards/tier-list/', label: 'Tier List' },
+  { href: '/anime-vanguards/beginner-guide/', label: 'Beginner' },
+];
+
+function isCurrent(href: string) {
+  if (href === '/anime-vanguards/') {
+    return path === '/anime-vanguards/' || path === '/anime-vanguards';
+  }
+  return path === href || path.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="logo" href="/">AV <span>Guides</span></a>
+    <nav class="nav" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

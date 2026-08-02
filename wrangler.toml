@@ -1,0 +1,5 @@
+# Cloudflare Pages / Wrangler (optional local preview)
+# Dashboard setup is usually enough: build command + output dir.
+name = "anime-vanguards-guides"
+compatibility_date = "2026-08-01"
+pages_build_output_dir = "dist"
