@@ -24,14 +24,16 @@ gh secret set CLOUDFLARE_ACCOUNT_ID -R xuehito/anime-vanguards-guides
 或在网页：  
 https://github.com/xuehito/anime-vanguards-guides/settings/secrets/actions
 
-## 首次创建 Pages 项目（可选）
+## 首次创建 Pages 项目
+
+GitHub Actions 会在部署前自动创建项目 `anime-vanguards-guides`（若不存在）。
+
+也可本机手动创建：
 
 ```bash
 npx wrangler login
 npx wrangler pages project create anime-vanguards-guides --production-branch=main
 ```
-
-若跳过，第一次 Actions 部署时 Wrangler 通常也会创建项目。
 
 ## 触发部署
 
