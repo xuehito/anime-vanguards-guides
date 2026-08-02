@@ -79,15 +79,58 @@ SITE=https://animevanguards.co npm run build
 
 `vercel.json` already adds basic security + long-cache headers for assets.
 
-### Cloudflare Pages
+### Cloudflare Pages (automated via GitHub Actions)
 
-1. New project → connect repo.
-2. Build command: `npm run build`
-3. Build output directory: `dist`
-4. Env var: `SITE=https://animevanguards.co`
-5. Node version: **22** (see `package.json` engines)
+Workflow: `.github/workflows/deploy-cloudflare.yml`  
+Push to `main` → `npm ci` → `npm run build` → `wrangler pages deploy dist`.
+
+**One-time setup**
+
+1. Cloudflare Dashboard → **My Profile → API Tokens → Create Token**  
+   Use template **Edit Cloudflare Workers** (includes Pages), or custom:
+   - Account → Cloudflare Pages → Edit  
+   - Account → Account Settings → Read (if prompted)
+2. Copy **Account ID** (Workers & Pages overview sidebar).
+3. Add GitHub secrets on the repo:
+
+```bash
+# from a machine with gh auth
+gh secret set CLOUDFLARE_API_TOKEN -R xuehito/anime-vanguards-guides
+gh secret set CLOUDFLARE_ACCOUNT_ID -R xuehito/anime-vanguards-guides
+```
+
+4. Create the Pages project once (optional; first deploy may create it):
+
+```bash
+npx wrangler login
+npx wrangler pages project create anime-vanguards-guides --production-branch=main
+```
+
+5. Custom domain: Pages project → **Custom domains** → `animevanguards.co`  
+   Build env in Actions already sets `SITE=https://animevanguards.co`.
+
+**Manual local deploy**
+
+```bash
+npx wrangler login
+npm run deploy:cf
+```
 
 `public/_headers` is copied into `dist` for CF header rules.
+
+#### Alternative: Cloudflare “Connect to Git” (no Actions secrets)
+
+Dashboard → Pages → Create → Connect GitHub → select this repo:
+
+| Setting | Value |
+|---------|--------|
+| Build command | `npm run build` |
+| Build output | `dist` |
+| Root | `/` |
+| Env `SITE` | `https://animevanguards.co` |
+| Env `NODE_VERSION` | `22` |
+
+Do **not** enable both Connect-to-Git and the Actions deploy for the same project (double deploys).
 
 ### Dual deploy
 
