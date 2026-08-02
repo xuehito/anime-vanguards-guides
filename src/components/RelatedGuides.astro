@@ -1,0 +1,66 @@
+---
+interface Link {
+  href: string;
+  title: string;
+  blurb: string;
+  tag?: string;
+}
+
+interface Props {
+  /** Current page type to exclude from related */
+  current?: 'hub' | 'codes' | 'tier-list' | 'beginner' | 'guide' | string;
+  heading?: string;
+}
+
+const { current, heading = 'Continue your session' } = Astro.props;
+
+const all: (Link & { id: string })[] = [
+  {
+    id: 'codes',
+    href: '/anime-vanguards/codes/',
+    title: 'Working codes',
+    blurb: 'Copy free Trait Rerolls, Gems, and event rewards.',
+    tag: 'Fast',
+  },
+  {
+    id: 'beginner',
+    href: '/anime-vanguards/beginner-guide/',
+    title: 'Beginner path',
+    blurb: 'First hours: what to farm, what not to waste.',
+    tag: 'New players',
+  },
+  {
+    id: 'tier-list',
+    href: '/anime-vanguards/tier-list/',
+    title: 'Unit tier list',
+    blurb: 'Who to invest gems and Trait Rerolls into.',
+    tag: 'Meta',
+  },
+  {
+    id: 'hub',
+    href: '/anime-vanguards/',
+    title: 'Game hub',
+    blurb: 'All Anime Vanguards guides in one place.',
+    tag: 'Hub',
+  },
+];
+
+const links = all.filter((l) => l.id !== current).slice(0, 3);
+---
+
+{
+  links.length > 0 && (
+    <section class="related" aria-labelledby="related-heading">
+      <h2 id="related-heading">{heading}</h2>
+      <div class="card-grid related__grid">
+        {links.map((l) => (
+          <a class="card" href={l.href} data-related={l.id}>
+            <h3 class="related__title">{l.title}</h3>
+            <p>{l.blurb}</p>
+            {l.tag && <span class="tag">{l.tag}</span>}
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}

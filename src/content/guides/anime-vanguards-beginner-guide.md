@@ -1,6 +1,6 @@
 ---
-title: "Anime Vanguards Beginner Guide"
-description: "Start Anime Vanguards the right way — first hours, codes, summons, traits, evolution basics, and what to farm."
+title: "Anime Vanguards Beginner Guide — First Hours Path"
+description: "Anime Vanguards beginner guide: redeem codes, first team, traits, and what not to waste gems on in your first sessions."
 label: "Beginner"
 updated: "2026-08-02"
 type: beginner

@@ -7,6 +7,16 @@ const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
+const latestUpdated = guides.reduce((max, g) => {
+  return g.data.updated > max ? g.data.updated : max;
+}, '1970-01-01');
+
+const latestLabel = new Date(latestUpdated + 'T12:00:00').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
 const cards = guides.map((g) => {
   const slug = g.id.replace(/\.mdx?$/, '');
   const href =
@@ -18,48 +28,96 @@ const cards = guides.map((g) => {
     title: g.data.label ?? g.data.title,
     description: g.data.description,
     tag: g.data.type,
+    updated: g.data.updated,
   };
 });
+
+const path = [
+  {
+    step: '1',
+    href: '/anime-vanguards/codes/',
+    title: 'Grab codes',
+    blurb: 'Copy free Trait Rerolls and currency in under a minute.',
+  },
+  {
+    step: '2',
+    href: '/anime-vanguards/beginner-guide/',
+    title: 'Learn the loop',
+    blurb: 'What to farm first — and what not to waste gems on.',
+  },
+  {
+    step: '3',
+    href: '/anime-vanguards/tier-list/',
+    title: 'Pick investments',
+    blurb: 'Who is worth Traits, evolution mats, and banners.',
+  },
+];
 ---
 
 <BaseLayout
-  title="Anime Vanguards Codes, Tier List & Guides"
-  description="Fast English guides for Roblox Anime Vanguards — working codes, unit tier list, and beginner tips. Updated for the latest patch."
+  title="Anime Vanguards Codes & Tier List (2026) | Free Rewards Guide"
+  description="Working Anime Vanguards codes with copy buttons, Update 14.x unit tier list, and a beginner path for Roblox. Updated regularly."
   wide
 >
   <section class="hero prose">
-    <h1>Anime Vanguards Guides</h1>
-    <p>
-      Unofficial English hub for <strong>Anime Vanguards</strong> on Roblox. Grab
-      working codes, check the unit meta, and start strong — mobile-friendly and
-      updated around major patches.
+    <p class="eyebrow">
+      <span class="badge badge--trust">Updated {latestLabel}</span>
+      <span class="badge">Unofficial · EN</span>
     </p>
+    <h1>Anime Vanguards Codes, Tier List &amp; Guides</h1>
+    <p>
+      Fast English hub for <strong>Anime Vanguards</strong> on Roblox. Redeem working
+      codes, see who to invest in, and start strong between matches.
+    </p>
+  </section>
+
+  <section class="start-here" aria-labelledby="start-heading">
+    <div class="start-here__head">
+      <h2 id="start-heading">Start here</h2>
+      <p>Three steps most players take in one session.</p>
+    </div>
+    <ol class="path-grid">
+      {
+        path.map((p) => (
+          <li>
+            <a class="path-card" href={p.href}>
+              <span class="path-card__step">{p.step}</span>
+              <span class="path-card__title">{p.title}</span>
+              <span class="path-card__blurb">{p.blurb}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
   </section>
 
   <AdSlot slot="leaderboard" />
 
-  <section class="card-grid" aria-label="Guides">
-    {
-      cards.map((c) => (
-        <a class="card" href={c.href}>
-          <h2>{c.title}</h2>
-          <p>{c.description}</p>
-          <span class="tag">{c.tag}</span>
-        </a>
-      ))
-    }
+  <section aria-labelledby="all-guides-heading">
+    <h2 id="all-guides-heading" class="section-title">All guides</h2>
+    <div class="card-grid">
+      {
+        cards.map((c) => (
+          <a class="card" href={c.href}>
+            <h2>{c.title}</h2>
+            <p>{c.description}</p>
+            <span class="tag">{c.tag}</span>
+          </a>
+        ))
+      }
+    </div>
   </section>
 
   <section class="prose" style="margin-top: 2.5rem">
     <h2>Why this site</h2>
     <ul>
-      <li><strong>Codes first</strong> — copy buttons, level requirements, expired list</li>
-      <li><strong>Clear tier guidance</strong> — investment priorities, not just a dump of names</li>
-      <li><strong>Static & fast</strong> — built for quick checks between matches</li>
+      <li><strong>Codes first</strong> — copy one or copy all, with level requirements</li>
+      <li><strong>Investment-focused tier list</strong> — who to feed, not just a name dump</li>
+      <li><strong>Fast on mobile</strong> — built for quick checks between matches</li>
     </ul>
     <p class="callout">
-      <strong>Not affiliated</strong> with Roblox or Anime Vanguards developers.
-      Codes and meta change often — verify in-game when in doubt.
+      <strong>Not affiliated</strong> with Roblox or Anime Vanguards developers. Codes and
+      meta change often — verify in-game when in doubt.
     </p>
   </section>
 </BaseLayout>

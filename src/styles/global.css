@@ -225,9 +225,152 @@ img {
   color: var(--new);
 }
 
+.badge--trust {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+  color: var(--success);
+}
+
+.badge--accent {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  color: var(--accent-hover);
+}
+
+.trust-line {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem !important;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+  color: var(--text);
+}
+
+/* ——— Start here path ——— */
+.start-here {
+  margin: 0 0 2rem;
+}
+
+.start-here__head h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+}
+
+.start-here__head p {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.path-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  counter-reset: none;
+}
+
+.path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.path-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.path-card__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 25%, var(--bg-elevated));
+  color: var(--accent-hover);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.path-card__title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.path-card__blurb {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ——— Related ——— */
+.related {
+  margin-top: 2.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.related h2 {
+  margin-top: 0 !important;
+  border-top: none !important;
+  font-size: 1.2rem;
+}
+
+.related__title {
+  font-size: 1.02rem !important;
+  margin: 0 0 0.4rem !important;
+  color: var(--text);
+}
+
+.related__grid {
+  margin-top: 0.75rem;
+}
+
+.after-redeem__list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+}
+
+.after-redeem__list li {
+  margin: 0.35rem 0;
+}
+
+.copy-hint {
+  margin: -0.5rem 0 1.25rem;
+  font-size: 0.88rem;
+  color: var(--success);
+}
+
+.copy-hint[hidden] {
+  display: none;
+}
+
 /* ——— Cards / home ——— */
 .hero {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .hero p {
@@ -453,13 +596,20 @@ img {
   max-width: 40rem;
 }
 
+@media (max-width: 720px) {
+  .path-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 560px) {
-  .codes-table th:nth-child(3),
-  .codes-table td:nth-child(3) {
-    /* keep req visible but allow wrap */
+  .btn {
+    padding: 0.5rem 0.75rem;
+    min-height: 2.5rem;
   }
 
-  .btn {
-    padding: 0.45rem 0.65rem;
+  .codes-table th,
+  .codes-table td {
+    padding: 0.65rem 0.6rem;
   }
 }

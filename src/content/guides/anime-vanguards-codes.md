@@ -1,6 +1,6 @@
 ---
-title: "Anime Vanguards Codes (August 2026)"
-description: "All working Anime Vanguards codes for free Trait Rerolls, Gems, Memoria Shards, and more. Updated regularly with copy buttons."
+title: "Anime Vanguards Codes (August 2026) — Working + Copy"
+description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
 updated: "2026-08-02"
 type: codes
@@ -54,12 +54,6 @@ Some codes require **Level 10** or **Level 30**. Level up in Story mode before r
 Developers post codes mainly in the [official Discord](https://discord.com/invite/animevanguards) (announcements / codes channels), and sometimes on socials around updates and milestones.
 
 We re-check this page when major updates drop. If a code fails in-game, treat the game as the source of truth.
-
-## After you redeem
-
-- Use **Trait Rerolls** on units you plan to main — don't burn them on fillers.
-- Check the [tier list](/anime-vanguards/tier-list/) before spending Gems on summons.
-- New players: start with the [beginner guide](/anime-vanguards/beginner-guide/).
 
 ## FAQ
 

@@ -10,83 +10,157 @@ interface Props {
   codes: CodeEntry[];
   emptyLabel?: string;
   showNew?: boolean;
+  /** Enable "Copy all" toolbar button for active lists */
+  copyAll?: boolean;
+  tableId?: string;
 }
 
-const { codes, emptyLabel = 'No codes listed.', showNew = true } = Astro.props;
+const {
+  codes,
+  emptyLabel = 'No codes listed.',
+  showNew = true,
+  copyAll = false,
+  tableId = 'codes-table',
+} = Astro.props;
+
+const allCodesPayload = codes.map((c) => c.code).join('\n');
 ---
 
 {
   codes.length === 0 ? (
     <p class="callout">{emptyLabel}</p>
   ) : (
-    <div class="codes-table-wrap">
-      <table class="codes-table">
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Rewards</th>
-            <th>Req.</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {codes.map((row) => (
+    <>
+      {copyAll && (
+        <div class="codes-toolbar">
+          <span class="badge">Tap Copy or grab every code at once</span>
+          <button
+            type="button"
+            class="btn btn--primary copy-all-btn"
+            data-codes={allCodesPayload}
+            aria-label="Copy all active codes"
+          >
+            Copy all active
+          </button>
+        </div>
+      )}
+      <div class="codes-table-wrap">
+        <table class="codes-table" id={tableId}>
+          <thead>
             <tr>
-              <td>
-                <span class="code-cell">{row.code}</span>
-                {showNew && row.new && (
-                  <span class="badge badge--new" style="margin-left:0.4rem">
-                    NEW
-                  </span>
-                )}
-              </td>
-              <td>{row.rewards}</td>
-              <td class="req">{row.requirement ?? '—'}</td>
-              <td>
-                <button
-                  type="button"
-                  class="btn btn--primary copy-btn"
-                  data-code={row.code}
-                  aria-label={`Copy code ${row.code}`}
-                >
-                  Copy
-                </button>
-              </td>
+              <th>Code</th>
+              <th>Rewards</th>
+              <th>Req.</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {codes.map((row) => (
+              <tr>
+                <td>
+                  <span class="code-cell">{row.code}</span>
+                  {showNew && row.new && (
+                    <span class="badge badge--new" style="margin-left:0.4rem">
+                      NEW
+                    </span>
+                  )}
+                </td>
+                <td>{row.rewards}</td>
+                <td class="req">{row.requirement ?? '—'}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn--primary copy-btn"
+                    data-code={row.code}
+                    aria-label={`Copy code ${row.code}`}
+                  >
+                    Copy
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="copy-hint" id="copy-toast" hidden role="status" aria-live="polite" />
+    </>
   )
 }
 
 <script>
+  async function copyText(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  function flashButton(btn: HTMLButtonElement, okLabel: string) {
+    const prev = btn.textContent;
+    btn.textContent = okLabel;
+    btn.classList.add('is-copied');
+    setTimeout(() => {
+      btn.textContent = prev;
+      btn.classList.remove('is-copied');
+    }, 1600);
+  }
+
+  function showToast(msg: string) {
+    const el = document.getElementById('copy-toast');
+    if (!el) return;
+    el.hidden = false;
+    el.textContent = msg;
+    window.setTimeout(() => {
+      el.hidden = true;
+    }, 4000);
+  }
+
   function bindCopyButtons() {
     document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
       if (btn.dataset.bound) return;
       btn.dataset.bound = '1';
       btn.addEventListener('click', async () => {
         const code = btn.dataset.code ?? '';
-        try {
-          await navigator.clipboard.writeText(code);
-        } catch {
-          const ta = document.createElement('textarea');
-          ta.value = code;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          ta.remove();
+        const ok = await copyText(code);
+        if (ok) {
+          flashButton(btn, 'Copied!');
+          showToast('Copied. Next: invest rewards wisely → open Tier list.');
         }
-        const prev = btn.textContent;
-        btn.textContent = 'Copied!';
-        btn.classList.add('is-copied');
-        setTimeout(() => {
-          btn.textContent = prev;
-          btn.classList.remove('is-copied');
-        }, 1400);
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.copy-all-btn').forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', async () => {
+        const codes = btn.dataset.codes ?? '';
+        const ok = await copyText(codes);
+        if (ok) {
+          flashButton(btn, 'All copied!');
+          const n = codes.split('\n').filter(Boolean).length;
+          showToast(
+            `${n} codes copied (one per line). Redeem in-game, then check the tier list.`,
+          );
+        }
       });
     });
   }
+
   bindCopyButtons();
   document.addEventListener('astro:page-load', bindCopyButtons);
 </script>

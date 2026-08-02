@@ -1,82 +1,105 @@
 ---
-title: "Anime Vanguards Tier List (Update 14.x)"
-description: "Community-oriented Anime Vanguards unit tier list — which units to prioritize for summons, investment, and team building."
+title: "Anime Vanguards Tier List (Update 14.x) — Best Units"
+description: "Update 14.x Anime Vanguards tier list for investment: SS–C ranks, why each tier matters, and who to feed Trait Rerolls and gems."
 label: "Tier list"
 updated: "2026-08-02"
 type: tier-list
 order: 3
 ---
 
-This is a **practical investment tier list** for English-speaking players: who is worth gems, evolution materials, and Trait Rerolls in the current patch window (Update 14.x era).
+**Patch focus: Update 14.x overall meta** (investment priority across Story and common endgame).
 
-Meta shifts every update. Treat this as a starting point, not gospel. Cross-check the [official wiki tier list](https://wiki.vanguards.gg/Tier_List) and high-level Discord discussion after big patches.
+This list answers: *where should free code rewards and banner gems go?* Meta shifts every update — re-check after big patches on the [official wiki tier list](https://wiki.vanguards.gg/Tier_List) and Discord.
 
-## How to read this list
+New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beginner guide](/anime-vanguards/beginner-guide/).
 
-- **S / SS** — meta carries; invest freely if you pull them
-- **A** — strong in many modes; solid mains
-- **B** — situational or budget-friendly; fine early, replace later
-- **C** — fillers / niche; don't dump premium currency here
+## How to read ranks
 
-Names below use common community labels (often based on anime inspirations). Exact in-game names may include form suffixes after evolution.
+| Tier | Meaning | Account advice |
+|------|---------|----------------|
+| **SS** | Meta carries | Invest freely if you pull them |
+| **S** | Excellent mains | Core of most mid-game teams |
+| **A** | Strong / flexible | Great if you lack SS |
+| **B** | Situational | Keep if traits are good |
+| **C** | Skip long-term | Early fillers only |
+
+Names use common community labels. In-game names may include evolution form suffixes.
 
 ## SS — prioritize hard
 
-- Top **Secret / Vanguard** damage carries from recent banners
-- Map-wide utility + high solo DPS units
-- Units that stay relevant across Story, harder stages, and events
+**Who:** Top Secret / Vanguard DPS and map-wide utility from recent banners.
 
-*Why:* Clear speed and fewer wipes matter more than collecting every mid unit.
+**Why invest**
+
+- Highest clear speed → fewer wipes and faster farms  
+- Stay relevant across Story, hard stages, and many events  
+- Best home for **Trait Rerolls** from codes  
+
+**Account fit:** Any account that owns them. Do not sit on SS with default traits if you have free rerolls.
 
 ## S — excellent mains
 
-- Strong single-target or AoE specialists
-- Supports that amplify your best DPS (damage amp, slow, utility)
-- Flexible units that work in multiple team cores
+**Who:** Strong single-target or AoE specialists; supports that amp / slow / utility.
 
-*Why:* Easier to build around than hyper-niche secrets if your account is mid-game.
+**Why invest**
+
+- Easier to build around than ultra-niche secrets  
+- Cover gaps when you do not own every SS  
+- Good second core while you save for the next banner  
+
+**Account fit:** Mid-game players pushing content with 1–2 solid cores.
 
 ## A — good investment
 
-- Reliable story pushers and farm units
-- Evolution lines with clear material paths
-- Units that fill a hole (crowd control, bossing, economy)
+**Who:** Reliable Story / farm units; clear evolution material paths; CC or economy fillers.
 
-*Why:* Great if you don't have SS pulls yet — clear content and farm materials.
+**Why invest**
+
+- Clears early–mid content without premium luck  
+- Materials are usually easier to farm than chasing every banner  
+- Valid “main until SS” path  
+
+**Account fit:** Beginners and F2P after codes — see [beginner guide](/anime-vanguards/beginner-guide/).
 
 ## B — situational
 
-- Older units power-crept but still usable with good traits
-- Mode-specific specialists
-- Fun picks that need more support to shine
+**Who:** Power-crept older units; mode specialists; fun picks that need support.
 
-*Why:* Keep them if traits rolled well; don't chase them on new banners.
+**Why (or why not)**
+
+- Fine if you already rolled great traits  
+- Do **not** dump new banner currency here  
+- Keep as flex slots, not full investment trees  
 
 ## C — skip for investment
 
-- Low rarity placeholders
-- Heavily outclassed DPS without unique utility
+**Who:** Low-rarity placeholders; outclassed DPS with no unique job.
 
-*Why:* Use early, replace as soon as you can.
+**Why skip:** Early placement only. Replace as soon as A-tier or better appears.
+
+## Quick decision tree
+
+1. Just redeemed [codes](/anime-vanguards/codes/)? → Reroll traits on your **best DPS**, not a random epic.  
+2. No SS? → Build one **A/S clear team** before spreading mats.  
+3. Banner FOMO? → If the unit is not SS/S for *your* holes, bank gems.  
+4. Still under Level 30? → Finish Story for code level gates, then optimize.
 
 ## Summon & trait tips
 
-1. **Bank resources** before major updates if a banner is known to be weak.
-2. **Trait Rerolls** go on units you will play for weeks, not temporary carries.
-3. Build **one clear team** before spreading materials across six partial teams.
-4. After redeeming [codes](/anime-vanguards/codes/), funnel free rerolls into your main DPS first.
+1. Bank resources before weak banners when you know an update is close.  
+2. Trait Rerolls = premium — only long-term mains.  
+3. One complete team beats six half-built units.  
+4. Funnel free code rerolls into main DPS first.
 
-## Team building (simple framework)
+## Simple team framework
 
 | Role | Goal |
 |------|------|
-| Main DPS | Highest consistent damage on your account |
-| AoE / clear | Handle dense waves |
-| Utility | Slow, amp, cleanse, or economy |
+| Main DPS | Highest consistent damage you own |
+| AoE / clear | Dense wave handling |
+| Utility | Slow, amp, cleanse, economy |
 | Flex | Boss specialist or second DPS |
-
-New accounts: see the [beginner guide](/anime-vanguards/beginner-guide/) for a first-week path.
 
 ## Disclaimer
 
-Unofficial community ranking for guidance only. Balance patches and new units can flip the meta overnight. Always verify abilities and evolution requirements in-game or on the official wiki.
+Unofficial community investment guidance. Balance patches can flip the meta overnight. Always verify abilities and evolution requirements in-game or on the official wiki.
