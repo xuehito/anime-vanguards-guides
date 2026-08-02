@@ -1,0 +1,47 @@
+# Deploy via Wrangler when Cloudflare Git build is misconfigured or as primary CI.
+# Secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PAGES_PROJECT: anime-vanguards-guides
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm install -D wrangler@4
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE: https://animevanguards.co
+
+      - name: Deploy
+        run: |
+          npx wrangler pages deploy dist \
+            --project-name="$PAGES_PROJECT" \
+            --branch=main \
+            --commit-dirty=true

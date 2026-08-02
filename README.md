@@ -79,25 +79,24 @@ SITE=https://animevanguards.co npm run build
 
 `vercel.json` already adds basic security + long-cache headers for assets.
 
-### Cloudflare Pages（连接 Git，自动构建）
+### Cloudflare Pages
 
-**仅使用 Cloudflare Pages 拉 Git 构建**（仓库内已无 GitHub Actions 部署 workflow）。
+详见 [`docs/cloudflare-setup.md`](docs/cloudflare-setup.md)。
 
-Dashboard → Workers & Pages → 你的项目 → Settings / Builds：
+**Git 构建（Dashboard 必填）**
 
 | Setting | Value |
 |---------|--------|
-| Production branch | `main` |
 | Build command | `npm run build` |
-| Build output | `dist` |
-| Root | `/` |
-| Env `SITE` | `https://animevanguards.co` |
+| Build output directory | `dist` |
+| Root | *(empty)* |
 | Env `NODE_VERSION` | `22` |
+| Env `SITE` | `https://animevanguards.co` |
 
-Push 到 `main` 即自动部署。`public/_headers` 会进 `dist`。
+若出现 `Output directory "dist" not found`，说明 Build command 为空，按上表补上后 Retry。
 
-**自定义域名打不开？** 见 [`docs/cloudflare-setup.md`](docs/cloudflare-setup.md)  
-（当前常见问题：域名还在 Spaceship 停放页，DNS 未指到 Pages。）
+**备用：GitHub Actions**（`.github/workflows/deploy-cloudflare.yml`）  
+Secrets：`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。Push `main` 会 `build` + `wrangler pages deploy`。
 
 ## Ads (later)
 
