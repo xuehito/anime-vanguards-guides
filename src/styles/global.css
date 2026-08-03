@@ -816,6 +816,23 @@ img {
   white-space: nowrap;
 }
 
+.expires {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.expires--past {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.codes-table__row--expired .code-cell {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--text-muted) 60%, transparent);
+}
+
 .btn {
   appearance: none;
   border: 1px solid var(--border);

@@ -6,6 +6,10 @@ const codeEntry = z.object({
   rewards: z.string(),
   requirement: z.string().optional(),
   new: z.boolean().optional(),
+  /** Display expiry, e.g. "Aug 3, 2026" or "Expired · Aug 3, 2026" */
+  expires: z.string().optional(),
+  /** ISO date YYYY-MM-DD when known (for sorting / future filters) */
+  expiresAt: z.string().optional(),
 });
 
 const archiveGroup = z.object({

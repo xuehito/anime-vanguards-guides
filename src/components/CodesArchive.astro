@@ -3,6 +3,8 @@ interface CodeEntry {
   code: string;
   rewards: string;
   requirement?: string;
+  expires?: string;
+  expiresAt?: string;
 }
 
 interface ArchiveGroup {
@@ -15,6 +17,25 @@ interface Props {
 }
 
 const { groups } = Astro.props;
+
+function expiresLabel(row: CodeEntry) {
+  if (row.expires) return row.expires;
+  if (row.expiresAt) {
+    try {
+      return (
+        'Expired · ' +
+        new Date(row.expiresAt + 'T12:00:00').toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        })
+      );
+    } catch {
+      return `Expired · ${row.expiresAt}`;
+    }
+  }
+  return 'Expired';
+}
 ---
 
 {
@@ -22,8 +43,8 @@ const { groups } = Astro.props;
     <section id="codes-archive" class="codes-archive" aria-labelledby="archive-heading">
       <h2 id="archive-heading">Archived by update</h2>
       <p>
-        Expired or historical codes, grouped like the official Wiki archive. Use this to check if a
-        code you found online already died — not to re-redeem.
+        Expired or historical codes. Check the <strong>Expires</strong> column so you know when a
+        code died — not for re-redeeming.
       </p>
       {groups.map((g, i) => (
         <details class="archive-group" open={i === 0}>
@@ -38,16 +59,18 @@ const { groups } = Astro.props;
                   <th>Code</th>
                   <th>Rewards</th>
                   <th>Req.</th>
+                  <th>Expires</th>
                 </tr>
               </thead>
               <tbody>
                 {g.codes.map((row) => (
-                  <tr>
+                  <tr class="codes-table__row--expired">
                     <td>
                       <span class="code-cell">{row.code}</span>
                     </td>
                     <td>{row.rewards}</td>
                     <td class="req">{row.requirement ?? '—'}</td>
+                    <td class="expires expires--past">{expiresLabel(row)}</td>
                   </tr>
                 ))}
               </tbody>

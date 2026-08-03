@@ -86,12 +86,95 @@ function formatRequirement(cellText) {
   return '—';
 }
 
+const MONTHS = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+};
+
+/** Parse "July 27 2026" / "August 3, 2026" without timezone shift */
+function parseWikiDate(raw) {
+  if (!raw) return null;
+  const m = String(raw)
+    .trim()
+    .match(/^([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})$/);
+  if (!m) {
+    const d = new Date(raw);
+    if (Number.isNaN(d.getTime())) return null;
+    return { y: d.getUTCFullYear(), mo: d.getUTCMonth(), d: d.getUTCDate() };
+  }
+  const mo = MONTHS[m[1].toLowerCase()];
+  if (mo === undefined) return null;
+  return { y: Number(m[3]), mo, d: Number(m[2]) };
+}
+
+function toIsoFromParts(p) {
+  if (!p) return undefined;
+  return `${p.y}-${String(p.mo + 1).padStart(2, '0')}-${String(p.d).padStart(2, '0')}`;
+}
+
+function toDisplayFromParts(p) {
+  if (!p) return undefined;
+  const d = new Date(Date.UTC(p.y, p.mo, p.d, 12));
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+/** Parse Wiki data-end / data-start into ISO + display strings */
+function parseExpiryFromAvailHtml(availHtml) {
+  const endRaw = availHtml.match(/data-end=["']([^"']+)["']/i)?.[1];
+  const startRaw = availHtml.match(/data-start=["']([^"']+)["']/i)?.[1];
+  const expired = /\bexpired\b/i.test(stripHtml(availHtml));
+
+  const endParts = parseWikiDate(endRaw);
+  const startParts = parseWikiDate(startRaw);
+  const expiresAt = toIsoFromParts(endParts);
+  const endLabel = toDisplayFromParts(endParts);
+
+  let expires;
+  if (expired && endLabel) expires = `Expired · ${endLabel}`;
+  else if (expired) expires = 'Expired';
+  else if (endLabel) expires = endLabel;
+  else expires = undefined;
+
+  return {
+    expires,
+    expiresAt,
+    startAt: toIsoFromParts(startParts),
+    expired,
+  };
+}
+
 /**
- * Parse only the ACTIVE codes table (before the Archived Codes section heading).
- * Prefer data-code attributes; rewards/req from table row cells.
+ * Parse the top codes table (before Archived Codes heading).
+ * Returns live (non-expired) and expired-but-listed rows with expiry metadata.
  */
-export function parseWikiActiveCodes(html) {
-  // Prefer region starting at the "only currently active" blurb, ending at h2 Archived
+export function parseWikiActiveTable(html) {
   let region = html;
   const start = html.search(/Only currently active codes are listed/i);
   const end = html.search(/id=["']Archived_Codes["']|>Archived Codes<\/h2>/i);
@@ -100,22 +183,20 @@ export function parseWikiActiveCodes(html) {
   } else if (end > 0) {
     region = html.slice(0, end);
   } else {
-    // fallback: first table after "active"
     const m = html.match(
       /Only currently active codes are listed[\s\S]*?(<table[\s\S]*?<\/table>)/i,
     );
     if (m) region = m[1];
   }
 
-  // Prefer the first table in region (active list)
   const tableMatch = region.match(/<table[\s\S]*?<\/table>/i);
-  const activeHtml = tableMatch ? tableMatch[0] : region;
+  const tableHtml = tableMatch ? tableMatch[0] : region;
 
-  // Row-based: each tr with data-code
-  const rows = [];
+  const live = [];
+  const expiredListed = [];
   const trRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
   let tr;
-  while ((tr = trRe.exec(activeHtml)) !== null) {
+  while ((tr = trRe.exec(tableHtml)) !== null) {
     const row = tr[1];
     const codeMatch = row.match(/data-code=["']([^"']+)["']/i);
     if (!codeMatch) continue;
@@ -123,32 +204,52 @@ export function parseWikiActiveCodes(html) {
     if (!code || code.length > 64) continue;
 
     const tds = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((x) => x[1]);
-    // expect: code | rewards | requirement | availability
     const rewardsText = stripHtml(tds[1] || tds[0] || '');
     const reqText = stripHtml(tds[2] || '');
-    const availText = stripHtml(tds[3] || '');
+    const availHtml = tds[3] || '';
+    const expiry = parseExpiryFromAvailHtml(availHtml);
 
-    // Wiki sometimes leaves rows in the "active" table with Availability = Expired
-    if (/\bexpired\b/i.test(availText)) {
-      continue;
-    }
-
-    rows.push({
+    const entry = {
       code,
       rewards: formatRewards(rewardsText),
       requirement: formatRequirement(reqText || rewardsText),
-    });
+      expires: expiry.expires,
+      expiresAt: expiry.expiresAt,
+    };
+
+    if (expiry.expired) {
+      // Prefer "Expired · date" for archive display
+      if (expiry.expiresAt) {
+        const d = new Date(expiry.expiresAt + 'T12:00:00');
+        entry.expires =
+          'Expired · ' +
+          d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      } else {
+        entry.expires = 'Expired';
+      }
+      expiredListed.push(entry);
+    } else {
+      live.push(entry);
+    }
   }
 
-  // de-dupe by code, keep first
-  const seen = new Set();
-  const out = [];
-  for (const r of rows) {
-    if (seen.has(r.code)) continue;
-    seen.add(r.code);
-    out.push(r);
+  function dedupe(list) {
+    const seen = new Set();
+    const out = [];
+    for (const r of list) {
+      if (seen.has(r.code)) continue;
+      seen.add(r.code);
+      out.push(r);
+    }
+    return out;
   }
-  return out;
+
+  return { live: dedupe(live), expiredListed: dedupe(expiredListed) };
+}
+
+/** @deprecated use parseWikiActiveTable */
+export function parseWikiActiveCodes(html) {
+  return parseWikiActiveTable(html).live;
 }
 
 function parseFrontmatter(raw) {
@@ -159,6 +260,7 @@ function parseFrontmatter(raw) {
 
 /** Minimal YAML extract for activeCodes list of {code,rewards,requirement,new?} */
 function extractActiveFromFm(fm) {
+  if (/^activeCodes:\s*\[\s*\]\s*$/m.test(fm)) return [];
   const block = fm.match(/activeCodes:\n([\s\S]*?)(?=\narchivedByUpdate:|\nexpiredCodes:|\n[a-zA-Z]|$)/);
   if (!block) return [];
   const items = [];
@@ -171,6 +273,8 @@ function extractActiveFromFm(fm) {
       rewards: p.match(/rewards:\s*"(.*)"/)?.[1] ?? '',
       requirement: p.match(/requirement:\s*"(.*)"/)?.[1] ?? '—',
       new: /new:\s*true/.test(p),
+      expires: p.match(/expires:\s*"(.*)"/)?.[1],
+      expiresAt: p.match(/expiresAt:\s*"(.*)"/)?.[1],
     });
   }
   return items;
@@ -193,6 +297,8 @@ function extractArchivedFromFm(fm) {
         code,
         rewards: c.match(/rewards:\s*"(.*)"/)?.[1] ?? '',
         requirement: c.match(/requirement:\s*"(.*)"/)?.[1] ?? '—',
+        expires: c.match(/expires:\s*"(.*)"/)?.[1],
+        expiresAt: c.match(/expiresAt:\s*"(.*)"/)?.[1],
       });
     }
     groups.push({ update, codes });
@@ -214,6 +320,8 @@ function emitCodeEntry(c, indent, withNew = false) {
   let out = `${pad}- code: "${yamlEscape(c.code)}"\n`;
   out += `${pad}  rewards: "${yamlEscape(c.rewards)}"\n`;
   out += `${pad}  requirement: "${yamlEscape(c.requirement || '—')}"\n`;
+  if (c.expires) out += `${pad}  expires: "${yamlEscape(c.expires)}"\n`;
+  if (c.expiresAt) out += `${pad}  expiresAt: "${yamlEscape(c.expiresAt)}"\n`;
   if (withNew && c.new) out += `${pad}  new: true\n`;
   return out;
 }
@@ -269,6 +377,8 @@ function mergeArchive(archived, removed, patchLabel) {
       code: r.code,
       rewards: r.rewards,
       requirement: r.requirement || '—',
+      expires: r.expires || (r.expiresAt ? `Expired · ${r.expiresAt}` : 'Expired'),
+      expiresAt: r.expiresAt,
     });
     existing.add(r.code);
   }
@@ -292,12 +402,33 @@ function detailedEqual(a, b) {
     if (
       a[i].code !== b[i].code ||
       a[i].rewards !== b[i].rewards ||
-      a[i].requirement !== b[i].requirement
+      a[i].requirement !== b[i].requirement ||
+      (a[i].expiresAt || '') !== (b[i].expiresAt || '') ||
+      (a[i].expires || '') !== (b[i].expires || '')
     ) {
       return false;
     }
   }
   return true;
+}
+
+/** Ensure archive entries carry expiry metadata from Wiki when available */
+function enrichArchiveExpires(archived, expiredListed) {
+  const byCode = new Map(expiredListed.map((c) => [c.code, c]));
+  return archived.map((g) => ({
+    update: g.update,
+    codes: g.codes.map((c) => {
+      const w = byCode.get(c.code);
+      if (!w) return c;
+      return {
+        ...c,
+        expires: w.expires || c.expires,
+        expiresAt: w.expiresAt || c.expiresAt,
+        rewards: c.rewards || w.rewards,
+        requirement: c.requirement || w.requirement,
+      };
+    }),
+  }));
 }
 
 async function fetchWikiHtml() {
@@ -321,18 +452,25 @@ async function main() {
   const dry = process.argv.includes('--dry-run');
   console.log(`Fetching ${WIKI_URL} ...`);
   const html = await fetchWikiHtml();
-  const wikiActive = parseWikiActiveCodes(html);
+  const { live: wikiActive, expiredListed } = parseWikiActiveTable(html);
   // Empty is valid when Wiki marks all rows Expired (or no live codes).
   // Only abort if the HTML looks broken (no codes table / no data-code at all).
   const anyDataCode = /data-code=["'][^"']+["']/i.test(html);
-  if (!wikiActive.length && !anyDataCode) {
+  if (!wikiActive.length && !expiredListed.length && !anyDataCode) {
     throw new Error('Parsed 0 codes and found no data-code in Wiki HTML — aborting (parse failure)');
   }
   console.log(`Wiki active (non-expired) codes: ${wikiActive.length}`);
   if (!wikiActive.length) {
     console.log('  (none — all wiki active-table rows expired or empty)');
   }
-  for (const c of wikiActive) console.log(`  - ${c.code}: ${c.rewards} (${c.requirement})`);
+  for (const c of wikiActive) {
+    console.log(
+      `  - ${c.code}: ${c.rewards} (${c.requirement}) expires=${c.expires || c.expiresAt || '—'}`,
+    );
+  }
+  if (expiredListed.length) {
+    console.log(`Wiki expired-in-table: ${expiredListed.map((c) => c.code).join(', ')}`);
+  }
 
   const raw = readFileSync(CODES_PATH, 'utf8');
   const { fm, body } = parseFrontmatter(raw);
@@ -351,7 +489,16 @@ async function main() {
   const wikiSet = new Set(wikiActive.map((c) => c.code));
 
   const added = wikiActive.filter((c) => !prevSet.has(c.code));
-  const removed = prevActive.filter((c) => !wikiSet.has(c.code));
+  // removed = was active, no longer live (includes wiki-marked expired)
+  const expiredByCode = new Map(expiredListed.map((c) => [c.code, c]));
+  const removed = prevActive
+    .filter((c) => !wikiSet.has(c.code))
+    .map((c) => expiredByCode.get(c.code) || c);
+
+  // also archive any wiki-expired codes not already in archive
+  const extraExpired = expiredListed.filter(
+    (c) => !prevActive.some((p) => p.code === c.code),
+  );
 
   // mark new
   const nextActive = wikiActive.map((c) => ({
@@ -359,24 +506,19 @@ async function main() {
     new: added.some((a) => a.code === c.code) ? true : undefined,
   }));
 
-  const nextArchived = mergeArchive(prevArchived, removed, patch);
+  let nextArchived = mergeArchive(prevArchived, [...removed, ...extraExpired], patch);
+  nextArchived = enrichArchiveExpires(nextArchived, expiredListed);
 
   const title = `Anime Vanguards Codes (${monthYearTitle()}) — Working + Copy`;
   const updated = todayISO();
 
-  const unchanged =
-    detailedEqual(
-      prevActive.map((c) => ({
-        code: c.code,
-        rewards: c.rewards,
-        requirement: c.requirement,
-      })),
-      wikiActive,
-    ) && removed.length === 0;
+  const activeUnchanged = detailedEqual(prevActive, nextActive) && removed.length === 0;
+  const archiveUnchanged =
+    JSON.stringify(prevArchived) === JSON.stringify(nextArchived);
 
   // still bump nothing if fully same
-  if (unchanged) {
-    console.log('No changes vs Wiki active list (codes + rewards + requirements).');
+  if (activeUnchanged && archiveUnchanged) {
+    console.log('No changes vs Wiki (active list + archive expiry metadata).');
     setOutput('changed', 'false');
     setOutput('added', '0');
     setOutput('removed', '0');
@@ -386,6 +528,7 @@ async function main() {
   console.log(`Changes: +${added.length} / -${removed.length}`);
   if (added.length) console.log('  added:', added.map((c) => c.code).join(', '));
   if (removed.length) console.log('  removed:', removed.map((c) => c.code).join(', '));
+  if (!archiveUnchanged) console.log('  archive/expiry metadata updated');
 
   const newFm = buildFrontmatter({
     title,

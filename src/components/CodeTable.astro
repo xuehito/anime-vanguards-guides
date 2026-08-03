@@ -4,6 +4,8 @@ interface CodeEntry {
   rewards: string;
   requirement?: string;
   new?: boolean;
+  expires?: string;
+  expiresAt?: string;
 }
 
 interface Props {
@@ -11,6 +13,8 @@ interface Props {
   emptyLabel?: string;
   showNew?: boolean;
   copyAll?: boolean;
+  /** Show copy button column (default true) */
+  showCopy?: boolean;
   tableId?: string;
 }
 
@@ -19,10 +23,12 @@ const {
   emptyLabel = 'No codes listed.',
   showNew = true,
   copyAll = false,
+  showCopy = true,
   tableId = 'codes-table',
 } = Astro.props;
 
 const allCodesPayload = codes.map((c) => c.code).join('\n');
+const showExpires = true;
 ---
 
 {
@@ -51,34 +57,49 @@ const allCodesPayload = codes.map((c) => c.code).join('\n');
               <th>Code</th>
               <th>Rewards</th>
               <th>Req.</th>
-              <th></th>
+              {showExpires && <th>Expires</th>}
+              {showCopy && <th></th>}
             </tr>
           </thead>
           <tbody>
-            {codes.map((row) => (
-              <tr>
-                <td>
-                  <span class="code-cell">{row.code}</span>
-                  {showNew && row.new && (
-                    <span class="badge badge--new" style="margin-left:0.4rem">
-                      NEW
-                    </span>
+            {codes.map((row) => {
+              const expired =
+                row.expires?.toLowerCase().includes('expired') ||
+                (row.expiresAt
+                  ? new Date(row.expiresAt + 'T23:59:59') < new Date()
+                  : false);
+              return (
+                <tr class:list={[expired && 'codes-table__row--expired']}>
+                  <td>
+                    <span class="code-cell">{row.code}</span>
+                    {showNew && row.new && (
+                      <span class="badge badge--new" style="margin-left:0.4rem">
+                        NEW
+                      </span>
+                    )}
+                  </td>
+                  <td>{row.rewards}</td>
+                  <td class="req">{row.requirement ?? '—'}</td>
+                  {showExpires && (
+                    <td class:list={['expires', expired && 'expires--past']}>
+                      {row.expires ?? (row.expiresAt ? row.expiresAt : '—')}
+                    </td>
                   )}
-                </td>
-                <td>{row.rewards}</td>
-                <td class="req">{row.requirement ?? '—'}</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn--primary copy-btn"
-                    data-code={row.code}
-                    aria-label={`Copy code ${row.code}`}
-                  >
-                    Copy
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  {showCopy && (
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn--primary copy-btn"
+                        data-code={row.code}
+                        aria-label={`Copy code ${row.code}`}
+                      >
+                        Copy
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
