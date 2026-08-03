@@ -2,7 +2,7 @@
 title: "Anime Vanguards Codes (August 2026) — Working + Copy"
 description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
-updated: "2026-08-02"
+updated: "2026-08-03"
 type: codes
 order: 2
 patch: "Update 14.0"
@@ -14,7 +14,7 @@ activeCodes:
     rewards: "50 Memoria Shards, 50 Extermination Tokens"
     requirement: "Level 30"
   - code: "ExecutionPart2"
-    rewards: "50 Trait Rerolls, 20 Extermination Tokens"
+    rewards: "50 Trait Rerolls, 20 Copycat Tokens"
     requirement: "Level 30"
 archivedByUpdate:
   - update: "Auto-archived 2026-08-02 (Update 14.0)"
