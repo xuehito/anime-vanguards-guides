@@ -33,6 +33,7 @@ const guides = defineCollection({
         'codes',
         'tier-list',
         'beginner',
+        'returning',
         'traits',
         'trait-odds',
         'farm-rr',

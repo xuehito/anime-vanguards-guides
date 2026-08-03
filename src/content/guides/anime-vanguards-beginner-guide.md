@@ -9,6 +9,8 @@ order: 4
 
 New to **Anime Vanguards** on Roblox? This guide gets you productive in the first few sessions without wasting Gems or Trait Rerolls.
 
+Played before and coming back? Use the **[returning player path](/anime-vanguards/returning-guide/)** instead — shorter comeback checklist.
+
 ## 1. Claim codes first
 
 Before long grinds, redeem every [active code](/anime-vanguards/codes/). Free Trait Rerolls and currencies stack up quickly around updates.
