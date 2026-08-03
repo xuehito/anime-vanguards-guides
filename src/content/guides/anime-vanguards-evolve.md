@@ -11,6 +11,15 @@ order: 6
 
 Always confirm exact requirements on the unit’s evolution panel or the [official wiki](https://wiki.vanguards.gg/).
 
+## Before you evolve (Wiki checklist)
+
+Official Evolutions guidance: **get good stats before evolving** — on evolution, **every stat goes up by one tier**, so weak base stats waste the upgrade.
+
+1. **Stats** acceptable (don’t evo a dumpster stat line if you can still reroll).  
+2. **Trait** decided if you can afford it — trait hunting after evo is fine, but don’t evo five units first.  
+3. **Materials / Evolution Quest** ready — see [Evolution Quests](https://wiki.vanguards.gg/Evolution_Quests).  
+4. **Lobby path** — [lobby guide](/anime-vanguards/lobby-guide/).
+
 ## Evolution priority (investment order)
 
 | Order | Evolve this | Why |

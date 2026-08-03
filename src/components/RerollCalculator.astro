@@ -1,28 +1,50 @@
 ---
 /**
- * Client-side Trait Reroll odds planner.
- * Rates are user-selected planning presets — NOT official game probabilities.
+ * Trait Reroll odds using official Wiki rates (Monarch 0.1% + pity 1500, etc.).
+ * Source: wiki.vanguards.gg/Traits — re-check after patches.
  */
+import { OFFICIAL_TRAITS, WIKI_TRAITS_URL } from '../data/traits';
+
+const traitsJson = JSON.stringify(
+  OFFICIAL_TRAITS.map((t) => ({
+    id: t.id,
+    name: t.name,
+    rate: t.rate,
+    pity: t.pity ?? null,
+    summary: t.summary,
+  })),
+);
 ---
 
 <section class="calc" id="reroll-calculator" aria-labelledby="calc-heading">
   <h2 id="calc-heading">Reroll odds calculator</h2>
   <p class="calc__disclaimer">
-    <strong>Planning tool only.</strong> Official trait rates are not published here. Presets are
-    <em>illustrative</em> so you can think about bank size — always treat in-game rolls as random.
+    Rates from the{' '}
+    <a href={WIKI_TRAITS_URL} rel="noopener noreferrer" target="_blank">official Wiki Traits</a>
+    {' '}table (e.g. Monarch <strong>0.1%</strong>, pity <strong>1,500</strong>). Pity is modeled as
+    <strong> hard pity</strong> (guaranteed by that roll if not hit earlier). Always re-check Wiki after
+    patches.
   </p>
 
   <form class="calc__form" id="reroll-form">
     <div class="calc__field">
-      <label for="rate-preset">Target rarity (illustrative)</label>
-      <select id="rate-preset" name="rate-preset">
-        <option value="0.05">Solid / common-good (~5% example)</option>
-        <option value="0.02">Strong niche (~2% example)</option>
-        <option value="0.005" selected>Ultra chase / Monarch-class talk (~0.5% example)</option>
-        <option value="0.001">Nightmare chase (~0.1% example)</option>
+      <label for="trait-select">Target trait</label>
+      <select id="trait-select" name="trait-select">
+        {
+          OFFICIAL_TRAITS.map((t) => (
+            <option value={t.id} selected={t.id === 'monarch'}>
+              {t.name}
+              {' — '}
+              {(t.rate * 100).toFixed(t.rate < 0.01 ? 3 : 2)}%
+              {t.pity ? ` · pity ${t.pity.toLocaleString('en-US')}` : ''}
+            </option>
+          ))
+        }
         <option value="custom">Custom percent…</option>
       </select>
     </div>
+
+    <p class="calc__trait-summary" id="trait-summary" />
 
     <div class="calc__field" id="custom-rate-wrap" hidden>
       <label for="custom-rate">Custom chance per reroll (%)</label>
@@ -32,9 +54,23 @@
         type="number"
         min="0.01"
         max="50"
-        step="0.01"
-        value="0.5"
+        step="0.001"
+        value="0.1"
         inputmode="decimal"
+      />
+    </div>
+
+    <div class="calc__field" id="custom-pity-wrap" hidden>
+      <label for="custom-pity">Custom hard pity (0 = none)</label>
+      <input
+        id="custom-pity"
+        name="custom-pity"
+        type="number"
+        min="0"
+        max="10000"
+        step="1"
+        value="0"
+        inputmode="numeric"
       />
     </div>
 
@@ -52,6 +88,20 @@
       />
     </div>
 
+    <div class="calc__field">
+      <label for="pity-progress">Pity progress already (optional)</label>
+      <input
+        id="pity-progress"
+        name="pity-progress"
+        type="number"
+        min="0"
+        max="10000"
+        step="1"
+        value="0"
+        inputmode="numeric"
+      />
+    </div>
+
     <button type="submit" class="btn btn--primary calc__submit">Calculate</button>
   </form>
 
@@ -59,124 +109,186 @@
     <h3 class="calc__results-title">Results</h3>
     <ul class="calc__stats">
       <li>
-        <span class="calc__stat-label">Chance of ≥1 success</span>
+        <span class="calc__stat-label">Chance of ≥1 hit (in N rolls)</span>
         <span class="calc__stat-value" id="out-at-least-one">—</span>
       </li>
       <li>
-        <span class="calc__stat-label">Expected rerolls for first success</span>
+        <span class="calc__stat-label">Expected rolls to first hit</span>
         <span class="calc__stat-value" id="out-expected">—</span>
       </li>
       <li>
-        <span class="calc__stat-label">Rerolls for ~50% chance</span>
+        <span class="calc__stat-label">Rolls for ~50% chance</span>
         <span class="calc__stat-value" id="out-p50">—</span>
       </li>
       <li>
-        <span class="calc__stat-label">Rerolls for ~90% chance</span>
+        <span class="calc__stat-label">Rolls for ~90% chance</span>
         <span class="calc__stat-value" id="out-p90">—</span>
+      </li>
+      <li>
+        <span class="calc__stat-label">Hard pity</span>
+        <span class="calc__stat-value" id="out-pity">—</span>
+      </li>
+      <li>
+        <span class="calc__stat-label">Rolls until pity (from progress)</span>
+        <span class="calc__stat-value" id="out-pity-left">—</span>
       </li>
     </ul>
     <p class="calc__note" id="out-note"></p>
     <p class="calc__next">
-      Free rerolls:{' '}
-      <a href="/anime-vanguards/codes/">codes</a>
-      · Who to spend on:{' '}
-      <a href="/anime-vanguards/traits/">traits guide</a>
+      Free RR sources:{' '}
+      <a href="/anime-vanguards/farm-trait-rerolls/">farm guide</a>
       ·{' '}
-      <a href="/anime-vanguards/tier-list/">tier list</a>
+      <a href="/anime-vanguards/codes/">codes</a>
+      · Who to trait:{' '}
+      <a href="/anime-vanguards/traits/">priority</a>
+      ·{' '}
+      <a href="/anime-vanguards/lobby-guide/">lobby NPCs</a>
     </p>
   </div>
 </section>
 
-<script>
-  function clamp(n: number, lo: number, hi: number) {
+<script define:vars={{ traitsJson }}>
+  const TRAITS = JSON.parse(traitsJson);
+
+  function clamp(n, lo, hi) {
     return Math.min(hi, Math.max(lo, n));
   }
 
-  function rollsForChance(p: number, target: number) {
+  function rollsForChance(p, target, pity) {
     if (p <= 0 || p >= 1) return Infinity;
-    return Math.ceil(Math.log(1 - target) / Math.log(1 - p));
+    let n = Math.ceil(Math.log(1 - target) / Math.log(1 - p));
+    if (pity && pity > 0) n = Math.min(n, pity);
+    return n;
   }
 
-  function formatPct(x: number) {
+  /** Expected rolls with optional hard pity (success on pity if never hit). */
+  function expectedWithPity(p, pity) {
+    if (p <= 0) return Infinity;
+    if (!pity || pity <= 0) return 1 / p;
+    let e = 0;
+    const q = 1 - p;
+    for (let k = 1; k < pity; k++) {
+      e += k * p * Math.pow(q, k - 1);
+    }
+    e += pity * Math.pow(q, pity - 1);
+    return e;
+  }
+
+  function chanceAtLeastOne(p, n, pity, progress) {
+    if (p <= 0) return 0;
+    const pityLeft =
+      pity && pity > 0 ? Math.max(1, pity - Math.max(0, progress)) : null;
+    let rolls = n;
+    if (pityLeft !== null && n >= pityLeft) {
+      // Hit is guaranteed by hard pity within the bank
+      return 1;
+    }
+    return 1 - Math.pow(1 - p, rolls);
+  }
+
+  function formatPct(x) {
     if (!Number.isFinite(x)) return '—';
-    if (x >= 0.9995) return '>99.9%';
+    if (x >= 0.9995) return '≥99.95% (or pity)';
     if (x < 0.0001) return '<0.01%';
     return `${(x * 100).toFixed(2)}%`;
   }
 
-  function formatInt(n: number) {
+  function formatInt(n) {
     if (!Number.isFinite(n) || n > 1e9) return '—';
     return Math.round(n).toLocaleString('en-US');
   }
 
-  function getP(): number {
-    const preset = (document.getElementById('rate-preset') as HTMLSelectElement).value;
-    if (preset === 'custom') {
-      const raw = Number((document.getElementById('custom-rate') as HTMLInputElement).value);
-      return clamp(raw / 100, 0.0001, 0.5);
+  function getSelection() {
+    const id = document.getElementById('trait-select').value;
+    if (id === 'custom') {
+      const raw = Number(document.getElementById('custom-rate').value);
+      const pity = Math.floor(Number(document.getElementById('custom-pity').value) || 0);
+      return {
+        id: 'custom',
+        name: 'Custom',
+        rate: clamp(raw / 100, 0.00001, 0.5),
+        pity: pity > 0 ? pity : null,
+        summary: 'Custom rate',
+      };
     }
-    return Number(preset);
+    return TRAITS.find((t) => t.id === id) || TRAITS[0];
   }
 
-  function runCalc(e?: Event) {
-    e?.preventDefault();
-    const p = getP();
-    const n = clamp(
-      Math.floor(Number((document.getElementById('rerolls') as HTMLInputElement).value) || 0),
-      1,
-      100000,
+  function updateSummary() {
+    const t = getSelection();
+    const el = document.getElementById('trait-summary');
+    const customWrap = document.getElementById('custom-rate-wrap');
+    const pityWrap = document.getElementById('custom-pity-wrap');
+    const isCustom = document.getElementById('trait-select').value === 'custom';
+    if (customWrap) customWrap.hidden = !isCustom;
+    if (pityWrap) pityWrap.hidden = !isCustom;
+    if (el) {
+      el.textContent = isCustom
+        ? 'Enter your own rate (and optional pity).'
+        : `${t.name}: ${t.summary}`;
+    }
+  }
+
+  function runCalc(e) {
+    if (e) e.preventDefault();
+    const t = getSelection();
+    const p = t.rate;
+    const pity = t.pity;
+    const n = clamp(Math.floor(Number(document.getElementById('rerolls').value) || 0), 1, 100000);
+    const progress = clamp(
+      Math.floor(Number(document.getElementById('pity-progress').value) || 0),
+      0,
+      pity || 10000,
     );
 
-    const atLeastOne = 1 - Math.pow(1 - p, n);
-    const expected = 1 / p;
-    const p50 = rollsForChance(p, 0.5);
-    const p90 = rollsForChance(p, 0.9);
+    const atLeastOne = chanceAtLeastOne(p, n, pity, progress);
+    const expected = expectedWithPity(p, pity);
+    const p50 = rollsForChance(p, 0.5, pity);
+    const p90 = rollsForChance(p, 0.9, pity);
+    const pityLeft = pity ? Math.max(0, pity - progress) : null;
 
     const results = document.getElementById('calc-results');
     if (results) results.hidden = false;
 
-    const el1 = document.getElementById('out-at-least-one');
-    const el2 = document.getElementById('out-expected');
-    const el3 = document.getElementById('out-p50');
-    const el4 = document.getElementById('out-p90');
-    const note = document.getElementById('out-note');
+    document.getElementById('out-at-least-one').textContent = formatPct(atLeastOne);
+    document.getElementById('out-expected').textContent = `~${formatInt(expected)}`;
+    document.getElementById('out-p50').textContent = `~${formatInt(p50)}`;
+    document.getElementById('out-p90').textContent = `~${formatInt(p90)}`;
+    document.getElementById('out-pity').textContent = pity
+      ? pity.toLocaleString('en-US')
+      : 'None listed';
+    document.getElementById('out-pity-left').textContent =
+      pityLeft === null ? '—' : pityLeft === 0 ? 'Pity ready' : formatInt(pityLeft);
 
-    if (el1) el1.textContent = formatPct(atLeastOne);
-    if (el2) el2.textContent = `~${formatInt(expected)}`;
-    if (el3) el3.textContent = `~${formatInt(p50)}`;
-    if (el4) el4.textContent = `~${formatInt(p90)}`;
+    const note = document.getElementById('out-note');
     if (note) {
-      note.textContent = `Using p = ${(p * 100).toFixed(3)}% per independent reroll and n = ${n}. Independent Bernoulli model — real pools may differ.`;
+      note.textContent = `${t.name}: p = ${(p * 100).toFixed(3)}% per roll${
+        pity ? `, hard pity ${pity}` : ''
+      }, N = ${n}${progress ? `, pity progress ${progress}` : ''}. Independent rolls + hard pity model.`;
     }
 
     try {
-      // @ts-expect-error gtag optional
       if (typeof gtag === 'function') {
-        // @ts-expect-error gtag
         gtag('event', 'reroll_calc', {
+          trait: t.id,
           rate: p,
+          pity: pity || 0,
           rerolls: n,
-          chance: Math.round(atLeastOne * 10000) / 10000,
         });
       }
-    } catch {
-      /* ignore */
-    }
+    } catch (_) {}
   }
 
   function bind() {
-    const form = document.getElementById('reroll-form') as HTMLFormElement | null;
-    const preset = document.getElementById('rate-preset') as HTMLSelectElement | null;
-    const customWrap = document.getElementById('custom-rate-wrap');
+    const form = document.getElementById('reroll-form');
     if (!form || form.dataset.bound) return;
     form.dataset.bound = '1';
-
-    preset?.addEventListener('change', () => {
-      if (customWrap) customWrap.hidden = preset.value !== 'custom';
+    document.getElementById('trait-select').addEventListener('change', () => {
+      updateSummary();
+      runCalc();
     });
-
     form.addEventListener('submit', runCalc);
-    // first paint
+    updateSummary();
     runCalc();
   }
 

@@ -35,6 +35,8 @@ const guides = defineCollection({
         'beginner',
         'traits',
         'trait-odds',
+        'farm-rr',
+        'lobby',
         'evolve',
         'event',
         'trading',

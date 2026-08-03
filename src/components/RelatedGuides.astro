@@ -46,14 +46,28 @@ const all: (Link & { id: string })[] = [
     id: 'trait-odds',
     href: '/anime-vanguards/trait-reroll-odds/',
     title: 'Reroll odds calculator',
-    blurb: 'How many RR for a chase trait — planning math.',
+    blurb: 'Monarch 0.1% + pity 1500 and other Wiki rates.',
     tag: 'Tools',
+  },
+  {
+    id: 'farm-rr',
+    href: '/anime-vanguards/farm-trait-rerolls/',
+    title: 'Farm Trait Rerolls',
+    blurb: 'Boss shop, Rift shop, challenges, codes.',
+    tag: 'Farm',
+  },
+  {
+    id: 'lobby',
+    href: '/anime-vanguards/lobby-guide/',
+    title: 'Lobby guide',
+    blurb: 'Mandra, upgrades, shops, where to click.',
+    tag: 'Map',
   },
   {
     id: 'trading',
     href: '/anime-vanguards/trading/',
     title: 'Trading guide',
-    blurb: 'Rules, WFL checklist, trait loss, scam safety.',
+    blurb: 'Level 50, traits removed, which RR trade.',
     tag: 'Trade',
   },
   {
@@ -80,16 +94,18 @@ const all: (Link & { id: string })[] = [
 ];
 
 const preference: Record<string, string[]> = {
-  codes: ['trait-odds', 'traits', 'tier-list'],
-  beginner: ['codes', 'traits', 'tier-list'],
-  'tier-list': ['traits', 'trait-odds', 'codes'],
-  traits: ['trait-odds', 'codes', 'tier-list'],
-  'trait-odds': ['traits', 'codes', 'trading'],
-  trading: ['tier-list', 'trait-odds', 'codes'],
-  evolve: ['traits', 'tier-list', 'event'],
-  event: ['codes', 'tier-list', 'traits'],
-  hub: ['codes', 'trait-odds', 'trading'],
-  guide: ['codes', 'trait-odds', 'trading'],
+  codes: ['farm-rr', 'trait-odds', 'traits'],
+  beginner: ['lobby', 'codes', 'farm-rr'],
+  'tier-list': ['traits', 'trait-odds', 'farm-rr'],
+  traits: ['trait-odds', 'farm-rr', 'lobby'],
+  'trait-odds': ['farm-rr', 'traits', 'lobby'],
+  'farm-rr': ['trait-odds', 'codes', 'lobby'],
+  lobby: ['farm-rr', 'traits', 'trading'],
+  trading: ['tier-list', 'farm-rr', 'lobby'],
+  evolve: ['lobby', 'traits', 'tier-list'],
+  event: ['codes', 'farm-rr', 'tier-list'],
+  hub: ['codes', 'farm-rr', 'trait-odds'],
+  guide: ['codes', 'farm-rr', 'trait-odds'],
 };
 
 const order = preference[current ?? 'guide'] ?? preference.guide;

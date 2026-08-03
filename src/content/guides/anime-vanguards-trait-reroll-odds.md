@@ -1,84 +1,60 @@
 ---
-title: "Anime Vanguards Trait Reroll Odds — How Many Rerolls?"
-description: "Plan Trait Rerolls in Anime Vanguards: illustrative odds calculator, how many rolls for a chase trait, and where free code rerolls should go."
+title: "Anime Vanguards Trait Reroll Odds — Monarch Pity & Calculator"
+description: "Official Wiki trait rates: Monarch 0.1% pity 1500, Ethereal, Deadeye, Solar. Calculator with hard pity and how many Trait Rerolls you need."
 label: "Reroll odds"
-updated: "2026-08-02"
+updated: "2026-08-03"
 type: trait-odds
 order: 5
 patch: "Update 14.x"
 ---
 
-This page is a **planning aid** for Trait Rerolls — not official drop rates from the developers.
+Use the calculator above with **Wiki-published rates**. Full table: [wiki.vanguards.gg/Traits](https://wiki.vanguards.gg/Traits).
 
-Use the calculator above, then read the decision rules below. Free rerolls: [codes](/anime-vanguards/codes/). Priority who to trait: [traits guide](/anime-vanguards/traits/).
+Free RR: [codes](/anime-vanguards/codes/) · [farm guide](/anime-vanguards/farm-trait-rerolls/). Spend priority: [traits guide](/anime-vanguards/traits/). NPC location: [lobby guide](/anime-vanguards/lobby-guide/).
+
+## Official rates (Wiki)
+
+| Trait | Rate | Pity | Notes |
+|-------|------|------|--------|
+| **Monarch** | **0.1%** (1/1,000) | **1,500** | +300% DMG, −10% SPA, +5% RNG, 1 placement |
+| **Ethereal** | 0.175% | 858 | High DMG + attack speed |
+| **Deadeye** | 0.375% | 400 | Crit / accuracy style |
+| **Solar** | 0.5% | 300 | Range + mild combat |
+| **Range Blitz** | 1.85% | — | −20% SPA |
+| **Fortune** | 2.5% | — | Income / cost |
+| **Vigor / Swift families** | ~26% pool | — | Common multi-tier families |
+
+Always re-check Wiki after balance patches. Sub-rolls (Vigor I/II/III) share larger pools — the calculator uses family-level rate where noted.
 
 ## How to read the calculator
 
 | Output | Meaning |
 |--------|---------|
-| **Chance of ≥1 success** | Odds you hit the target at least once in N independent rerolls |
-| **Expected rerolls** | Average rolls until first success if each roll has chance *p* |
-| **~50% / ~90% chance** | Rough bank size if you want a coin-flip or high confidence |
+| **Chance of ≥1 hit** | Probability you hit within N rolls (pity can force 100%) |
+| **Expected rolls** | Average rolls to first hit **with hard pity** if listed |
+| **~50% / ~90%** | Bank size for that confidence (capped by pity when present) |
+| **Rolls until pity** | Pity − your current pity progress |
 
-Formula (independent rolls):  
-`P(at least one) = 1 − (1 − p)^N`
-
-### Presets are illustrative
-
-Ultra-rare traits (often nicknamed **Monarch**-class) are much harder to hit than “good enough” traits. The presets below are **example percents** so you can plan a bank size:
-
-- **~5%** — solid / usable planning tier  
-- **~2%** — strong niche  
-- **~0.5%** — ultra chase  
-- **~0.1%** — extreme chase  
-- **Custom** — enter a rate from your own tests  
-
-If the real pool differs, use custom %. **Do not treat presets as official datamined rates.**
+Hard pity model: if you never hit by roll `pity`, that roll is treated as guaranteed (Wiki “Pity” field).
 
 ## Practical banking rules
 
-1. **Main DPS first** — only long-term units deserve chase banks.  
-2. **Stop at “good enough”** early — clear content, then chase cosmetics/meta traits.  
-3. **Codes → bank → one unit** — don’t split 200 RR across five epics.  
-4. **Before a banner you will main** — hold RR if you know a new SS is coming this week.  
-5. **Expected value is not a guarantee** — 1/p average still allows long dry streaks.
-
-## “How many RR should I have?”
-
-There is no single number. Use the calculator:
-
-| Goal | What to set |
-|------|-------------|
-| Just want a usable trait | Higher *p* preset, smaller N |
-| Chasing a named ultra trait | Lowest *p* preset; look at **90%** row — that’s the painful truth |
-| Only 50–100 free code RR | Spend on main only; don’t open “Monarch or nothing” |
-
-Also see farming sources on the [traits](/anime-vanguards/traits/) page mindset: codes, challenges, events, battlepass — rates and caps change by patch.
-
-## Who to spend on (quick)
-
-| Priority | Target |
-|----------|--------|
-| 1 | Best DPS you place every run ([tier list](/anime-vanguards/tier-list/)) |
-| 2 | Core support you always place |
-| 3 | Secondary clear — only after 1 is fine |
-
-Deep dive: [Trait priority guide](/anime-vanguards/traits/).
+1. **Main DPS only** for chase traits (Monarch / Ethereal).  
+2. **Good enough is fine** early — clear content first.  
+3. **Codes + Boss + Rift shops** before Robux.  
+4. **Pity progress is per trait hunt** — trading a unit **wipes traits and pities** ([trading](/anime-vanguards/trading/)).  
+5. Expected value is not a promise — dry streaks happen even below pity.
 
 ## FAQ
 
-### Are these official drop rates?
+### Is Monarch really 0.1%?
 
-**No.** Official public tables are not mirrored here. Presets are for **planning math** only.
+That is what the **Wiki Traits** table lists, with pity **1,500**. If the game changes rates, update from Wiki.
 
-### Why did I use 500 RR and still miss?
+### Should I buy Robux RR?
 
-Variance. Even at 0.5% per roll, long dry streaks are normal. The 90% bank size exists for a reason.
+Only if you need speed or tradable RR. Farmed RR cannot be traded the same way — see [farm guide](/anime-vanguards/farm-trait-rerolls/).
 
-### Should I trade for rerolls?
+### Where do I reroll?
 
-Trading rules and risks: [Trading guide](/anime-vanguards/trading/). Prefer free [codes](/anime-vanguards/codes/) and legitimate in-game sinks first. Never buy accounts or grey-market currency.
-
-### Does trading delete traits?
-
-Community reports often say **traded units can lose traits** (and rules change). Confirm in-game / Wiki before you move a Monarch roll. Details on the trading page.
+**Mandra (Traits)** in the lobby Upgrades area — [lobby guide](/anime-vanguards/lobby-guide/).

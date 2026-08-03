@@ -9,7 +9,8 @@ order: 5
 
 **Traits** are one of the biggest power levers after unit rarity. Free **Trait Rerolls** from [codes](/anime-vanguards/codes/) are premium — this guide is about not wasting them.
 
-Wondering *how many* rerolls for a chase trait? Use the [**reroll odds calculator**](/anime-vanguards/trait-reroll-odds/).
+Wondering *how many* rerolls for Monarch? Wiki rate is **0.1%** with **pity 1,500** — use the [**reroll odds calculator**](/anime-vanguards/trait-reroll-odds/).  
+Where to get free RR: [farm guide](/anime-vanguards/farm-trait-rerolls/). Where to click: [lobby · Mandra](/anime-vanguards/lobby-guide/).
 
 ## What traits do (simple version)
 

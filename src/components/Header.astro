@@ -17,7 +17,9 @@ function isCurrent(href: string) {
       path.includes('/evolve') ||
       path.includes('/event') ||
       path.includes('/beginner') ||
-      path.includes('/traits/')
+      path.includes('/traits/') ||
+      path.includes('/farm-') ||
+      path.includes('/lobby')
     );
   }
   return path === href || path.startsWith(href);

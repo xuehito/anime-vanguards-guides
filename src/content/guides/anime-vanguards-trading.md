@@ -1,114 +1,123 @@
 ---
 title: "Anime Vanguards Trading Guide — Rules, WFL, Safety"
-description: "Anime Vanguards trading explained: level limits, limited units, traits on trade, WFL checklist, value tips, and scam safety. Unofficial fan guide."
+description: "Official Wiki trading rules: level 50, limited units, traits removed, which Trait Rerolls can be traded. WFL checklist and scam safety."
 label: "Trading"
-updated: "2026-08-02"
+updated: "2026-08-03"
 type: trading
 order: 8
 patch: "Check in-game"
 ---
 
-This page is a **rules + safety checklist** for trading — not a live price list and **not a trade marketplace**.
+This page summarizes **hard rules** from the [official Wiki Trading](https://wiki.vanguards.gg/Trading) page and FAQs — not a price list and **not a trade marketplace**.
 
-Always verify current rules in-game and on the [official Wiki](https://wiki.vanguards.gg/) / Discord. Trading has been **disabled or restricted** after exploits in the past — if the trade UI is gone, treat this as reference only.
+Always confirm live in-game. Trading has been disabled after exploits before; if the UI is gone, this is reference only.
+
+**Wiki states:** no official value list will be published on the Wiki or promoted in Discord. Any value sheet you see is **unofficial**.
 
 ## Safety first
 
 | Do | Don’t |
 |----|--------|
-| Trade only in official game UI | Middleman with strangers for Robux/Irl |
-| Screenshot offers | Share passwords / account login |
-| Check level & trade filters | Trust “admin giveaway” DMs |
-| Assume values swing after banners | Beg for free limiteds in comments here |
+| Trade only in official game UI | Middleman for Robux / IRL money |
+| Screenshot the confirmation screen | Share passwords / account login |
+| Both accounts **level 50+** | Trust “admin giveaway” DMs |
+| Accept that **traits wipe** | Beg for free limiteds here |
 
-**We do not broker trades, buy units, or host RMT.** For unit stats use the Wiki; for community value boards use third-party value sites **at your own risk**.
+We do **not** broker trades, buy units, or host RMT.
 
-## Rules to verify in-game
+## Official rules (Wiki)
 
-Patch notes can change any of these — confirm live before trading:
+### Access
 
-1. **Level gate** — trading may require a high account level (commonly discussed around level 50+).  
-2. **Limited / unobtainable focus** — the tradeable pool is often **limited** units, not every farmable unit.  
-3. **Traits on trade** — traits may be **stripped or not transfer** safely. Never assume a Monarch roll survives a trade.  
-4. **Currency / RR exploits** — trading rerolls or currency has been abused before; expect locks or bans if systems are bugged.  
-5. **Shiny / dupe value** — event 2x shiny windows can inflate or crash specific shinies; old prices go stale fast.
+- Introduced in **Update 9.0**  
+- Both players must be at least **level 50**
 
-For exact lists (what is tradeable today), prefer Wiki / in-game index over any fan site.
+### What happens to units on trade (IMPORTANT)
 
-## WFL checklist (before you accept)
+| Kept | Removed |
+|------|---------|
+| **Stats, Levels, Ascensions** | **Traits and pities** |
 
-Use this instead of vibes-only screenshots:
+Never trade assuming a **Monarch** (or any trait) survives. Pity progress on that unit is also cleared per Wiki.
 
-- [ ] Is trading **enabled** right now?  
-- [ ] Are both accounts **high enough level**?  
-- [ ] Is the unit **actually tradeable** (limited / allowed list)?  
-- [ ] Am I okay if **traits reset or vanish**?  
-- [ ] Is this unit still **meta** after the latest banner ([tier list](/anime-vanguards/tier-list/))?  
-- [ ] Am I trading away my **only** clear core with no replacement?  
-- [ ] Does the other side demand **out-of-game payment**? → walk away  
+When trading stats at **S rank or above**, the trade UI shows the **% values** of those stats.
 
-**WFL tip:** “Fair” ≠ “helps your account.” A fair trade can still brick your team if you dump your only DPS.
+### Tradable items (Wiki list)
 
-## Value without a full price list
+| Category | Detail |
+|----------|--------|
+| **Limited units** | Units that will become unobtainable. Still-on-banner limiteds may **not** trade until they are fully gone |
+| **Giftable shop items** | Gamepasses, bundles, battlepasses, etc. Bundle contents show on hover |
+| **Trait Rerolls (Robux only)** | Rerolls **purchased with Robux** from the reroll shop |
+| **Skins** | Limited or non-limited |
+| **Familiars** | Including limited; **Vanguard Familiars** have special notes (not the same as normal limiteds) |
+| **Unobtainable Memoria** | e.g. specialty memoria that are no longer available |
+| **Unobtainable bundle mounts** | e.g. special bikes/horses from old bundles |
 
-Community value is **relative** and moves with:
+### Trait Rerolls — what you can trade
 
-- New banners / power creep  
-- Limited windows and shiny events  
-- Exploit bans / trade disables (liquidity dries up)  
-- Bundle Robux prices (people anchor to shop cost)
+| Type | Tradable? |
+|------|-----------|
+| Bought with **Robux** in the Trait Reroll shop | **Yes** (Wiki) |
+| From **codes**, grinding, shops (Boss/Rift/etc.), bundles | **No** (FAQ / Trading notes) |
 
-### How to think in tiers (not numbers)
+Farm free RR instead: [farm guide](/anime-vanguards/farm-trait-rerolls/) · [codes](/anime-vanguards/codes/).
 
-| Rough tier | Examples of thinking |
-|------------|----------------------|
-| **Chase limited / meta** | Current SS faces people spam in trade chats |
-| **Strong limited** | Good but replaceable after next update |
-| **Shiny flex** | Taste + event timing; not always stronger |
-| **Dupe / bulk** | Fuel for crafting or lowballs — don’t overvalue |
+## WFL checklist
 
-For named units, open the [Wiki unit page](https://wiki.vanguards.gg/Unit_List) for identity, then ask trade chat / value tools with **today’s date** in mind.
+- [ ] Trading **enabled** right now?  
+- [ ] Both players **level 50+**?  
+- [ ] Unit is **actually limited / tradable** (not still on banner)?  
+- [ ] I accept **traits & pity wipe**?  
+- [ ] Unit still useful for my team ([tier list](/anime-vanguards/tier-list/))?  
+- [ ] Not dumping my **only** clear core?  
+- [ ] No **out-of-game payment** demanded?  
 
-Optional third-party value browsers exist in the ecosystem (search “Anime Vanguards value list”). Treat them as **rumor + spreadsheet**, not law.
+**WFL tip:** “Fair on a value sheet” ≠ “good for your account.”
+
+## Value without official prices
+
+The Wiki will **not** publish values. Relative value moves with banners, shiny events, and trade locks. Use third-party lists at your own risk.
+
+| Rough tier | Thinking |
+|------------|----------|
+| Chase limited / meta | People still place it every run |
+| Strong limited | Good, replaceable next update |
+| Shiny flex | Taste + event timing |
+| Dupes | Don’t overvalue |
 
 ## Common questions
 
-### Should I trade shiny X for Y + Z?
-
-Check: (1) team hole you fill, (2) limited status, (3) trait loss, (4) whether Y/Z are still good on the [tier list](/anime-vanguards/tier-list/).  
-If you need a **playable account**, prefer units you will place every run over flex screenshots.
-
 ### Do traded units keep traits?
 
-Do **not** assume yes. Plan as if traits are lost unless the current patch notes explicitly say otherwise.
+**No** per Wiki — **traits and pities are removed**. Stats/levels/ascensions stay.
 
-### Can I trade trait rerolls?
+### Can I trade my 500 code rerolls?
 
-Even when currency trade exists, it has been **exploit-prone**. Prefer earning RR via [codes](/anime-vanguards/codes/), quests, and events. See [reroll odds](/anime-vanguards/trait-reroll-odds/) before dumping thousands on a chase trait.
+**No** if they came from codes/grind/shops. Only **Robux shop** RR are listed as tradable.
 
-### Why does trading get disabled sometimes?
+### Should I trade my only DPS for “value”?
 
-Past incidents involved **currency or reroll bugs** and economy damage. When that happens, expect freezes — stay away from “too good” offers.
+Usually **no** until you have a replacement. Power for clears beats screenshot WFL.
 
-## Fair-play alternatives to trading
+### Where do I open trade?
 
-| Goal | Better path |
-|------|-------------|
-| More power | [Evolve](/anime-vanguards/evolve/) + [traits](/anime-vanguards/traits/) on one main |
-| Free RR | [Codes](/anime-vanguards/codes/) + weekly content |
-| Know who is good | [Tier list](/anime-vanguards/tier-list/) + Wiki |
-| New player | [Beginner guide](/anime-vanguards/beginner-guide/) |
+In the **lobby** when the system is on — see [lobby guide](/anime-vanguards/lobby-guide/).
+
+## Fair alternatives
+
+| Goal | Path |
+|------|------|
+| More power | [Evolve](/anime-vanguards/evolve/) + [traits](/anime-vanguards/traits/) |
+| More RR | [Farm RR](/anime-vanguards/farm-trait-rerolls/) + [codes](/anime-vanguards/codes/) |
+| Odds for Monarch | [Reroll calculator](/anime-vanguards/trait-reroll-odds/) (0.1% + pity 1500) |
 
 ## FAQ
 
-### Is this an official trading board?
+### Is this official?
 
-No. Unofficial fan guide only.
+No. Unofficial summary of Wiki rules with links back to [Trading](https://wiki.vanguards.gg/Trading).
 
-### Will you add live values?
+### Can I post trades here?
 
-Not as a scraped black-market feed. We may add **dated relative tiers** later if we maintain them carefully.
-
-### Can I post trades on this site?
-
-No trade posts or middleman requests. Use official game systems and community Discords at your own risk.
+No. Use in-game trade only.
