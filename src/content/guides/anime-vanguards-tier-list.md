@@ -2,7 +2,7 @@
 title: "Anime Vanguards Tier List (Update 14.x) — Best Units"
 description: "Update 14.x Anime Vanguards tier list for investment: SS–C ranks, why each tier matters, and who to feed Trait Rerolls and gems."
 label: "Tier list"
-updated: "2026-08-02"
+updated: "2026-08-03"
 type: tier-list
 order: 3
 patch: "Update 14.x"
@@ -12,7 +12,7 @@ patch: "Update 14.x"
 
 This list answers: *where should free code rewards and banner gems go?* For the **authoritative ranked list** (competitive included), use the [official Wiki Tier List](https://wiki.vanguards.gg/Tier_List). We focus on **how to invest**, not mirroring every nameplate.
 
-New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beginner guide](/anime-vanguards/beginner-guide/).
+New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beginner guide](/anime-vanguards/beginner-guide/). After you pick a main, spend RR with the [traits guide](/anime-vanguards/traits/) and [reroll odds calculator](/anime-vanguards/trait-reroll-odds/) (Monarch **0.1%**, pity **1,500**).
 
 ## How to read ranks
 
@@ -90,9 +90,10 @@ In-game names often include evolution form suffixes. Open Wiki unit pages for ki
 ## Summon & trait tips
 
 1. Bank resources before weak banners when you know an update is close.  
-2. Trait Rerolls = premium — only long-term mains.  
+2. Trait Rerolls = premium — only long-term mains ([traits](/anime-vanguards/traits/)).  
 3. One complete team beats six half-built units.  
-4. Funnel free code rerolls into main DPS first.
+4. Funnel free code rerolls into main DPS first; bank more via the [farm guide](/anime-vanguards/farm-trait-rerolls/) (Boss/Rift shops, challenges).  
+5. Reroll at **Mandra** in the lobby ([lobby map](/anime-vanguards/lobby-guide/)); check odds with the [calculator](/anime-vanguards/trait-reroll-odds/).
 
 ## Simple team framework
 

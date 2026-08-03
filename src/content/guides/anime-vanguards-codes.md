@@ -111,3 +111,12 @@ Common reasons: already redeemed, expired, wrong spelling, not high enough level
 ### Is this list official?
 
 No. This is an unofficial fan site for fast redeem + next steps. Codes come from the developers; full history also lives on the [official Wiki Codes page](https://wiki.vanguards.gg/Codes).
+
+## Next steps after redeeming
+
+Codes are the pulse — then spend and farm smart:
+
+1. **Spend RR** on a real main → [traits guide](/anime-vanguards/traits/) · [tier list](/anime-vanguards/tier-list/) · [reroll odds](/anime-vanguards/trait-reroll-odds/) (Monarch **0.1%**, pity **1,500**)
+2. **Bank more RR** when the free codes dry up → [farm Trait Rerolls](/anime-vanguards/farm-trait-rerolls/) (Boss shop 4:1, Rift 10:1, challenges)
+3. **Where to click** in lobby → [lobby guide](/anime-vanguards/lobby-guide/) (Mandra, shops, trade)
+4. New account → [beginner path](/anime-vanguards/beginner-guide/) · limited mode → [event playbook](/anime-vanguards/event/)

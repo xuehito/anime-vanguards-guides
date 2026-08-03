@@ -2,7 +2,7 @@
 title: "Anime Vanguards Event Guide — How to Play Limited Content"
 description: "How to approach Anime Vanguards events and limited modes: entry order, rewards focus, and what beginners should skip."
 label: "Events"
-updated: "2026-08-02"
+updated: "2026-08-03"
 type: event
 order: 7
 ---
@@ -29,7 +29,7 @@ Mechanics change; the **decision order** below stays useful.
 | 2 | Unlock **entry requirements** (level / story) | Many event stages gate early |
 | 3 | Clear **easy free rewards** first | Guaranteed value, low wipe risk |
 | 4 | Push **harder tiers** only with a stable team | See [tier list](/anime-vanguards/tier-list/) |
-| 5 | Spend event currency on **account power** | Mats, rerolls, units > pure cosmetics if you are behind |
+| 5 | Spend event currency on **account power** | Mats, rerolls, units > pure cosmetics if you are behind — see [farm RR](/anime-vanguards/farm-trait-rerolls/) for shop rates |
 
 ## Beginners: what to skip
 
@@ -51,9 +51,11 @@ If you are still in the [beginner path](/anime-vanguards/beginner-guide/):
 
 - [ ] Codes page updated / redeemed  
 - [ ] Event entry unlocked  
-- [ ] Free track / shop essentials bought  
+- [ ] Free track / shop essentials bought (RR shops: [farm guide](/anime-vanguards/farm-trait-rerolls/))  
 - [ ] Main team still matches [tier list](/anime-vanguards/tier-list/)  
-- [ ] Trait rerolls assigned to mains, not fillers  
+- [ ] Trait rerolls assigned to mains, not fillers ([traits](/anime-vanguards/traits/) · [odds](/anime-vanguards/trait-reroll-odds/))  
+- [ ] Know lobby NPCs for evo / traits / shops ([lobby guide](/anime-vanguards/lobby-guide/))  
+
 
 ## FAQ
 
