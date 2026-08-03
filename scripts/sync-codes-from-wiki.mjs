@@ -126,6 +126,12 @@ export function parseWikiActiveCodes(html) {
     // expect: code | rewards | requirement | availability
     const rewardsText = stripHtml(tds[1] || tds[0] || '');
     const reqText = stripHtml(tds[2] || '');
+    const availText = stripHtml(tds[3] || '');
+
+    // Wiki sometimes leaves rows in the "active" table with Availability = Expired
+    if (/\bexpired\b/i.test(availText)) {
+      continue;
+    }
 
     rows.push({
       code,
@@ -221,13 +227,25 @@ function buildFrontmatter({ title, description, label, updated, type, order, pat
   fm += `type: ${type}\n`;
   fm += `order: ${order}\n`;
   fm += `patch: "${yamlEscape(patch)}"\n`;
-  fm += `activeCodes:\n`;
-  for (const c of active) fm += emitCodeEntry(c, 2, true);
-  fm += `archivedByUpdate:\n`;
-  for (const g of archived) {
-    fm += `  - update: "${yamlEscape(g.update)}"\n`;
-    fm += `    codes:\n`;
-    for (const c of g.codes) fm += emitCodeEntry(c, 6, false);
+  if (active.length === 0) {
+    fm += `activeCodes: []\n`;
+  } else {
+    fm += `activeCodes:\n`;
+    for (const c of active) fm += emitCodeEntry(c, 2, true);
+  }
+  if (archived.length === 0) {
+    fm += `archivedByUpdate: []\n`;
+  } else {
+    fm += `archivedByUpdate:\n`;
+    for (const g of archived) {
+      fm += `  - update: "${yamlEscape(g.update)}"\n`;
+      if (g.codes.length === 0) {
+        fm += `    codes: []\n`;
+      } else {
+        fm += `    codes:\n`;
+        for (const c of g.codes) fm += emitCodeEntry(c, 6, false);
+      }
+    }
   }
   return fm;
 }
@@ -304,10 +322,16 @@ async function main() {
   console.log(`Fetching ${WIKI_URL} ...`);
   const html = await fetchWikiHtml();
   const wikiActive = parseWikiActiveCodes(html);
-  if (!wikiActive.length) {
-    throw new Error('Parsed 0 active codes from Wiki — aborting to avoid wiping the list');
+  // Empty is valid when Wiki marks all rows Expired (or no live codes).
+  // Only abort if the HTML looks broken (no codes table / no data-code at all).
+  const anyDataCode = /data-code=["'][^"']+["']/i.test(html);
+  if (!wikiActive.length && !anyDataCode) {
+    throw new Error('Parsed 0 codes and found no data-code in Wiki HTML — aborting (parse failure)');
   }
-  console.log(`Wiki active codes: ${wikiActive.length}`);
+  console.log(`Wiki active (non-expired) codes: ${wikiActive.length}`);
+  if (!wikiActive.length) {
+    console.log('  (none — all wiki active-table rows expired or empty)');
+  }
   for (const c of wikiActive) console.log(`  - ${c.code}: ${c.rewards} (${c.requirement})`);
 
   const raw = readFileSync(CODES_PATH, 'utf8');

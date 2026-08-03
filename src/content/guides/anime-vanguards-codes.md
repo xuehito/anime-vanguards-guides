@@ -6,17 +6,19 @@ updated: "2026-08-03"
 type: codes
 order: 2
 patch: "Update 14.0"
-activeCodes:
-  - code: "1DayL8"
-    rewards: "500 Trait Rerolls"
-    requirement: "Level 30"
-  - code: "HeavyEyes"
-    rewards: "50 Memoria Shards, 50 Extermination Tokens"
-    requirement: "Level 30"
-  - code: "ExecutionPart2"
-    rewards: "50 Trait Rerolls, 20 Copycat Tokens"
-    requirement: "Level 30"
+activeCodes: []
 archivedByUpdate:
+  - update: "Auto-archived 2026-08-03 (Update 14.0)"
+    codes:
+      - code: "1DayL8"
+        rewards: "500 Trait Rerolls"
+        requirement: "Level 30"
+      - code: "HeavyEyes"
+        rewards: "50 Memoria Shards, 50 Extermination Tokens"
+        requirement: "Level 30"
+      - code: "ExecutionPart2"
+        rewards: "50 Trait Rerolls, 20 Copycat Tokens"
+        requirement: "Level 30"
   - update: "Auto-archived 2026-08-02 (Update 14.0)"
     codes:
       - code: "kat"
