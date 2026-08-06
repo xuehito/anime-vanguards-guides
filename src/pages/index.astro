@@ -1,13 +1,35 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
 import VersionHotBar from '../components/VersionHotBar.astro';
 import SourceStrip from '../components/SourceStrip.astro';
+import CodeTable from '../components/CodeTable.astro';
+import SummonPityCalculator from '../components/SummonPityCalculator.astro';
+import {
+  CODES_REFRESH_HOURS,
+  formatNextUpdateBadge,
+  getNextUpdateDate,
+} from '../lib/next-update';
 
 const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+const codesEntry = await getEntry('guides', 'anime-vanguards-codes');
+const activeCodes = codesEntry?.data.activeCodes ?? [];
+const codesUpdated = codesEntry?.data.updated ?? '1970-01-01';
+const codesNextDate = getNextUpdateDate(
+  codesUpdated,
+  codesEntry?.data.nextUpdate,
+  CODES_REFRESH_HOURS,
+);
+const codesNextBadge = formatNextUpdateBadge(codesNextDate);
+const codesNextIso = codesNextDate.toISOString();
+/** Homepage shows a short preview; full list on /codes */
+const HOME_CODES_PREVIEW = 5;
+const previewCodes = activeCodes.slice(0, HOME_CODES_PREVIEW);
+const hasMoreCodes = activeCodes.length > HOME_CODES_PREVIEW;
 
 const latestUpdated = guides.reduce((max, g) => {
   return g.data.updated > max ? g.data.updated : max;
@@ -16,6 +38,12 @@ const latestUpdated = guides.reduce((max, g) => {
 const latestLabel = new Date(latestUpdated + 'T12:00:00').toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
+  day: 'numeric',
+});
+
+const codesUpdatedLabel = new Date(codesUpdated + 'T12:00:00').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
   day: 'numeric',
 });
 
@@ -57,6 +85,8 @@ const path = [
     id: 'tier-list',
   },
 ];
+
+const ROBLOX_GAME_URL = 'https://www.roblox.com/games/16146832113';
 ---
 
 <BaseLayout
@@ -68,6 +98,7 @@ const path = [
     <p class="eyebrow">
       <span class="badge badge--trust">Updated {latestLabel}</span>
       <span class="badge">Unofficial · EN</span>
+      <span class="badge">Syncs from official Wiki</span>
     </p>
     <h1>Anime Vanguards Codes, Tier List &amp; Guides</h1>
     <p>
@@ -75,6 +106,23 @@ const path = [
       codes, see who to invest in, and start strong between matches. Official data lives on
       the Wiki and Changelog — we turn it into a session path.
     </p>
+    <div class="hero__cta">
+      <a class="btn btn--primary hero-cta-link" href="/anime-vanguards/codes/" data-cta="codes">
+        Get free codes
+      </a>
+      <a class="btn hero-cta-link" href="/anime-vanguards/summon-pity/" data-cta="pity">
+        Summon pity
+      </a>
+      <a
+        class="btn hero-cta-link"
+        href={ROBLOX_GAME_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="play"
+      >
+        Play on Roblox
+      </a>
+    </div>
   </section>
 
   <VersionHotBar
@@ -83,6 +131,98 @@ const path = [
   />
 
   <SourceStrip context="general" />
+
+  <section class="home-codes" id="codes" aria-labelledby="home-codes-heading">
+    <div class="home-codes__head">
+      <div>
+        <h2 id="home-codes-heading" class="section-title" style="margin-bottom:0.35rem">
+          Active codes
+        </h2>
+        <p class="home-codes__meta">
+          {
+            activeCodes.length > 0 ? (
+              <>
+                <span class="badge badge--active">{activeCodes.length} active</span>
+                <span class="badge badge--trust">Codes checked {codesUpdatedLabel}</span>
+                <span class="badge badge--next">
+                  <time datetime={codesNextIso}>{codesNextBadge}</time>
+                </span>
+              </>
+            ) : (
+              <>
+                <span class="badge">None live</span>
+                <span class="badge badge--trust">Codes checked {codesUpdatedLabel}</span>
+                <span class="badge badge--next">
+                  <time datetime={codesNextIso}>{codesNextBadge}</time>
+                </span>
+              </>
+            )
+          }
+        </p>
+      </div>
+      <a class="btn" href="/anime-vanguards/codes/">Full codes page</a>
+    </div>
+
+    {
+      activeCodes.length > 0 ? (
+        <>
+          <CodeTable
+            codes={previewCodes}
+            copyAll={activeCodes.length <= HOME_CODES_PREVIEW}
+            tableId="home-codes-table"
+          />
+          {hasMoreCodes && (
+            <p class="home-codes__more">
+              Showing {HOME_CODES_PREVIEW} of {activeCodes.length}.{' '}
+              <a href="/anime-vanguards/codes/">See all active codes &amp; archive →</a>
+            </p>
+          )}
+          {!hasMoreCodes && (
+            <p class="home-codes__more">
+              <a href="/anime-vanguards/codes/">How to redeem · expired archive →</a>
+            </p>
+          )}
+        </>
+      ) : (
+        <div class="callout callout--warn codes-empty" role="status">
+          <strong>No active codes right now</strong>
+          <p>
+            Between patch drops the live list can be empty. Planned site re-check:{' '}
+            <time datetime={codesNextIso}>{codesNextBadge.replace(/^Next update /, '')}</time>
+            {' '}({CODES_REFRESH_HOURS}h cadence). Check{' '}
+            <a
+              href="https://discord.com/invite/animevanguards"
+              rel="noopener noreferrer"
+              target="_blank">Discord</a
+            >
+            {' '}or{' '}
+            <a href="https://wiki.vanguards.gg/Codes" rel="noopener noreferrer" target="_blank"
+              >Wiki Codes</a
+            >, or browse the{' '}
+            <a href="/anime-vanguards/codes/#codes-archive">expired archive</a> so you do not
+            re-try dead codes.
+          </p>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="home-tools" aria-labelledby="home-tools-heading">
+    <div class="home-tools__head">
+      <h2 id="home-tools-heading" class="section-title" style="margin-bottom:0.35rem">
+        Tools
+      </h2>
+      <p class="home-tools__meta">
+        Plan pulls, then spend Trait Rerolls on mains only.
+      </p>
+    </div>
+    <SummonPityCalculator compact id="home-summon-pity" />
+    <p class="home-tools__more">
+      <a href="/anime-vanguards/trait-reroll-odds/">Trait reroll odds (Monarch pity) →</a>
+      {' · '}
+      <a href="/anime-vanguards/tier-list/">Investment tier list →</a>
+    </p>
+  </section>
 
   <section class="start-here" aria-labelledby="start-heading">
     <div class="start-here__head">
@@ -150,6 +290,26 @@ const path = [
       });
     });
   }
+
+  function bindHeroCta() {
+    document.querySelectorAll<HTMLAnchorElement>('a.hero-cta-link').forEach((a) => {
+      if (a.dataset.gaBound) return;
+      a.dataset.gaBound = '1';
+      a.addEventListener('click', () => {
+        const cta = a.dataset.cta ?? 'unknown';
+        // @ts-expect-error gtag optional
+        if (typeof gtag === 'function') {
+          // @ts-expect-error gtag
+          gtag('event', 'click_hero_cta', { cta_id: cta });
+        }
+      });
+    });
+  }
+
   bindStartPath();
-  document.addEventListener('astro:page-load', bindStartPath);
+  bindHeroCta();
+  document.addEventListener('astro:page-load', () => {
+    bindStartPath();
+    bindHeroCta();
+  });
 </script>

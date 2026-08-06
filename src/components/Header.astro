@@ -4,8 +4,8 @@ const path = Astro.url.pathname;
 const links = [
   { href: '/anime-vanguards/codes/', label: 'Codes' },
   { href: '/anime-vanguards/tier-list/', label: 'Tier' },
+  { href: '/anime-vanguards/summon-pity/', label: 'Pity' },
   { href: '/anime-vanguards/trait-reroll-odds/', label: 'Rerolls' },
-  { href: '/anime-vanguards/trading/', label: 'Trade' },
   { href: '/anime-vanguards/', label: 'More' },
 ];
 
@@ -20,7 +20,8 @@ function isCurrent(href: string) {
       path.includes('/returning') ||
       path.includes('/traits/') ||
       path.includes('/farm-') ||
-      path.includes('/lobby')
+      path.includes('/lobby') ||
+      path.includes('/trading')
     );
   }
   return path === href || path.startsWith(href);
@@ -30,7 +31,17 @@ function isCurrent(href: string) {
 <header class="site-header">
   <div class="site-header__inner">
     <a class="logo" href="/">AV <span>Guides</span></a>
-    <nav class="nav" aria-label="Primary">
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-nav-toggle
+    >
+      <span class="sr-only">Menu</span>
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+    </button>
+    <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       {
         links.map((l) => (
           <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
@@ -41,3 +52,39 @@ function isCurrent(href: string) {
     </nav>
   </div>
 </header>
+
+<script>
+  function bindNav() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+    const nav = document.querySelector<HTMLElement>('[data-nav]');
+    if (!toggle || !nav || toggle.dataset.bound) return;
+    toggle.dataset.bound = '1';
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      nav.classList.toggle('is-open', open);
+      document.body.classList.toggle('nav-open', open);
+    };
+
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      setOpen(open);
+    });
+
+    nav.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Close when resizing back to desktop nav
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(min-width: 721px)').matches) setOpen(false);
+    });
+  }
+
+  bindNav();
+  document.addEventListener('astro:page-load', bindNav);
+</script>

@@ -26,6 +26,8 @@ New players: redeem [codes](/anime-vanguards/codes/) first, then follow the [beg
 
 In-game names often include evolution form suffixes. Open Wiki unit pages for kits and mats.
 
+<span id="ss-tier"></span>
+
 ## SS — prioritize hard
 
 **Who:** Top Secret / Vanguard DPS and map-wide utility from recent banners (Update 14 examples on Wiki: [Cursed Copycat (Pure)](https://wiki.vanguards.gg/Cursed_Copycat_(Pure)), [Awakened Sibling (Restricted)](https://wiki.vanguards.gg/Awakened_Sibling_(Restricted))).
@@ -40,6 +42,8 @@ In-game names often include evolution form suffixes. Open Wiki unit pages for ki
 
 **Data:** Full rankings → [Wiki Tier List](https://wiki.vanguards.gg/Tier_List)
 
+<span id="s-tier"></span>
+
 ## S — excellent mains
 
 **Who:** Strong single-target or AoE specialists; supports that amp / slow / utility. Recent mid-tier headlines on Wiki also include units like [Divine General (Adaptation)](https://wiki.vanguards.gg/Divine_General_(Adaptation)) — always re-check the live tier page after patches.
@@ -51,6 +55,8 @@ In-game names often include evolution form suffixes. Open Wiki unit pages for ki
 - Good second core while you save for the next banner  
 
 **Account fit:** Mid-game players pushing content with 1–2 solid cores.
+
+<span id="a-tier"></span>
 
 ## A — good investment
 
@@ -94,6 +100,8 @@ In-game names often include evolution form suffixes. Open Wiki unit pages for ki
 3. One complete team beats six half-built units.  
 4. Funnel free code rerolls into main DPS first; bank more via the [farm guide](/anime-vanguards/farm-trait-rerolls/) (Boss/Rift shops, challenges).  
 5. Reroll at **Mandra** in the lobby ([lobby map](/anime-vanguards/lobby-guide/)); check odds with the [calculator](/anime-vanguards/trait-reroll-odds/).
+
+<span id="team-framework"></span>
 
 ## Simple team framework
 

@@ -6,6 +6,13 @@ import RelatedGuides from '../components/RelatedGuides.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SourceStrip from '../components/SourceStrip.astro';
 import CodesArchive from '../components/CodesArchive.astro';
+import Faq from '../components/Faq.astro';
+import { FAQ_BY_TYPE } from '../data/faqs';
+import {
+  CODES_REFRESH_HOURS,
+  formatNextUpdateBadge,
+  getNextUpdateDate,
+} from '../lib/next-update';
 
 interface CodeEntry {
   code: string;
@@ -25,6 +32,8 @@ interface Props {
   title: string;
   description: string;
   updated: string;
+  /** ISO datetime for planned next refresh (codes) */
+  nextUpdate?: string;
   type?: string;
   patch?: string;
   activeCodes?: CodeEntry[];
@@ -36,6 +45,7 @@ const {
   title,
   description,
   updated,
+  nextUpdate,
   type,
   patch,
   activeCodes = [],
@@ -49,6 +59,11 @@ const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString('en-US',
   day: 'numeric',
 });
 
+const codesNextDate =
+  type === 'codes' ? getNextUpdateDate(updated, nextUpdate, CODES_REFRESH_HOURS) : null;
+const codesNextBadge = codesNextDate ? formatNextUpdateBadge(codesNextDate) : null;
+const codesNextIso = codesNextDate?.toISOString() ?? null;
+
 const relatedTypes = new Set([
   'hub',
   'codes',
@@ -57,6 +72,7 @@ const relatedTypes = new Set([
   'returning',
   'traits',
   'trait-odds',
+  'summon-pity',
   'farm-rr',
   'lobby',
   'evolve',
@@ -68,44 +84,7 @@ const relatedCurrent = type && relatedTypes.has(type) ? type : 'guide';
 const sourceContext =
   type === 'codes' ? 'codes' : type === 'tier-list' ? 'tier' : 'general';
 
-const codesFaq = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Do Anime Vanguards codes expire?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Most event and milestone codes expire after a short window. Redeem as soon as you can.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Are Anime Vanguards codes case-sensitive?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Usually yes. Use the Copy button and paste exactly into the in-game Codes panel.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Why doesn’t an Anime Vanguards code work?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Common reasons: already redeemed, expired, wrong spelling, level requirement not met, or an old server. Rejoin a fresh server and try again.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is this codes list official?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'No. This is an unofficial fan site. Codes originate from the developers; full archives also live on the official Wiki Codes page.',
-      },
-    },
-  ],
-};
+const faqItems = (type && FAQ_BY_TYPE[type]) || [];
 
 const articleLd = {
   '@context': 'https://schema.org',
@@ -128,7 +107,6 @@ const articleLd = {
 
 <BaseLayout title={title} description={description} type="article">
   <JsonLd data={articleLd} />
-  {type === 'codes' && <JsonLd data={codesFaq} />}
 
   <article class="prose">
     <header>
@@ -136,9 +114,21 @@ const articleLd = {
       <div class="meta">
         <span class="badge badge--trust">Last checked {updatedLabel}</span>
         {
-          type === 'codes' && (
-            <span class="badge badge--accent">{activeCodes.length} active codes</span>
-          )
+          type === 'codes' &&
+            codesNextBadge &&
+            codesNextIso && (
+              <span class="badge badge--next">
+                <time datetime={codesNextIso}>{codesNextBadge}</time>
+              </span>
+            )
+        }
+        {
+          type === 'codes' &&
+            (activeCodes.length > 0 ? (
+              <span class="badge badge--active">{activeCodes.length} active codes</span>
+            ) : (
+              <span class="badge">No active codes</span>
+            ))
         }
         {
           (type === 'tier-list' || patch) && (
@@ -149,7 +139,8 @@ const articleLd = {
       {
         type === 'codes' && (
           <p class="trust-line">
-            Fast redeem list · Cross-check Wiki/Discord · Unofficial fan guide
+            Fast redeem list · Cross-check Wiki/Discord · Unofficial fan guide · Re-check every{' '}
+            {CODES_REFRESH_HOURS}h
           </p>
         )
       }
@@ -167,12 +158,48 @@ const articleLd = {
             Tap <strong>Copy</strong> or <strong>Copy all active</strong>, then paste
             in-game. Codes are case-sensitive and often need Level 10 or 30.
           </p>
-          <CodeTable
-            codes={activeCodes}
-            copyAll
-            tableId="active-codes-table"
-            emptyLabel="No active codes right now. Check back soon."
-          />
+          {activeCodes.length > 0 ? (
+            <CodeTable codes={activeCodes} copyAll tableId="active-codes-table" />
+          ) : (
+            <div class="callout callout--warn codes-empty" role="status">
+              <strong>No active codes listed right now</strong>
+              <p>
+                Lists often go empty between patch drops. Check these sources, then come
+                back after the next announcement
+                {codesNextBadge && codesNextIso && (
+                  <>
+                    {' '}
+                    (planned site re-check:{' '}
+                    <time datetime={codesNextIso}>{codesNextBadge.replace(/^Next update /, '')}</time>
+                    , {CODES_REFRESH_HOURS}h after last sync)
+                  </>
+                )}
+                :
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="https://discord.com/invite/animevanguards"
+                    rel="noopener noreferrer"
+                    target="_blank">Official Discord</a
+                  >{' '}
+                  — codes usually drop here first
+                </li>
+                <li>
+                  <a
+                    href="https://wiki.vanguards.gg/Codes"
+                    rel="noopener noreferrer"
+                    target="_blank">Wiki Codes</a
+                  >{' '}
+                  — full archive &amp; live list
+                </li>
+                <li>
+                  <a href="#codes-archive">Archive below</a> — recently expired codes so
+                  you do not re-try dead ones
+                </li>
+              </ul>
+            </div>
+          )}
           <div class="after-redeem callout">
             <strong>After you redeem</strong>
             <ol class="after-redeem__list">
@@ -226,6 +253,8 @@ const articleLd = {
           </section>
         )
     }
+
+    {faqItems.length > 0 && <Faq items={faqItems} />}
 
     <RelatedGuides current={relatedCurrent} />
 

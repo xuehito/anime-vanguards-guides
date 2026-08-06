@@ -1,0 +1,44 @@
+---
+/**
+ * Accessible FAQ accordion + FAQPage JSON-LD.
+ */
+import JsonLd from './JsonLd.astro';
+import { faqPageLd, type FaqItem } from '../data/faqs';
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+  /** Anchor id for in-page links */
+  id?: string;
+  /** Emit FAQPage schema (default true) */
+  schema?: boolean;
+}
+
+const {
+  items,
+  heading = 'Frequently asked questions',
+  id = 'faq',
+  schema = true,
+} = Astro.props;
+
+const ld = schema && items.length > 0 ? faqPageLd(items) : null;
+---
+
+{
+  items.length > 0 && (
+    <section class="faq" id={id} aria-labelledby={`${id}-heading`}>
+      {ld && <JsonLd data={ld} />}
+      <h2 id={`${id}-heading`}>{heading}</h2>
+      <div class="faq__list">
+        {items.map((item, index) => (
+          <details class="faq__item" open={index === 0}>
+            <summary class="faq__question">{item.question}</summary>
+            <div class="faq__answer">
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}

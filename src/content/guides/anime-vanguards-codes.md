@@ -2,7 +2,8 @@
 title: "Anime Vanguards Codes (August 2026) — Working + Copy"
 description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
-updated: "2026-08-03"
+updated: "2026-08-06"
+nextUpdate: "2026-08-07T03:51:00.000Z"
 type: codes
 order: 2
 patch: "Update 14.0"

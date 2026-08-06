@@ -1,10 +1,10 @@
 ---
 import { getEntry, render } from 'astro:content';
 import GuideLayout from '../../layouts/GuideLayout.astro';
-import TopUnits from '../../components/TopUnits.astro';
+import SummonPityCalculator from '../../components/SummonPityCalculator.astro';
 
-const entry = await getEntry('guides', 'anime-vanguards-tier-list');
-if (!entry) throw new Error('Missing content: anime-vanguards-tier-list');
+const entry = await getEntry('guides', 'anime-vanguards-summon-pity');
+if (!entry) throw new Error('Missing content: anime-vanguards-summon-pity');
 const { Content } = await render(entry);
 const { title, description, updated, type, patch } = entry.data;
 ---
@@ -16,6 +16,6 @@ const { title, description, updated, type, patch } = entry.data;
   type={type}
   patch={patch}
 >
-  <TopUnits />
+  <SummonPityCalculator />
   <Content />
 </GuideLayout>

@@ -1,0 +1,32 @@
+---
+import { HUB_CATEGORIES } from '../data/hub-categories';
+---
+
+<section class="hub-cats" aria-labelledby="hub-cats-heading">
+  <div class="hub-cats__head">
+    <h2 id="hub-cats-heading">Browse by session goal</h2>
+    <p>Pick a path — codes first, then invest, then limited modes.</p>
+  </div>
+  <div class="hub-cats__grid">
+    {
+      HUB_CATEGORIES.map((cat) => (
+        <article class="hub-cat" id={cat.id}>
+          <header class="hub-cat__header">
+            <h3 class="hub-cat__title">{cat.title}</h3>
+            <p class="hub-cat__desc">{cat.description}</p>
+          </header>
+          <ul class="hub-cat__links">
+            {cat.links.map((l) => (
+              <li>
+                <a class="hub-cat__link" href={l.href}>
+                  <span class="hub-cat__link-title">{l.title}</span>
+                  <span class="hub-cat__link-blurb">{l.blurb}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>

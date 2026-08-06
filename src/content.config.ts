@@ -26,6 +26,11 @@ const guides = defineCollection({
     label: z.string().optional(),
     /** SEO & display: last content update (ISO date) */
     updated: z.string(),
+    /**
+     * Planned next refresh (ISO datetime). For codes: typically last sync + 24h.
+     * Optional — UI falls back to updated (noon) + 24 hours.
+     */
+    nextUpdate: z.string().optional(),
     /** Guide kind for templates */
     type: z
       .enum([
@@ -36,6 +41,7 @@ const guides = defineCollection({
         'returning',
         'traits',
         'trait-odds',
+        'summon-pity',
         'farm-rr',
         'lobby',
         'evolve',

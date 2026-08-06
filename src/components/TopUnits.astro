@@ -1,0 +1,68 @@
+---
+import { TOP_UNITS, WIKI_BASE } from '../data/top-units';
+
+interface Props {
+  /** Base path for in-page anchors (tier list) */
+  pagePath?: string;
+}
+
+const { pagePath = '/anime-vanguards/tier-list/' } = Astro.props;
+---
+
+<section class="top-units" aria-labelledby="top-units-heading">
+  <div class="top-units__head">
+    <h2 id="top-units-heading">Top investment targets</h2>
+    <p>
+      Quick picks from the investment guide — jump to the tier section or open the Wiki unit page.
+      Full competitive ranks live on the{' '}
+      <a href={`${WIKI_BASE}/Tier_List`} rel="noopener noreferrer" target="_blank">Wiki Tier List</a>.
+    </p>
+  </div>
+  <ul class="top-units__grid">
+    {
+      TOP_UNITS.map((u) => (
+        <li>
+          <a
+            class:list={['top-unit', `top-unit--${u.tier.toLowerCase()}`]}
+            href={`${pagePath}#${u.anchor}`}
+          >
+            <div class="top-unit__art" aria-hidden="true">
+              <span class="top-unit__initial">{u.initial}</span>
+              <span class="top-unit__tier">{u.tier}</span>
+            </div>
+            <div class="top-unit__body">
+              <h3 class="top-unit__name">{u.name}</h3>
+              <p class="top-unit__role">{u.role}</p>
+              <p class="top-unit__blurb">{u.blurb}</p>
+              {u.wikiPath && (
+                <span
+                  class="top-unit__wiki"
+                  data-wiki={`${WIKI_BASE}${u.wikiPath}`}
+                >
+                  Wiki →
+                </span>
+              )}
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  function bindWikiStops() {
+    document.querySelectorAll<HTMLElement>('.top-unit__wiki[data-wiki]').forEach((el) => {
+      if (el.dataset.bound) return;
+      el.dataset.bound = '1';
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const url = el.dataset.wiki;
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      });
+    });
+  }
+  bindWikiStops();
+  document.addEventListener('astro:page-load', bindWikiStops);
+</script>

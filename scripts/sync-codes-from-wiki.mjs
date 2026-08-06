@@ -326,12 +326,31 @@ function emitCodeEntry(c, indent, withNew = false) {
   return out;
 }
 
-function buildFrontmatter({ title, description, label, updated, type, order, patch, active, archived }) {
+/** Hours until next planned codes re-check after a successful sync write. */
+const NEXT_UPDATE_HOURS = 24;
+
+function nextUpdateISO(hours = NEXT_UPDATE_HOURS) {
+  return new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+}
+
+function buildFrontmatter({
+  title,
+  description,
+  label,
+  updated,
+  nextUpdate,
+  type,
+  order,
+  patch,
+  active,
+  archived,
+}) {
   let fm = '';
   fm += `title: "${yamlEscape(title)}"\n`;
   fm += `description: "${yamlEscape(description)}"\n`;
   fm += `label: "${yamlEscape(label)}"\n`;
   fm += `updated: "${yamlEscape(updated)}"\n`;
+  if (nextUpdate) fm += `nextUpdate: "${yamlEscape(nextUpdate)}"\n`;
   fm += `type: ${type}\n`;
   fm += `order: ${order}\n`;
   fm += `patch: "${yamlEscape(patch)}"\n`;
@@ -365,14 +384,17 @@ function mergeArchive(archived, removed, patchLabel) {
     codes: [...g.codes],
   }));
   const label = `Auto-archived ${todayISO()} (${patchLabel})`;
+  const existing = new Set(groups.flatMap((g) => g.codes.map((c) => c.code)));
+  const toAdd = removed.filter((r) => !existing.has(r.code));
+  // Nothing new to archive (e.g. wiki-expired rows already in archive)
+  if (!toAdd.length) return groups;
+
   let group = groups.find((g) => g.update === label);
   if (!group) {
     group = { update: label, codes: [] };
     groups.unshift(group);
   }
-  const existing = new Set(groups.flatMap((g) => g.codes.map((c) => c.code)));
-  for (const r of removed) {
-    if (existing.has(r.code)) continue;
+  for (const r of toAdd) {
     group.codes.push({
       code: r.code,
       rewards: r.rewards,
@@ -511,6 +533,7 @@ async function main() {
 
   const title = `Anime Vanguards Codes (${monthYearTitle()}) — Working + Copy`;
   const updated = todayISO();
+  const nextUpdate = nextUpdateISO(NEXT_UPDATE_HOURS);
 
   const activeUnchanged = detailedEqual(prevActive, nextActive) && removed.length === 0;
   const archiveUnchanged =
@@ -519,6 +542,9 @@ async function main() {
   // still bump nothing if fully same
   if (activeUnchanged && archiveUnchanged) {
     console.log('No changes vs Wiki (active list + archive expiry metadata).');
+    console.log(
+      `  next planned re-check stays as-is (cadence ${NEXT_UPDATE_HOURS}h after last write)`,
+    );
     setOutput('changed', 'false');
     setOutput('added', '0');
     setOutput('removed', '0');
@@ -529,12 +555,14 @@ async function main() {
   if (added.length) console.log('  added:', added.map((c) => c.code).join(', '));
   if (removed.length) console.log('  removed:', removed.map((c) => c.code).join(', '));
   if (!archiveUnchanged) console.log('  archive/expiry metadata updated');
+  console.log(`  nextUpdate (+${NEXT_UPDATE_HOURS}h): ${nextUpdate}`);
 
   const newFm = buildFrontmatter({
     title,
     description,
     label,
     updated,
+    nextUpdate,
     type: 'codes',
     order,
     patch,

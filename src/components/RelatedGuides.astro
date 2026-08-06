@@ -57,6 +57,13 @@ const all: (Link & { id: string })[] = [
     tag: 'Tools',
   },
   {
+    id: 'summon-pity',
+    href: '/anime-vanguards/summon-pity/',
+    title: 'Summon pity planner',
+    blurb: 'Gem budget, hard pity, success chance for banners.',
+    tag: 'Tools',
+  },
+  {
     id: 'farm-rr',
     href: '/anime-vanguards/farm-trait-rerolls/',
     title: 'Farm Trait Rerolls',
@@ -104,15 +111,16 @@ const preference: Record<string, string[]> = {
   codes: ['farm-rr', 'returning', 'traits'],
   beginner: ['lobby', 'codes', 'farm-rr'],
   returning: ['codes', 'farm-rr', 'event'],
-  'tier-list': ['traits', 'trait-odds', 'farm-rr'],
+  'tier-list': ['traits', 'trait-odds', 'summon-pity'],
   traits: ['trait-odds', 'farm-rr', 'trading'],
-  'trait-odds': ['farm-rr', 'traits', 'lobby'],
+  'trait-odds': ['summon-pity', 'farm-rr', 'traits'],
+  'summon-pity': ['tier-list', 'trait-odds', 'codes'],
   'farm-rr': ['trait-odds', 'codes', 'returning'],
   lobby: ['farm-rr', 'traits', 'trading'],
   trading: ['returning', 'farm-rr', 'lobby'],
   evolve: ['lobby', 'traits', 'tier-list'],
   event: ['codes', 'farm-rr', 'returning'],
-  hub: ['codes', 'returning', 'farm-rr'],
+  hub: ['codes', 'summon-pity', 'tier-list'],
   guide: ['codes', 'returning', 'farm-rr'],
 };
 
