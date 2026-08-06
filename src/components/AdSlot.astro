@@ -80,31 +80,50 @@ const LEADERBOARD = {
   isLeaderboardLive && (
     <script is:inline>
       (function () {
-        var FAIL_MS = 6000;
-        var CHECK_MS = 2200;
+        // Give the ad network time to inject (HPF often fills after script onload).
+        var FAIL_MS = 15000;
+        var POLL_MS = 400;
 
         function schedule(fn) {
           if (typeof requestIdleCallback === 'function') {
-            requestIdleCallback(fn, { timeout: 1800 });
+            requestIdleCallback(fn, { timeout: 1200 });
           } else if (document.readyState === 'complete') {
-            setTimeout(fn, 1);
+            setTimeout(fn, 50);
           } else {
             window.addEventListener('load', function () {
-              setTimeout(fn, 1);
+              setTimeout(fn, 50);
             });
           }
         }
 
         function hasFill(el) {
           if (!el) return false;
-          if (el.querySelector('iframe, img, ins, object, embed')) return true;
-          // Ignore loader script + skeleton placeholder
+          if (el.querySelector('iframe, img, ins, object, embed, canvas')) return true;
+          // Nested containers from some networks
+          var nodes = el.querySelectorAll('div, span, a');
+          for (var i = 0; i < nodes.length; i++) {
+            var n = nodes[i];
+            if (n.hasAttribute('data-ad-skeleton')) continue;
+            if (n.children.length === 0 && (n.textContent || '').trim().length > 0) continue;
+            if (n.querySelector('iframe, img, ins')) return true;
+            // Non-empty box with explicit size often means creative shell
+            var st = window.getComputedStyle(n);
+            var h = parseFloat(st.height) || n.offsetHeight;
+            var w = parseFloat(st.width) || n.offsetWidth;
+            if (h >= 50 && w >= 100 && n !== el && !n.hasAttribute('data-ad-skeleton')) {
+              if (n.tagName === 'IFRAME' || n.querySelector('iframe')) return true;
+            }
+          }
           var kids = el.children;
-          for (var i = 0; i < kids.length; i++) {
-            var tag = kids[i].tagName;
+          for (var j = 0; j < kids.length; j++) {
+            var tag = kids[j].tagName;
             if (tag === 'SCRIPT') continue;
-            if (kids[i].hasAttribute('data-ad-skeleton')) continue;
-            return true;
+            if (kids[j].hasAttribute && kids[j].hasAttribute('data-ad-skeleton')) continue;
+            if (tag === 'IFRAME' || tag === 'IMG' || tag === 'INS') return true;
+            // Any extra element besides skeleton/script is a possible fill
+            if (tag === 'DIV' || tag === 'SPAN' || tag === 'A' || tag === 'CENTER') {
+              if (kids[j].children.length > 0 || kids[j].offsetHeight >= 40) return true;
+            }
           }
           return false;
         }
@@ -151,23 +170,32 @@ const LEADERBOARD = {
             return;
           }
 
-          // Keep reserved space while loading
           slot.hidden = false;
           slot.setAttribute('data-ad-state', 'loading');
           slot.setAttribute('aria-busy', 'true');
 
           var settled = false;
-          var failTimer = setTimeout(function () {
-            if (!settled) {
-              settled = true;
-              collapse(slot);
+          var observer = null;
+          var pollTimer = null;
+
+          function cleanup() {
+            if (observer) {
+              try {
+                observer.disconnect();
+              } catch (e) {}
+              observer = null;
             }
-          }, FAIL_MS);
+            if (pollTimer) {
+              clearInterval(pollTimer);
+              pollTimer = null;
+            }
+          }
 
           function succeed() {
             if (settled) return;
             settled = true;
             clearTimeout(failTimer);
+            cleanup();
             markLoaded(slot);
           }
 
@@ -175,10 +203,34 @@ const LEADERBOARD = {
             if (settled) return;
             settled = true;
             clearTimeout(failTimer);
+            cleanup();
             collapse(slot);
           }
 
+          var failTimer = setTimeout(function () {
+            // Last chance check before collapse
+            if (hasFill(mount) || hasFill(slot)) succeed();
+            else fail();
+          }, FAIL_MS);
+
+          function check() {
+            if (settled) return;
+            if (hasFill(mount) || hasFill(slot)) succeed();
+          }
+
+          // Watch for network injects (iframe often appears after onload)
+          if (typeof MutationObserver === 'function') {
+            observer = new MutationObserver(function () {
+              check();
+            });
+            observer.observe(mount, { childList: true, subtree: true });
+            observer.observe(slot, { childList: true, subtree: true });
+          }
+
+          pollTimer = setInterval(check, POLL_MS);
+
           try {
+            // HPF expects a global atOptions object before invoke.js runs
             window.atOptions = {
               key: key,
               format: 'iframe',
@@ -191,12 +243,18 @@ const LEADERBOARD = {
             s.src = src;
             s.async = true;
             s.referrerPolicy = 'no-referrer-when-downgrade';
-            s.onerror = fail;
-            s.onload = function () {
+            s.onerror = function () {
+              // Network hard-fail — still wait a beat in case of race, then collapse
               setTimeout(function () {
-                if (hasFill(mount) || hasFill(slot)) succeed();
-                else fail();
-              }, CHECK_MS);
+                if (!hasFill(mount) && !hasFill(slot)) fail();
+              }, 500);
+            };
+            s.onload = function () {
+              // Do not fail here — creative may inject later; poll + failTimer handle it
+              check();
+              setTimeout(check, 800);
+              setTimeout(check, 2000);
+              setTimeout(check, 4000);
             };
 
             try {
