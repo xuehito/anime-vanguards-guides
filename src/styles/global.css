@@ -875,7 +875,7 @@ img {
   color: var(--success);
 }
 
-/* ——— Ad slots (reserve space = better CLS for AdSense later) ——— */
+/* ——— Ad slots ——— */
 .ad-slot {
   display: flex;
   align-items: center;
@@ -893,6 +893,7 @@ img {
 
 .ad-slot--leaderboard {
   min-height: 90px;
+  overflow-x: auto;
 }
 
 .ad-slot--in-article {
@@ -905,9 +906,101 @@ img {
 
 .ad-slot[data-live='true'] {
   border-style: solid;
+  border-color: transparent;
   background: transparent;
   color: transparent;
   font-size: 0;
+}
+
+/*
+ * Async live units:
+ * 1) Reserve 728×90 immediately (stable layout / low CLS while loading)
+ * 2) On success keep the slot; on fail collapse fully (no blank hole)
+ */
+.ad-slot--async {
+  display: flex;
+  min-height: 90px;
+  margin: 1.25rem 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  overflow-x: auto;
+  contain: layout style;
+  transition:
+    min-height 0.2s ease,
+    margin 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.ad-slot--async[data-ad-state='loading'],
+.ad-slot--async[data-ad-state='pending'] {
+  /* Reserved placeholder while script loads */
+  min-height: 90px;
+}
+
+.ad-slot--async[data-ad-state='loaded'],
+.ad-slot--async.ad-slot--loaded {
+  border-color: transparent;
+  background: transparent;
+  min-height: 90px;
+}
+
+.ad-slot--async[hidden],
+.ad-slot--async[data-ad-state='empty'],
+.ad-slot--async.ad-slot--empty {
+  display: none !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.ad-slot__mount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 728px;
+  max-width: 100%;
+  min-height: 90px;
+  margin: 0 auto;
+}
+
+/* Soft shimmer while waiting for creative */
+.ad-slot__skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius) - 2px);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--bg-elevated) 100%, transparent) 0%,
+    color-mix(in srgb, var(--border) 55%, var(--bg-elevated)) 50%,
+    color-mix(in srgb, var(--bg-elevated) 100%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: ad-slot-shimmer 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ad-slot-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-slot__skeleton {
+    animation: none;
+    background: var(--bg-elevated);
+  }
+
+  .ad-slot--async {
+    transition: none;
+  }
 }
 
 /* ——— Callouts ——— */

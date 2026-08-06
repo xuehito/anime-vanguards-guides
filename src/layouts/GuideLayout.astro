@@ -157,7 +157,7 @@ const articleLd = {
 
     <SourceStrip context={sourceContext} />
 
-    <AdSlot slot="leaderboard" />
+    <AdSlot placement="leaderboard" />
 
     {
       type === 'codes' && (
@@ -203,7 +203,7 @@ const articleLd = {
       )
     }
 
-    <AdSlot slot="in-article" />
+    <AdSlot placement="in-article" />
 
     <div class="guide-body">
       <slot />
@@ -229,6 +229,6 @@ const articleLd = {
 
     <RelatedGuides current={relatedCurrent} />
 
-    <AdSlot slot="footer" />
+    <AdSlot placement="footer" />
   </article>
 </BaseLayout>

@@ -1,32 +1,45 @@
 ---
 /**
- * Ad slot for future AdSense / Mediavine.
+ * Ad slot (Adsterra / HighPerformanceFormat + future AdSense).
  *
- * Hidden by default. Enable with env:
- *   PUBLIC_ADS_ENABLED=true
+ * Hidden by default unless:
+ *   - PUBLIC_ADS_ENABLED=true, or
+ *   - `enabled` prop is true (e.g. homepage live placement)
  *
- * Placement tips:
- * - leaderboard: under H1 / above codes table
- * - in-article: after first H2
- * - footer: end of article
+ * Live leaderboard: reserve 728×90 first (async load after paint), then
+ * collapse the slot entirely if the network fails / times out — so a dead
+ * ad never leaves a permanent blank hole in the page.
+ *
+ * Note: prop is `placement` (not `slot`) — `slot` is reserved by Astro.
  */
 interface Props {
-  slot: 'leaderboard' | 'in-article' | 'footer' | 'sidebar';
-  /** When true, hides placeholder label (use once ads are live) */
+  placement: 'leaderboard' | 'in-article' | 'footer' | 'sidebar';
+  /** When true, hides placeholder label and injects network units when available */
   live?: boolean;
+  /** Force render even if PUBLIC_ADS_ENABLED is not set */
+  enabled?: boolean;
 }
 
-const { slot, live = false } = Astro.props;
+const { placement, live = false, enabled = false } = Astro.props;
 
-/** Off until ads are ready — no placeholder boxes on the page */
-const adsEnabled = import.meta.env.PUBLIC_ADS_ENABLED === 'true';
+const adsEnabled =
+  enabled === true || import.meta.env.PUBLIC_ADS_ENABLED === 'true';
 
-const labels: Record<Props['slot'], string> = {
+const labels: Record<Props['placement'], string> = {
   leaderboard: 'Ad · Leaderboard',
   'in-article': 'Ad · In-article',
   footer: 'Ad · Footer',
   sidebar: 'Ad · Sidebar',
 };
+
+const isLeaderboardLive = placement === 'leaderboard' && live === true;
+
+const LEADERBOARD = {
+  key: '54f713ed15b4e0ccb1dbce29218460bb',
+  width: 728,
+  height: 90,
+  src: 'https://www.highperformanceformat.com/54f713ed15b4e0ccb1dbce29218460bb/invoke.js',
+} as const;
 ---
 
 {
@@ -34,20 +47,175 @@ const labels: Record<Props['slot'], string> = {
     <aside
       class:list={[
         'ad-slot',
-        slot === 'leaderboard' && 'ad-slot--leaderboard',
-        slot === 'in-article' && 'ad-slot--in-article',
-        slot === 'footer' && 'ad-slot--footer',
+        placement === 'leaderboard' && 'ad-slot--leaderboard',
+        placement === 'in-article' && 'ad-slot--in-article',
+        placement === 'footer' && 'ad-slot--footer',
+        isLeaderboardLive && 'ad-slot--async',
       ]}
-      data-ad-slot={slot}
+      data-ad-slot={placement}
       data-live={live ? 'true' : 'false'}
-      aria-hidden="true"
+      data-ad-async={isLeaderboardLive ? 'true' : undefined}
+      data-ad-key={isLeaderboardLive ? LEADERBOARD.key : undefined}
+      data-ad-width={isLeaderboardLive ? String(LEADERBOARD.width) : undefined}
+      data-ad-height={isLeaderboardLive ? String(LEADERBOARD.height) : undefined}
+      data-ad-src={isLeaderboardLive ? LEADERBOARD.src : undefined}
+      data-ad-state={isLeaderboardLive ? 'pending' : undefined}
+      aria-label={live ? 'Advertisement' : undefined}
+      aria-hidden={live ? undefined : 'true'}
+      aria-busy={isLeaderboardLive ? 'true' : undefined}
     >
-      {!live && labels[slot]}
-      <!--
-        Future: paste AdSense <ins> here, e.g.
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX"
-             data-ad-slot="YYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      -->
+      {!live && labels[placement]}
+      {
+        isLeaderboardLive && (
+          <div class="ad-slot__mount" data-ad-mount>
+            <div class="ad-slot__skeleton" data-ad-skeleton aria-hidden="true" />
+          </div>
+        )
+      }
     </aside>
+  )
+}
+
+{
+  isLeaderboardLive && (
+    <script is:inline>
+      (function () {
+        var FAIL_MS = 6000;
+        var CHECK_MS = 2200;
+
+        function schedule(fn) {
+          if (typeof requestIdleCallback === 'function') {
+            requestIdleCallback(fn, { timeout: 1800 });
+          } else if (document.readyState === 'complete') {
+            setTimeout(fn, 1);
+          } else {
+            window.addEventListener('load', function () {
+              setTimeout(fn, 1);
+            });
+          }
+        }
+
+        function hasFill(el) {
+          if (!el) return false;
+          if (el.querySelector('iframe, img, ins, object, embed')) return true;
+          // Ignore loader script + skeleton placeholder
+          var kids = el.children;
+          for (var i = 0; i < kids.length; i++) {
+            var tag = kids[i].tagName;
+            if (tag === 'SCRIPT') continue;
+            if (kids[i].hasAttribute('data-ad-skeleton')) continue;
+            return true;
+          }
+          return false;
+        }
+
+        function removeSkeleton(slot) {
+          var sk = slot.querySelector('[data-ad-skeleton]');
+          if (sk) sk.remove();
+        }
+
+        /** Collapse slot completely — no permanent blank hole */
+        function collapse(slot) {
+          if (!slot || slot.getAttribute('data-ad-state') === 'loaded') return;
+          slot.setAttribute('data-ad-state', 'empty');
+          slot.setAttribute('aria-busy', 'false');
+          slot.setAttribute('aria-hidden', 'true');
+          slot.hidden = true;
+          slot.classList.add('ad-slot--empty');
+          var mount = slot.querySelector('[data-ad-mount]');
+          if (mount) mount.replaceChildren();
+        }
+
+        function markLoaded(slot) {
+          removeSkeleton(slot);
+          slot.hidden = false;
+          slot.removeAttribute('aria-hidden');
+          slot.setAttribute('aria-busy', 'false');
+          slot.setAttribute('data-ad-state', 'loaded');
+          slot.classList.add('ad-slot--loaded');
+          slot.classList.remove('ad-slot--empty');
+        }
+
+        function loadSlot(slot) {
+          if (!slot) return;
+          var state = slot.getAttribute('data-ad-state');
+          if (state === 'loading' || state === 'loaded' || state === 'empty') return;
+
+          var key = slot.getAttribute('data-ad-key');
+          var src = slot.getAttribute('data-ad-src');
+          var width = parseInt(slot.getAttribute('data-ad-width') || '728', 10);
+          var height = parseInt(slot.getAttribute('data-ad-height') || '90', 10);
+          var mount = slot.querySelector('[data-ad-mount]');
+          if (!key || !src || !mount) {
+            collapse(slot);
+            return;
+          }
+
+          // Keep reserved space while loading
+          slot.hidden = false;
+          slot.setAttribute('data-ad-state', 'loading');
+          slot.setAttribute('aria-busy', 'true');
+
+          var settled = false;
+          var failTimer = setTimeout(function () {
+            if (!settled) {
+              settled = true;
+              collapse(slot);
+            }
+          }, FAIL_MS);
+
+          function succeed() {
+            if (settled) return;
+            settled = true;
+            clearTimeout(failTimer);
+            markLoaded(slot);
+          }
+
+          function fail() {
+            if (settled) return;
+            settled = true;
+            clearTimeout(failTimer);
+            collapse(slot);
+          }
+
+          try {
+            window.atOptions = {
+              key: key,
+              format: 'iframe',
+              height: height,
+              width: width,
+              params: {},
+            };
+
+            var s = document.createElement('script');
+            s.src = src;
+            s.async = true;
+            s.referrerPolicy = 'no-referrer-when-downgrade';
+            s.onerror = fail;
+            s.onload = function () {
+              setTimeout(function () {
+                if (hasFill(mount) || hasFill(slot)) succeed();
+                else fail();
+              }, CHECK_MS);
+            };
+
+            try {
+              mount.appendChild(s);
+            } catch (e) {
+              fail();
+            }
+          } catch (e) {
+            fail();
+          }
+        }
+
+        function boot() {
+          var nodes = document.querySelectorAll('[data-ad-async="true"]');
+          for (var i = 0; i < nodes.length; i++) loadSlot(nodes[i]);
+        }
+
+        schedule(boot);
+      })();
+    </script>
   )
 }
