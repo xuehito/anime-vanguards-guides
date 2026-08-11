@@ -2,12 +2,30 @@
 title: "Anime Vanguards Codes (August 2026) — Working + Copy"
 description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
-updated: "2026-08-06"
-nextUpdate: "2026-08-07T03:51:00.000Z"
+updated: "2026-08-11"
+nextUpdate: "2026-08-12T12:44:38.533Z"
 type: codes
 order: 2
 patch: "Update 14.0"
-activeCodes: []
+activeCodes:
+  - code: "1DayDelay"
+    rewards: "200 Trait Rerolls"
+    requirement: "Level 30"
+    expires: "Aug 17, 2026"
+    expiresAt: "2026-08-17"
+    new: true
+  - code: "25thHour"
+    rewards: "50 Trait Rerolls, 50 Memoria Shards"
+    requirement: "Level 30"
+    expires: "Aug 17, 2026"
+    expiresAt: "2026-08-17"
+    new: true
+  - code: "LetTheLarpingBegin"
+    rewards: "10,000 Gems, 50,000 Gold"
+    requirement: "—"
+    expires: "Aug 17, 2026"
+    expiresAt: "2026-08-17"
+    new: true
 archivedByUpdate:
   - update: "Auto-archived 2026-08-03 (Update 14.0)"
     codes:
