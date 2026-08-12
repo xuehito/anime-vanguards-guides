@@ -6,6 +6,7 @@ const links = [
   { href: '/anime-vanguards/tier-list/', label: 'Tier' },
   { href: '/anime-vanguards/summon-pity/', label: 'Pity' },
   { href: '/anime-vanguards/trait-reroll-odds/', label: 'Rerolls' },
+  { href: '/blog/', label: 'Blog' },
   { href: '/anime-vanguards/', label: 'More' },
 ];
 
@@ -23,6 +24,9 @@ function isCurrent(href: string) {
       path.includes('/lobby') ||
       path.includes('/trading')
     );
+  }
+  if (href === '/blog/') {
+    return path === '/blog/' || path.startsWith('/blog/');
   }
   return path === href || path.startsWith(href);
 }

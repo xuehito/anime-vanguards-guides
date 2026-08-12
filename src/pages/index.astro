@@ -16,6 +16,10 @@ const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
+const latestPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.localeCompare(a.data.pubDate))
+  .slice(0, 3);
+
 const codesEntry = await getEntry('guides', 'anime-vanguards-codes');
 const activeCodes = codesEntry?.data.activeCodes ?? [];
 const codesUpdated = codesEntry?.data.updated ?? '1970-01-01';
@@ -261,6 +265,45 @@ const ROBLOX_GAME_URL = 'https://www.roblox.com/games/16146832113';
       }
     </div>
   </section>
+
+  {
+    latestPosts.length > 0 && (
+      <section class="home-blog" aria-labelledby="latest-blog-heading">
+        <div class="home-blog__head">
+          <div>
+            <h2 id="latest-blog-heading" class="section-title">Latest blog</h2>
+            <p>Short patch notes, farming choices, and code-spending reminders.</p>
+          </div>
+          <a class="btn" href="/blog/">All posts</a>
+        </div>
+        <div class="blog-list blog-list--home">
+          {latestPosts.map((post) => {
+            const slug = post.id.replace(/\.mdx?$/, '');
+            const dateLabel = new Date(post.data.pubDate + 'T12:00:00').toLocaleDateString(
+              'en-US',
+              {
+                month: 'short',
+                day: 'numeric',
+              },
+            );
+
+            return (
+              <article class="blog-card">
+                <a href={`/blog/${slug}/`}>
+                  <div class="blog-card__meta">
+                    <span>{post.data.category}</span>
+                    <time datetime={post.data.pubDate}>{dateLabel}</time>
+                  </div>
+                  <h2>{post.data.title}</h2>
+                  <p>{post.data.description}</p>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
 
   <section class="prose" style="margin-top: 2.5rem">
     <h2>Why this site</h2>

@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.localeCompare(a.data.pubDate),
+);
+
+const latestPost = posts[0];
+const latestLabel = latestPost
+  ? new Date(latestPost.data.pubDate + 'T12:00:00').toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+---
+
+<BaseLayout
+  title="Anime Vanguards Blog | Patch Notes, Codes & Farming Tips"
+  description="Short Anime Vanguards blog notes for codes, events, farming routes, summon planning, and patch prep."
+  wide
+>
+  <section class="blog-index-hero prose">
+    <p class="eyebrow">
+      <span class="badge badge--accent">Blog</span>
+      {latestLabel && <span class="badge badge--trust">Latest {latestLabel}</span>}
+    </p>
+    <h1>Anime Vanguards Blog</h1>
+    <p>
+      Short notes for patches, codes, farming choices, and the small decisions that make
+      each session cleaner.
+    </p>
+  </section>
+
+  <section aria-labelledby="blog-list-heading">
+    <h2 id="blog-list-heading" class="section-title">Latest posts</h2>
+    <div class="blog-list">
+      {
+        posts.map((post) => {
+          const slug = post.id.replace(/\.mdx?$/, '');
+          const href = `/blog/${slug}/`;
+          const dateLabel = new Date(post.data.pubDate + 'T12:00:00').toLocaleDateString(
+            'en-US',
+            {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            },
+          );
+
+          return (
+            <article class="blog-card">
+              <a href={href}>
+                <div class="blog-card__meta">
+                  <span>{post.data.category}</span>
+                  <time datetime={post.data.pubDate}>{dateLabel}</time>
+                </div>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+                {post.data.tags.length > 0 && (
+                  <ul class="blog-tags blog-tags--compact" aria-label="Post tags">
+                    {post.data.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                )}
+              </a>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>
