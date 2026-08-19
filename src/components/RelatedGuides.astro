@@ -1,4 +1,7 @@
 ---
+import { getUi } from '../i18n/ui';
+import { localeFromPath, localizePath } from '../lib/url';
+
 interface Link {
   href: string;
   title: string;
@@ -11,101 +14,37 @@ interface Props {
   heading?: string;
 }
 
-const { current, heading = 'Continue your session' } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
+const { current, heading = ui.related.heading } = Astro.props;
+const r = ui.related;
 
-const all: (Link & { id: string })[] = [
-  {
-    id: 'codes',
-    href: '/anime-vanguards/codes/',
-    title: 'Working codes',
-    blurb: 'Copy free Trait Rerolls, Gems, and event rewards.',
-    tag: 'Fast',
-  },
-  {
-    id: 'beginner',
-    href: '/anime-vanguards/beginner-guide/',
-    title: 'Beginner path',
-    blurb: 'First hours: what to farm, what not to waste.',
-    tag: 'New players',
-  },
-  {
-    id: 'returning',
-    href: '/anime-vanguards/returning-guide/',
-    title: 'Returning player path',
-    blurb: 'Back after a break: first 10–30 minutes.',
-    tag: 'Comeback',
-  },
-  {
-    id: 'tier-list',
-    href: '/anime-vanguards/tier-list/',
-    title: 'Unit tier list',
-    blurb: 'Who to invest gems and Trait Rerolls into.',
-    tag: 'Meta',
-  },
-  {
-    id: 'traits',
-    href: '/anime-vanguards/traits/',
-    title: 'Traits & rerolls',
-    blurb: 'Where free code rerolls should go first.',
-    tag: 'Power',
-  },
-  {
-    id: 'trait-odds',
-    href: '/anime-vanguards/trait-reroll-odds/',
-    title: 'Reroll odds calculator',
-    blurb: 'Monarch 0.1% + pity 1500 and other Wiki rates.',
-    tag: 'Tools',
-  },
-  {
-    id: 'summon-pity',
-    href: '/anime-vanguards/summon-pity/',
-    title: 'Summon pity planner',
-    blurb: 'Gem budget, hard pity, success chance for banners.',
-    tag: 'Tools',
-  },
-  {
-    id: 'farm-rr',
-    href: '/anime-vanguards/farm-trait-rerolls/',
-    title: 'Farm Trait Rerolls',
-    blurb: 'Boss shop, Rift shop, challenges, codes.',
-    tag: 'Farm',
-  },
-  {
-    id: 'lobby',
-    href: '/anime-vanguards/lobby-guide/',
-    title: 'Lobby guide',
-    blurb: 'Mandra, upgrades, shops, where to click.',
-    tag: 'Map',
-  },
-  {
-    id: 'trading',
-    href: '/anime-vanguards/trading/',
-    title: 'Trading guide',
-    blurb: 'Level 50, traits removed, which RR trade.',
-    tag: 'Trade',
-  },
-  {
-    id: 'evolve',
-    href: '/anime-vanguards/evolve/',
-    title: 'Evolution priority',
-    blurb: 'Who to evolve before you farm for a week.',
-    tag: 'Progress',
-  },
-  {
-    id: 'event',
-    href: '/anime-vanguards/event/',
-    title: 'Event playbook',
-    blurb: 'Limited content order: free rewards first.',
-    tag: 'Limited',
-  },
-  {
-    id: 'hub',
-    href: '/anime-vanguards/',
-    title: 'Game hub',
-    blurb: 'All Anime Vanguards guides in one place.',
-    tag: 'Hub',
-  },
-];
+const relatedHrefs: Record<string, string> = {
+  codes: '/anime-vanguards/codes/',
+  beginner: '/anime-vanguards/beginner-guide/',
+  returning: '/anime-vanguards/returning-guide/',
+  'tier-list': '/anime-vanguards/tier-list/',
+  traits: '/anime-vanguards/traits/',
+  'trait-odds': '/anime-vanguards/trait-reroll-odds/',
+  'summon-pity': '/anime-vanguards/summon-pity/',
+  'farm-rr': '/anime-vanguards/farm-trait-rerolls/',
+  lobby: '/anime-vanguards/lobby-guide/',
+  trading: '/anime-vanguards/trading/',
+  evolve: '/anime-vanguards/evolve/',
+  event: '/anime-vanguards/event/',
+  hub: '/anime-vanguards/',
+};
+
+const all: (Link & { id: string })[] = Object.entries(relatedHrefs).map(([id, href]) => {
+  const copy = r[id as keyof typeof r] as { title: string; blurb: string; tag: string };
+  return {
+    id,
+    href: localizePath(href, locale),
+    title: copy.title,
+    blurb: copy.blurb,
+    tag: copy.tag,
+  };
+});
 
 const preference: Record<string, string[]> = {
   codes: ['farm-rr', 'returning', 'traits'],

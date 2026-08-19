@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { defaultLocale, isLocale } from '../../../i18n/routing';
+import { getUi } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { locale: 'zh', slug: post.id.replace(/\.mdx?$/, '') },
+    props: { post },
+  }));
+}
+
+const { locale } = Astro.params;
+const { post } = Astro.props;
+if (!isLocale(locale) || locale === defaultLocale) {
+  return Astro.redirect(`/blog/${Astro.params.slug}/`);
+}
+
+const { Content } = await render(post);
+const ui = getUi(locale);
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updated={post.data.updated}
+  category={post.data.category}
+  tags={post.data.tags}
+>
+  <p class="callout fallback-notice" role="note">{ui.shared.englishFallback}</p>
+  <Content />
+</BlogLayout>

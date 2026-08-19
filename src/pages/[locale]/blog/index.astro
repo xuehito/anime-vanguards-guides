@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { defaultLocale, isLocale } from '../../../i18n/routing';
+import { LOCALE_BCP47 } from '../../../i18n/routing';
+import { getUi } from '../../../i18n/ui';
+import { localeFromPath, localizePath } from '../../../lib/url';
+
+export function getStaticPaths() {
+  return [{ params: { locale: 'zh' } }];
+}
+
+const { locale } = Astro.params;
+if (!isLocale(locale) || locale === defaultLocale) {
+  return Astro.redirect('/blog/');
+}
+
+const ui = getUi(localeFromPath(Astro.url.pathname));
+const dateLocale = LOCALE_BCP47[locale];
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) =>
+  b.data.pubDate.localeCompare(a.data.pubDate),
+);
+const latestPost = posts[0];
+const latestLabel = latestPost
+  ? new Date(latestPost.data.pubDate + 'T12:00:00').toLocaleDateString(dateLocale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+---
+
+<BaseLayout title={ui.blog.metaTitle} description={ui.blog.metaDescription} wide>
+  <section class="blog-index-hero prose">
+    <p class="eyebrow">
+      <span class="badge badge--accent">{ui.nav.blog}</span>
+      {latestLabel && (
+        <span class="badge badge--trust">
+          {ui.blog.latestBadge} {latestLabel}
+        </span>
+      )}
+    </p>
+    <h1>{ui.blog.title}</h1>
+    <p>{ui.blog.lead}</p>
+    <p class="callout fallback-notice" role="note">{ui.shared.englishFallback}</p>
+  </section>
+
+  <section aria-labelledby="blog-list-heading">
+    <h2 id="blog-list-heading" class="section-title">{ui.blog.latest}</h2>
+    <div class="blog-list">
+      {
+        posts.map((post) => {
+          const slug = post.id.replace(/\.mdx?$/, '');
+          const href = localizePath(`/blog/${slug}/`, locale);
+          const dateLabel = new Date(post.data.pubDate + 'T12:00:00').toLocaleDateString(
+            dateLocale,
+            {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            },
+          );
+
+          return (
+            <article class="blog-card">
+              <a href={href}>
+                <div class="blog-card__meta">
+                  <span>{post.data.category}</span>
+                  <time datetime={post.data.pubDate}>{dateLabel}</time>
+                </div>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+                {post.data.tags.length > 0 && (
+                  <ul class="blog-tags blog-tags--compact" aria-label="Post tags">
+                    {post.data.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                )}
+              </a>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>

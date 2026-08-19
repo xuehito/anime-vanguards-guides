@@ -1,279 +1,45 @@
 ---
 /**
- * Ad slot (Adsterra / HighPerformanceFormat + future AdSense).
+ * Compatibility wrapper around AnvilWiki-style iframe ads.
  *
- * Hidden by default unless:
- *   - PUBLIC_ADS_ENABLED=true, or
- *   - `enabled` prop is true (e.g. homepage live placement)
+ * Hidden unless:
+ *   - PUBLIC_ADS_ENABLED=true and the slot has a key, or
+ *   - `live` / `enabled` is true and the slot has a key
  *
- * Live leaderboard: reserve 728×90 first (async load after paint), then
- * collapse the slot entirely if the network fails / times out — so a dead
- * ad never leaves a permanent blank hole in the page.
- *
- * Note: prop is `placement` (not `slot`) — `slot` is reserved by Astro.
+ * Homepage keeps the existing 728×90 unit via ads.ts fallback key.
  */
+import { isSlotOn, slotFromPlacement } from '../config/ads';
+import { getUi } from '../i18n/ui';
+import { localeFromPath } from '../lib/url';
+import AdBanner from './ads/AdBanner.astro';
+
 interface Props {
   placement: 'leaderboard' | 'in-article' | 'footer' | 'sidebar';
-  /** When true, hides placeholder label and injects network units when available */
   live?: boolean;
-  /** Force render even if PUBLIC_ADS_ENABLED is not set */
   enabled?: boolean;
 }
 
 const { placement, live = false, enabled = false } = Astro.props;
-
-const adsEnabled =
-  enabled === true || import.meta.env.PUBLIC_ADS_ENABLED === 'true';
-
-const labels: Record<Props['placement'], string> = {
-  leaderboard: 'Ad · Leaderboard',
-  'in-article': 'Ad · In-article',
-  footer: 'Ad · Footer',
-  sidebar: 'Ad · Sidebar',
-};
-
-const isLeaderboardLive = placement === 'leaderboard' && live === true;
-
-const LEADERBOARD = {
-  key: '54f713ed15b4e0ccb1dbce29218460bb',
-  width: 728,
-  height: 90,
-  src: 'https://www.highperformanceformat.com/54f713ed15b4e0ccb1dbce29218460bb/invoke.js',
-} as const;
+const slot = slotFromPlacement(placement);
+const show = isSlotOn(slot, { live, enabled });
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
 ---
 
 {
-  adsEnabled && (
+  show && (
     <aside
       class:list={[
         'ad-slot',
-        placement === 'leaderboard' && 'ad-slot--leaderboard',
-        placement === 'in-article' && 'ad-slot--in-article',
-        placement === 'footer' && 'ad-slot--footer',
-        isLeaderboardLive && 'ad-slot--async',
+        `ad-slot--${placement}`,
+        'ad-slot--iframe',
       ]}
       data-ad-slot={placement}
       data-live={live ? 'true' : 'false'}
-      data-ad-async={isLeaderboardLive ? 'true' : undefined}
-      data-ad-key={isLeaderboardLive ? LEADERBOARD.key : undefined}
-      data-ad-width={isLeaderboardLive ? String(LEADERBOARD.width) : undefined}
-      data-ad-height={isLeaderboardLive ? String(LEADERBOARD.height) : undefined}
-      data-ad-src={isLeaderboardLive ? LEADERBOARD.src : undefined}
-      data-ad-state={isLeaderboardLive ? 'pending' : undefined}
-      aria-label={live ? 'Advertisement' : undefined}
-      aria-hidden={live ? undefined : 'true'}
-      aria-busy={isLeaderboardLive ? 'true' : undefined}
+      aria-label={ui.ads.label}
     >
-      {!live && labels[placement]}
-      {
-        isLeaderboardLive && (
-          <div class="ad-slot__mount" data-ad-mount>
-            <div class="ad-slot__skeleton" data-ad-skeleton aria-hidden="true" />
-          </div>
-        )
-      }
+      <span class="ad-slot__label">{ui.ads.label}</span>
+      <AdBanner type={slot} eager={live || placement === 'leaderboard'} />
     </aside>
-  )
-}
-
-{
-  isLeaderboardLive && (
-    <script is:inline>
-      (function () {
-        // Give the ad network time to inject (HPF often fills after script onload).
-        var FAIL_MS = 15000;
-        var POLL_MS = 400;
-
-        function schedule(fn) {
-          if (typeof requestIdleCallback === 'function') {
-            requestIdleCallback(fn, { timeout: 1200 });
-          } else if (document.readyState === 'complete') {
-            setTimeout(fn, 50);
-          } else {
-            window.addEventListener('load', function () {
-              setTimeout(fn, 50);
-            });
-          }
-        }
-
-        function hasFill(el) {
-          if (!el) return false;
-          if (el.querySelector('iframe, img, ins, object, embed, canvas')) return true;
-          // Nested containers from some networks
-          var nodes = el.querySelectorAll('div, span, a');
-          for (var i = 0; i < nodes.length; i++) {
-            var n = nodes[i];
-            if (n.hasAttribute('data-ad-skeleton')) continue;
-            if (n.children.length === 0 && (n.textContent || '').trim().length > 0) continue;
-            if (n.querySelector('iframe, img, ins')) return true;
-            // Non-empty box with explicit size often means creative shell
-            var st = window.getComputedStyle(n);
-            var h = parseFloat(st.height) || n.offsetHeight;
-            var w = parseFloat(st.width) || n.offsetWidth;
-            if (h >= 50 && w >= 100 && n !== el && !n.hasAttribute('data-ad-skeleton')) {
-              if (n.tagName === 'IFRAME' || n.querySelector('iframe')) return true;
-            }
-          }
-          var kids = el.children;
-          for (var j = 0; j < kids.length; j++) {
-            var tag = kids[j].tagName;
-            if (tag === 'SCRIPT') continue;
-            if (kids[j].hasAttribute && kids[j].hasAttribute('data-ad-skeleton')) continue;
-            if (tag === 'IFRAME' || tag === 'IMG' || tag === 'INS') return true;
-            // Any extra element besides skeleton/script is a possible fill
-            if (tag === 'DIV' || tag === 'SPAN' || tag === 'A' || tag === 'CENTER') {
-              if (kids[j].children.length > 0 || kids[j].offsetHeight >= 40) return true;
-            }
-          }
-          return false;
-        }
-
-        function removeSkeleton(slot) {
-          var sk = slot.querySelector('[data-ad-skeleton]');
-          if (sk) sk.remove();
-        }
-
-        /** Collapse slot completely — no permanent blank hole */
-        function collapse(slot) {
-          if (!slot || slot.getAttribute('data-ad-state') === 'loaded') return;
-          slot.setAttribute('data-ad-state', 'empty');
-          slot.setAttribute('aria-busy', 'false');
-          slot.setAttribute('aria-hidden', 'true');
-          slot.hidden = true;
-          slot.classList.add('ad-slot--empty');
-          var mount = slot.querySelector('[data-ad-mount]');
-          if (mount) mount.replaceChildren();
-        }
-
-        function markLoaded(slot) {
-          removeSkeleton(slot);
-          slot.hidden = false;
-          slot.removeAttribute('aria-hidden');
-          slot.setAttribute('aria-busy', 'false');
-          slot.setAttribute('data-ad-state', 'loaded');
-          slot.classList.add('ad-slot--loaded');
-          slot.classList.remove('ad-slot--empty');
-        }
-
-        function loadSlot(slot) {
-          if (!slot) return;
-          var state = slot.getAttribute('data-ad-state');
-          if (state === 'loading' || state === 'loaded' || state === 'empty') return;
-
-          var key = slot.getAttribute('data-ad-key');
-          var src = slot.getAttribute('data-ad-src');
-          var width = parseInt(slot.getAttribute('data-ad-width') || '728', 10);
-          var height = parseInt(slot.getAttribute('data-ad-height') || '90', 10);
-          var mount = slot.querySelector('[data-ad-mount]');
-          if (!key || !src || !mount) {
-            collapse(slot);
-            return;
-          }
-
-          slot.hidden = false;
-          slot.setAttribute('data-ad-state', 'loading');
-          slot.setAttribute('aria-busy', 'true');
-
-          var settled = false;
-          var observer = null;
-          var pollTimer = null;
-
-          function cleanup() {
-            if (observer) {
-              try {
-                observer.disconnect();
-              } catch (e) {}
-              observer = null;
-            }
-            if (pollTimer) {
-              clearInterval(pollTimer);
-              pollTimer = null;
-            }
-          }
-
-          function succeed() {
-            if (settled) return;
-            settled = true;
-            clearTimeout(failTimer);
-            cleanup();
-            markLoaded(slot);
-          }
-
-          function fail() {
-            if (settled) return;
-            settled = true;
-            clearTimeout(failTimer);
-            cleanup();
-            collapse(slot);
-          }
-
-          var failTimer = setTimeout(function () {
-            // Last chance check before collapse
-            if (hasFill(mount) || hasFill(slot)) succeed();
-            else fail();
-          }, FAIL_MS);
-
-          function check() {
-            if (settled) return;
-            if (hasFill(mount) || hasFill(slot)) succeed();
-          }
-
-          // Watch for network injects (iframe often appears after onload)
-          if (typeof MutationObserver === 'function') {
-            observer = new MutationObserver(function () {
-              check();
-            });
-            observer.observe(mount, { childList: true, subtree: true });
-            observer.observe(slot, { childList: true, subtree: true });
-          }
-
-          pollTimer = setInterval(check, POLL_MS);
-
-          try {
-            // HPF expects a global atOptions object before invoke.js runs
-            window.atOptions = {
-              key: key,
-              format: 'iframe',
-              height: height,
-              width: width,
-              params: {},
-            };
-
-            var s = document.createElement('script');
-            s.src = src;
-            s.async = true;
-            s.referrerPolicy = 'no-referrer-when-downgrade';
-            s.onerror = function () {
-              // Network hard-fail — still wait a beat in case of race, then collapse
-              setTimeout(function () {
-                if (!hasFill(mount) && !hasFill(slot)) fail();
-              }, 500);
-            };
-            s.onload = function () {
-              // Do not fail here — creative may inject later; poll + failTimer handle it
-              check();
-              setTimeout(check, 800);
-              setTimeout(check, 2000);
-              setTimeout(check, 4000);
-            };
-
-            try {
-              mount.appendChild(s);
-            } catch (e) {
-              fail();
-            }
-          } catch (e) {
-            fail();
-          }
-        }
-
-        function boot() {
-          var nodes = document.querySelectorAll('[data-ad-async="true"]');
-          for (var i = 0; i < nodes.length; i++) loadSlot(nodes[i]);
-        }
-
-        schedule(boot);
-      })();
-    </script>
   )
 }

@@ -1,11 +1,16 @@
 ---
 import { HUB_CATEGORIES } from '../data/hub-categories';
+import { getUi } from '../i18n/ui';
+import { localeFromPath, localizePath } from '../lib/url';
+
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
 ---
 
 <section class="hub-cats" aria-labelledby="hub-cats-heading">
   <div class="hub-cats__head">
-    <h2 id="hub-cats-heading">Browse by session goal</h2>
-    <p>Pick a path — codes first, then invest, then limited modes.</p>
+    <h2 id="hub-cats-heading">{ui.hub.heading}</h2>
+    <p>{ui.hub.lead}</p>
   </div>
   <div class="hub-cats__grid">
     {
@@ -18,7 +23,7 @@ import { HUB_CATEGORIES } from '../data/hub-categories';
           <ul class="hub-cat__links">
             {cat.links.map((l) => (
               <li>
-                <a class="hub-cat__link" href={l.href}>
+                <a class="hub-cat__link" href={localizePath(l.href, locale)}>
                   <span class="hub-cat__link-title">{l.title}</span>
                   <span class="hub-cat__link-blurb">{l.blurb}</span>
                 </a>

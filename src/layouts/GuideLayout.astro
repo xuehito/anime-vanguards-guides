@@ -8,11 +8,10 @@ import SourceStrip from '../components/SourceStrip.astro';
 import CodesArchive from '../components/CodesArchive.astro';
 import Faq from '../components/Faq.astro';
 import { FAQ_BY_TYPE } from '../data/faqs';
-import {
-  CODES_REFRESH_HOURS,
-  formatNextUpdateBadge,
-  getNextUpdateDate,
-} from '../lib/next-update';
+import { CODES_REFRESH_HOURS } from '../lib/next-update';
+import { localeFromPath, localizePath } from '../lib/url';
+import { LOCALE_BCP47, defaultLocale } from '../i18n/routing';
+import { getUi } from '../i18n/ui';
 
 interface CodeEntry {
   code: string;
@@ -32,37 +31,37 @@ interface Props {
   title: string;
   description: string;
   updated: string;
-  /** ISO datetime for planned next refresh (codes) */
   nextUpdate?: string;
   type?: string;
   patch?: string;
   activeCodes?: CodeEntry[];
   expiredCodes?: CodeEntry[];
   archivedByUpdate?: ArchiveGroup[];
+  /** When true, show the English-body fallback notice (non-default locale). */
+  showFallbackNotice?: boolean;
 }
 
 const {
   title,
   description,
   updated,
-  nextUpdate,
   type,
   patch,
   activeCodes = [],
   expiredCodes = [],
   archivedByUpdate = [],
+  showFallbackNotice = false,
 } = Astro.props;
 
-const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', {
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
+const dateLocale = LOCALE_BCP47[locale];
+
+const updatedLabel = new Date(updated + 'T12:00:00').toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
-
-const codesNextDate =
-  type === 'codes' ? getNextUpdateDate(updated, nextUpdate, CODES_REFRESH_HOURS) : null;
-const codesNextBadge = codesNextDate ? formatNextUpdateBadge(codesNextDate) : null;
-const codesNextIso = codesNextDate?.toISOString() ?? null;
 
 const relatedTypes = new Set([
   'hub',
@@ -84,7 +83,8 @@ const relatedCurrent = type && relatedTypes.has(type) ? type : 'guide';
 const sourceContext =
   type === 'codes' ? 'codes' : type === 'tier-list' ? 'tier' : 'general';
 
-const faqItems = (type && FAQ_BY_TYPE[type]) || [];
+const localeFaq = type === 'codes' ? ui.faq.codes : null;
+const faqItems = localeFaq ?? ((type && FAQ_BY_TYPE[type]) || []);
 
 const articleLd = {
   '@context': 'https://schema.org',
@@ -92,6 +92,7 @@ const articleLd = {
   headline: title,
   description,
   dateModified: updated,
+  inLanguage: dateLocale,
   author: { '@type': 'Organization', name: 'AV Guides' },
   publisher: {
     '@type': 'Organization',
@@ -112,22 +113,15 @@ const articleLd = {
     <header>
       <h1>{title}</h1>
       <div class="meta">
-        <span class="badge badge--trust">Last checked {updatedLabel}</span>
-        {
-          type === 'codes' &&
-            codesNextBadge &&
-            codesNextIso && (
-              <span class="badge badge--next">
-                <time datetime={codesNextIso}>{codesNextBadge}</time>
-              </span>
-            )
-        }
+        <span class="badge badge--trust">{ui.shared.lastChecked} {updatedLabel}</span>
         {
           type === 'codes' &&
             (activeCodes.length > 0 ? (
-              <span class="badge badge--active">{activeCodes.length} active codes</span>
+              <span class="badge badge--active">
+                {activeCodes.length} {ui.codes.activeCount}
+              </span>
             ) : (
-              <span class="badge">No active codes</span>
+              <span class="badge">{ui.codes.noActive}</span>
             ))
         }
         {
@@ -139,12 +133,18 @@ const articleLd = {
       {
         type === 'codes' && (
           <p class="trust-line">
-            Fast redeem list · Cross-check Wiki/Discord · Unofficial fan guide · Re-check every{' '}
-            {CODES_REFRESH_HOURS}h
+            {ui.codes.trustLine} {CODES_REFRESH_HOURS}
+            {ui.codes.hours}
           </p>
         )
       }
     </header>
+
+    {
+      showFallbackNotice && locale !== defaultLocale && (
+        <p class="callout fallback-notice" role="note">{ui.shared.englishFallback}</p>
+      )
+    }
 
     <SourceStrip context={sourceContext} />
 
@@ -153,29 +153,14 @@ const articleLd = {
     {
       type === 'codes' && (
         <section id="active-codes" aria-labelledby="active-heading">
-          <h2 id="active-heading">Active Anime Vanguards codes</h2>
-          <p>
-            Tap <strong>Copy</strong> or <strong>Copy all active</strong>, then paste
-            in-game. Codes are case-sensitive and often need Level 10 or 30.
-          </p>
+          <h2 id="active-heading">{ui.codes.activeHeading}</h2>
+          <p>{ui.codes.activeIntro}</p>
           {activeCodes.length > 0 ? (
             <CodeTable codes={activeCodes} copyAll tableId="active-codes-table" />
           ) : (
             <div class="callout callout--warn codes-empty" role="status">
-              <strong>No active codes listed right now</strong>
-              <p>
-                Lists often go empty between patch drops. Check these sources, then come
-                back after the next announcement
-                {codesNextBadge && codesNextIso && (
-                  <>
-                    {' '}
-                    (planned site re-check:{' '}
-                    <time datetime={codesNextIso}>{codesNextBadge.replace(/^Next update /, '')}</time>
-                    , {CODES_REFRESH_HOURS}h after last sync)
-                  </>
-                )}
-                :
-              </p>
+              <strong>{ui.codes.noActiveListed}</strong>
+              <p>{ui.codes.noActiveBody}:</p>
               <ul>
                 <li>
                   <a
@@ -183,7 +168,7 @@ const articleLd = {
                     rel="noopener noreferrer"
                     target="_blank">Official Discord</a
                   >{' '}
-                  — codes usually drop here first
+                  {ui.codes.discordFirst}
                 </li>
                 <li>
                   <a
@@ -191,38 +176,41 @@ const articleLd = {
                     rel="noopener noreferrer"
                     target="_blank">Wiki Codes</a
                   >{' '}
-                  — full archive &amp; live list
+                  {ui.codes.wikiFull}
                 </li>
                 <li>
-                  <a href="#codes-archive">Archive below</a> — recently expired codes so
-                  you do not re-try dead ones
+                  <a href="#codes-archive">{ui.codes.archiveHeading}</a>{' '}
+                  {ui.codes.archiveHint}
                 </li>
               </ul>
             </div>
           )}
           <div class="after-redeem callout">
-            <strong>After you redeem</strong>
+            <strong>{ui.codes.afterRedeem}</strong>
             <ol class="after-redeem__list">
               <li>
-                Put free Trait Rerolls on a unit you will actually main — see the{' '}
-                <a href="/anime-vanguards/tier-list/">tier list</a>,{' '}
-                <a href="/anime-vanguards/traits/">traits guide</a>, and{' '}
-                <a href="/anime-vanguards/trait-reroll-odds/">reroll odds</a>.
+                {ui.codesAfter[0]}{' '}
+                <a href={localizePath('/anime-vanguards/tier-list/', locale)}>tier</a>
+                {' · '}
+                <a href={localizePath('/anime-vanguards/traits/', locale)}>traits</a>
+                {' · '}
+                <a href={localizePath('/anime-vanguards/trait-reroll-odds/', locale)}>odds</a>
               </li>
               <li>
-                Need more RR after codes? Follow the{' '}
-                <a href="/anime-vanguards/farm-trait-rerolls/">farm guide</a>. Reroll at{' '}
-                <a href="/anime-vanguards/lobby-guide/">Mandra in the lobby</a>.
+                {ui.codesAfter[1]}{' '}
+                <a href={localizePath('/anime-vanguards/farm-trait-rerolls/', locale)}>farm</a>
+                {' · '}
+                <a href={localizePath('/anime-vanguards/lobby-guide/', locale)}>lobby</a>
               </li>
               <li>
-                New account? Follow the{' '}
-                <a href="/anime-vanguards/beginner-guide/">beginner path</a>. Back
-                after a break? Use the{' '}
-                <a href="/anime-vanguards/returning-guide/">returning path</a>.
+                {ui.codesAfter[2]}{' '}
+                <a href={localizePath('/anime-vanguards/beginner-guide/', locale)}>beginner</a>
+                {' · '}
+                <a href={localizePath('/anime-vanguards/returning-guide/', locale)}>returning</a>
               </li>
               <li>
-                Playing a limited mode? Read the{' '}
-                <a href="/anime-vanguards/event/">event shop order</a>.
+                {ui.codesAfter[3]}{' '}
+                <a href={localizePath('/anime-vanguards/event/', locale)}>event</a>
               </li>
             </ol>
           </div>
@@ -247,8 +235,8 @@ const articleLd = {
         archivedByUpdate.length === 0 &&
         expiredCodes.length > 0 && (
           <section id="expired-codes" aria-labelledby="expired-heading">
-            <h2 id="expired-heading">Expired codes</h2>
-            <p>These no longer work. Listed so you can avoid wasting time.</p>
+            <h2 id="expired-heading">{ui.codes.expiredHeading}</h2>
+            <p>{ui.codes.expiredIntro}</p>
             <CodeTable codes={expiredCodes} showNew={false} tableId="expired-codes-table" />
           </section>
         )

@@ -1,20 +1,32 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { locales, defaultLocale } from './src/i18n/routing.ts';
 
-// Set SITE in env for production if needed
 const site = process.env.SITE || 'https://animevanguards.co';
 
-// https://astro.build/config
 export default defineConfig({
   site,
   output: 'static',
+  i18n: {
+    locales: [...locales],
+    defaultLocale,
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [
     sitemap({
-      // Prefer higher priority for money/traffic pages
+      i18n: {
+        defaultLocale,
+        locales: Object.fromEntries(
+          locales.map((l) => [l, l === 'zh' ? 'zh-Hans' : l]),
+        ),
+      },
+      filter: (page) => !page.includes('/ads/'),
       serialize(item) {
         const path = new URL(item.url).pathname;
-        if (path === '/') {
+        if (path === '/' || path === '/zh/') {
           item.changefreq = 'daily';
           item.priority = 1.0;
         } else if (path.includes('/codes')) {

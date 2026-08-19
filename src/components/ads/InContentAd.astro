@@ -1,0 +1,29 @@
+---
+/**
+ * In-content banner. Empty key → render nothing.
+ */
+import { getAdKey, type AdSlotId } from '../../config/ads';
+import { getUi } from '../../i18n/ui';
+import { localeFromPath } from '../../lib/url';
+import AdBanner from './AdBanner.astro';
+
+interface Props {
+  type?: Extract<AdSlotId, 'banner-300x250' | 'banner-728x90' | 'banner-468x60'>;
+  label?: string;
+}
+
+const { type = 'banner-300x250', label } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
+const adKey = getAdKey(type);
+const shown = label ?? ui.ads.label;
+---
+
+{
+  adKey && (
+    <div class="in-content-ad">
+      <span class="in-content-ad__label">{shown}</span>
+      <AdBanner type={type} />
+    </div>
+  )
+}

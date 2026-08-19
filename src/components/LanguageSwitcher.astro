@@ -1,0 +1,47 @@
+---
+import { locales, LOCALE_LABELS, type Locale } from '../i18n/routing';
+import { getUi } from '../i18n/ui';
+import { pathForLocale } from '../lib/url';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const path = Astro.url.pathname;
+const ui = getUi(locale);
+const options = locales.map((loc) => ({
+  loc,
+  href: pathForLocale(path, loc),
+  label: LOCALE_LABELS[loc],
+}));
+---
+
+<label class="lang-switch">
+  <span class="sr-only">{ui.nav.language}</span>
+  <select class="lang-switch__select" data-lang-switch aria-label={ui.nav.language}>
+    {
+      options.map((opt) => (
+        <option value={opt.href} selected={opt.loc === locale}>
+          {opt.label}
+        </option>
+      ))
+    }
+  </select>
+</label>
+
+<script>
+  function bindLangSwitch() {
+    document.querySelectorAll<HTMLSelectElement>('[data-lang-switch]').forEach((el) => {
+      if (el.dataset.bound) return;
+      el.dataset.bound = '1';
+      el.addEventListener('change', () => {
+        const href = el.value;
+        if (href) window.location.assign(href);
+      });
+    });
+  }
+
+  bindLangSwitch();
+  document.addEventListener('astro:page-load', bindLangSwitch);
+</script>

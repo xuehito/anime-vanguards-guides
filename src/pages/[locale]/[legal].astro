@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { defaultLocale, isLocale } from '../../i18n/routing';
+import { getLegal, type LegalSlug } from '../../i18n/legal';
+
+export function getStaticPaths() {
+  const pages = ['about', 'privacy', 'contact', 'disclaimer'];
+  return pages.map((legal) => ({ params: { locale: 'zh', legal } }));
+}
+
+const legalPages = ['about', 'privacy', 'contact', 'disclaimer'] as const;
+const { locale, legal } = Astro.params;
+if (!isLocale(locale) || locale === defaultLocale) {
+  return Astro.redirect(`/${legal}/`);
+}
+if (!legalPages.includes(legal as (typeof legalPages)[number])) {
+  return new Response(null, { status: 404 });
+}
+
+const doc = getLegal(legal as LegalSlug, locale);
+---
+
+<BaseLayout title={doc.title} description={doc.description}>
+  <article class="prose legal">
+    <h1>{doc.title}</h1>
+    {doc.lastUpdated && (
+      <p>
+        <em>{doc.lastUpdated}</em>
+      </p>
+    )}
+    <Fragment set:html={doc.html} />
+  </article>
+</BaseLayout>

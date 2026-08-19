@@ -2,48 +2,28 @@
 /**
  * Patch + "what to do this week" — inspired by wiki home / official changelog.
  */
+import { getUi } from '../i18n/ui';
+import { localeFromPath, localizePath } from '../lib/url';
+
 interface Props {
   version?: string;
   versionNote?: string;
 }
 
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
 const {
   version = 'Update 14.5',
   versionNote = '25th Hour / The Arcana — redeem codes, then clear limited event rewards',
 } = Astro.props;
 
-const hot = [
-  {
-    href: '/anime-vanguards/codes/',
-    title: 'Redeem codes',
-    blurb: 'Free rerolls before you spend gems',
-    tag: 'Do first',
-  },
-  {
-    href: '/anime-vanguards/summon-pity/',
-    title: 'Summon pity',
-    blurb: 'Gem budget before you pull',
-    tag: 'Tools',
-  },
-  {
-    href: '/anime-vanguards/farm-trait-rerolls/',
-    title: 'Farm Trait Rerolls',
-    blurb: 'Top 3 + RR reality check',
-    tag: 'Farm',
-  },
-  {
-    href: '/anime-vanguards/event/',
-    title: 'Event shop order',
-    blurb: 'RR and power before cosmetics',
-    tag: 'Limited',
-  },
-];
+const hot = ui.version.items;
 ---
 
 <section class="version-hot" aria-labelledby="version-hot-heading">
   <div class="version-hot__banner">
     <div>
-      <p class="version-hot__kicker">Current patch focus</p>
+      <p class="version-hot__kicker">{ui.version.kicker}</p>
       <h2 id="version-hot-heading" class="version-hot__title">{version}</h2>
       <p class="version-hot__note">{versionNote}</p>
     </div>
@@ -52,22 +32,22 @@ const hot = [
         class="btn"
         href="https://vanguards.gg/changelog"
         rel="noopener noreferrer"
-        target="_blank">Changelog</a
+        target="_blank">{ui.version.changelog}</a
       >
       <a
         class="btn"
         href="https://wiki.vanguards.gg/Anime_Vanguards_Wiki"
         rel="noopener noreferrer"
-        target="_blank">Wiki home</a
+        target="_blank">{ui.version.wikiHome}</a
       >
     </div>
   </div>
-  <p class="version-hot__hot-label">Hot this week</p>
+  <p class="version-hot__hot-label">{ui.version.hot}</p>
   <ul class="version-hot__grid">
     {
       hot.map((h) => (
         <li>
-          <a class="version-hot__card" href={h.href}>
+          <a class="version-hot__card" href={localizePath(h.href, locale)}>
             <span class="tag">{h.tag}</span>
             <span class="version-hot__card-title">{h.title}</span>
             <span class="version-hot__card-blurb">{h.blurb}</span>

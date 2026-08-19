@@ -1,4 +1,8 @@
 ---
+import { getUi } from '../i18n/ui';
+import { localeFromPath } from '../lib/url';
+import { LOCALE_BCP47 } from '../i18n/routing';
+
 interface CodeEntry {
   code: string;
   rewards: string;
@@ -17,6 +21,9 @@ interface Props {
 }
 
 const { groups } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
+const dateLocale = LOCALE_BCP47[locale];
 
 function expiresLabel(row: CodeEntry) {
   if (row.expires) return row.expires;
@@ -24,7 +31,7 @@ function expiresLabel(row: CodeEntry) {
     try {
       return (
         'Expired · ' +
-        new Date(row.expiresAt + 'T12:00:00').toLocaleDateString('en-US', {
+        new Date(row.expiresAt + 'T12:00:00').toLocaleDateString(dateLocale, {
           month: 'short',
           day: 'numeric',
           year: 'numeric',
@@ -41,11 +48,8 @@ function expiresLabel(row: CodeEntry) {
 {
   groups.length > 0 && (
     <section id="codes-archive" class="codes-archive" aria-labelledby="archive-heading">
-      <h2 id="archive-heading">Archived by update</h2>
-      <p>
-        Expired or historical codes. Check the <strong>Expires</strong> column so you know when a
-        code died — not for re-redeeming.
-      </p>
+      <h2 id="archive-heading">{ui.codes.archiveHeading}</h2>
+      <p>{ui.codes.archiveIntro}</p>
       {groups.map((g, i) => (
         <details class="archive-group" open={i === 0}>
           <summary>

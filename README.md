@@ -1,6 +1,6 @@
 # AV Guides — Anime Vanguards (static MD)
 
-Unofficial English guide site for Roblox **Anime Vanguards**: codes, tier list, beginner guide.
+Unofficial guide site for Roblox **Anime Vanguards**: codes, tier list, beginner guide. English is the default locale (`/`); Chinese UI lives under `/zh/`.
 
 Stack: **Astro** (static output) + **Markdown** content collections. Deploy to **Vercel** and/or **Cloudflare Pages**.
 
@@ -115,14 +115,11 @@ SITE=https://animevanguards.co npm run build
 **备用：GitHub Actions**（`.github/workflows/deploy-cloudflare.yml`）  
 Secrets：`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。Push `main` 会 `build` + `wrangler pages deploy`。
 
-## Ads (later)
+## i18n + ads
 
-Ad slots are **hidden by default** (no placeholders on the page).
+See [`docs/i18n.md`](docs/i18n.md) and [`docs/ads.md`](docs/ads.md).
 
-1. Slots stay wired in layouts via `AdSlot` (leaderboard / in-article / footer).
-2. Enable with env: `PUBLIC_ADS_ENABLED=true`
-3. When AdSense is approved, add the loader script in `BaseLayout.astro` and paste `<ins class="adsbygoogle">` inside `AdSlot`.
-4. Keep Privacy Policy + Disclaimer updated.
+Ad slots use isolated iframes (`/ads/<type>/`). Empty `PUBLIC_AD_*` keys render nothing. Homepage 728×90 stays live with the existing unit unless you override `PUBLIC_AD_BANNER_728X90`. Guide in-article/footer slots also need `PUBLIC_ADS_ENABLED=true`.
 
 ## SEO checklist
 

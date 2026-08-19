@@ -1,19 +1,23 @@
 ---
+import { getUi } from '../i18n/ui';
+import { localeFromPath, localizePath } from '../lib/url';
+
 const year = new Date().getFullYear();
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
     <p>
-      © {year} AV Guides · Unofficial fan resource for Roblox Anime Vanguards.
-      Not affiliated with Roblox or the game developers.
+      © {year} {ui.site.name} · {ui.footer.copyright}
     </p>
     <div class="footer-links">
-      <a href="/about/">About</a>
-      <a href="/blog/">Blog</a>
-      <a href="/privacy/">Privacy</a>
-      <a href="/disclaimer/">Disclaimer</a>
-      <a href="/contact/">Contact</a>
+      <a href={localizePath('/about/', locale)}>{ui.footer.about}</a>
+      <a href={localizePath('/blog/', locale)}>{ui.footer.blog}</a>
+      <a href={localizePath('/privacy/', locale)}>{ui.footer.privacy}</a>
+      <a href={localizePath('/disclaimer/', locale)}>{ui.footer.disclaimer}</a>
+      <a href={localizePath('/contact/', locale)}>{ui.footer.contact}</a>
     </div>
   </div>
 </footer>

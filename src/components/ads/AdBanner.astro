@@ -1,0 +1,33 @@
+---
+/**
+ * AdBanner — one slot via iframe isolation (AnvilWiki PRD).
+ * Each /ads/<type>/ page has its own window.atOptions so keys do not collide.
+ */
+import { AD_SLOTS, getAdKey, type AdSlotId } from '../../config/ads';
+
+interface Props {
+  type: AdSlotId;
+  eager?: boolean;
+  class?: string;
+}
+
+const { type, eager = false, class: className = '' } = Astro.props;
+const def = AD_SLOTS[type];
+const key = getAdKey(type);
+---
+
+{
+  key && (
+    <div class:list={['ad-banner', className]}>
+      <iframe
+        src={`/ads/${type}/`}
+        width={def.width}
+        height={def.height}
+        scrolling="no"
+        loading={eager ? 'eager' : 'lazy'}
+        title={`advertisement ${type}`}
+        aria-hidden="true"
+      />
+    </div>
+  )
+}

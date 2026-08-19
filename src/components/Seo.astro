@@ -1,4 +1,8 @@
 ---
+import { locales, LOCALE_BCP47, LOCALE_HREFLANG, defaultLocale } from '../i18n/routing';
+import { localeFromPath, pathForLocale } from '../lib/url';
+import { siteUrl } from '../config/site';
+
 interface Props {
   title: string;
   description: string;
@@ -17,12 +21,27 @@ const {
   image = '/og.png',
 } = Astro.props;
 
+const locale = localeFromPath(Astro.url.pathname);
 const siteName = 'AV Guides';
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 const canonicalURL = canonical
   ? new URL(canonical, Astro.site)
   : new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
+
+const skipHreflang = Astro.url.pathname.startsWith('/ads/');
+const alternates = skipHreflang
+  ? []
+  : [
+      ...locales.map((loc) => ({
+        hreflang: LOCALE_HREFLANG[loc],
+        href: `${siteUrl}${pathForLocale(Astro.url.pathname, loc)}`,
+      })),
+      {
+        hreflang: 'x-default',
+        href: `${siteUrl}${pathForLocale(Astro.url.pathname, defaultLocale)}`,
+      },
+    ];
 ---
 
 <meta charset="utf-8" />
@@ -30,8 +49,14 @@ const imageURL = new URL(image, Astro.site);
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+{
+  alternates.map((a) => (
+    <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+  ))
+}
 {noindex && <meta name="robots" content="noindex,follow" />}
 <meta property="og:type" content={type} />
+<meta property="og:locale" content={LOCALE_BCP47[locale]} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalURL} />

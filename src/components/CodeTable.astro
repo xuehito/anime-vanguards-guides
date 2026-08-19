@@ -1,4 +1,7 @@
 ---
+import { getUi } from '../i18n/ui';
+import { localeFromPath } from '../lib/url';
+
 interface CodeEntry {
   code: string;
   rewards: string;
@@ -18,9 +21,10 @@ interface Props {
   tableId?: string;
 }
 
+const ui = getUi(localeFromPath(Astro.url.pathname));
 const {
   codes,
-  emptyLabel = 'No codes listed.',
+  emptyLabel = ui.codes.empty,
   showNew = true,
   copyAll = false,
   showCopy = true,
@@ -38,15 +42,17 @@ const showExpires = true;
     <>
       {copyAll && (
         <div class="codes-toolbar">
-          <span class="badge">Tap Copy or grab every code at once</span>
+          <span class="badge">{ui.shared.copyAllHint}</span>
           <button
             type="button"
             class="btn btn--primary copy-all-btn"
             data-codes={allCodesPayload}
             data-count={String(codes.length)}
-            aria-label="Copy all active codes"
+            data-label-copied={ui.shared.copiedAll}
+            data-toast={ui.shared.copiedAllToast}
+            aria-label={ui.shared.copyAll}
           >
-            Copy all active
+            {ui.shared.copyAll}
           </button>
         </div>
       )}
@@ -54,10 +60,10 @@ const showExpires = true;
         <table class="codes-table" id={tableId}>
           <thead>
             <tr>
-              <th>Code</th>
-              <th>Rewards</th>
-              <th>Req.</th>
-              {showExpires && <th>Expires</th>}
+              <th>{ui.codes.colCode}</th>
+              <th>{ui.codes.colRewards}</th>
+              <th>{ui.codes.colReq}</th>
+              {showExpires && <th>{ui.codes.colExpires}</th>}
               {showCopy && <th></th>}
             </tr>
           </thead>
@@ -74,7 +80,7 @@ const showExpires = true;
                     <span class="code-cell">{row.code}</span>
                     {showNew && row.new && (
                       <span class="badge badge--new" style="margin-left:0.4rem">
-                        NEW
+                        {ui.shared.new}
                       </span>
                     )}
                   </td>
@@ -91,9 +97,12 @@ const showExpires = true;
                         type="button"
                         class="btn btn--primary copy-btn"
                         data-code={row.code}
-                        aria-label={`Copy code ${row.code}`}
+                        data-label-copy={ui.shared.copy}
+                        data-label-copied={ui.shared.copied}
+                        data-toast={ui.shared.copiedToast}
+                        aria-label={`${ui.shared.copy} ${row.code}`}
                       >
-                        Copy
+                        {ui.shared.copy}
                       </button>
                     </td>
                   )}
@@ -169,9 +178,9 @@ const showExpires = true;
         const code = btn.dataset.code ?? '';
         const ok = await copyText(code);
         if (ok) {
-          flashButton(btn, 'Copied!');
+          flashButton(btn, btn.dataset.labelCopied || 'Copied');
           track('copy_code', { code_name: code });
-          showToast('Copied. Next: invest rewards wisely → open Tier list or Traits.');
+          showToast(btn.dataset.toast || '');
         }
       });
     });
@@ -184,11 +193,9 @@ const showExpires = true;
         const count = Number(btn.dataset.count ?? '0');
         const ok = await copyText(codes);
         if (ok) {
-          flashButton(btn, 'All copied!');
+          flashButton(btn, btn.dataset.labelCopied || 'Copied');
           track('copy_all', { code_count: count });
-          showToast(
-            `${count} codes copied (one per line). Redeem in-game, then check traits / tier list.`,
-          );
+          showToast(`${count} ${btn.dataset.toast || ''}`.trim());
         }
       });
     });

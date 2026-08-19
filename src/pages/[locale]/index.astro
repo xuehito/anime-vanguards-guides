@@ -1,0 +1,15 @@
+---
+import HomePage from '../../components/home/HomePage.astro';
+import { defaultLocale, isLocale } from '../../i18n/routing';
+
+export function getStaticPaths() {
+  return [{ params: { locale: 'zh' } }].filter((p) => p.params.locale !== defaultLocale);
+}
+
+const { locale } = Astro.params;
+if (!isLocale(locale) || locale === defaultLocale) {
+  return Astro.redirect('/');
+}
+---
+
+<HomePage />

@@ -1,0 +1,18 @@
+---
+import LocalizedGuide from '../../../components/guide/LocalizedGuide.astro';
+import { defaultLocale, isLocale, type Locale } from '../../../i18n/routing';
+import { GUIDE_DEFS } from '../../../lib/guides';
+
+export function getStaticPaths() {
+  return GUIDE_DEFS.filter((g) => g.slug).map((g) => ({
+    params: { locale: 'zh', guide: g.slug },
+  }));
+}
+
+const { locale, guide } = Astro.params;
+if (!isLocale(locale) || locale === defaultLocale) {
+  return Astro.redirect(`/anime-vanguards/${guide}/`);
+}
+---
+
+<LocalizedGuide slug={guide ?? ''} locale={locale as Locale} />

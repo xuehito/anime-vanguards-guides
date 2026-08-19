@@ -1,0 +1,249 @@
+{
+  "site": {
+    "name": "AV Guides",
+    "description": "非官方 Anime Vanguards 中文指南：可用兑换码、配装优先级、特质、进化与活动决策。",
+    "tagline": "先兑码，再决定下一步",
+    "legalNotice": "Roblox《Anime Vanguards》非官方粉丝站，与 Roblox 及游戏开发商无关。",
+    "unofficial": "非官方 · 中文界面",
+    "wikiSync": "对照官方 Wiki 同步"
+  },
+  "nav": {
+    "codes": "兑换码",
+    "tier": "配装",
+    "pity": "保底",
+    "rerolls": "重随",
+    "blog": "博客",
+    "more": "更多",
+    "menu": "菜单",
+    "home": "首页",
+    "language": "语言"
+  },
+  "footer": {
+    "about": "关于",
+    "blog": "博客",
+    "privacy": "隐私",
+    "disclaimer": "免责声明",
+    "contact": "联系",
+    "copyright": "Roblox《Anime Vanguards》非官方粉丝站，与 Roblox 及游戏开发商无关。"
+  },
+  "shared": {
+    "lastChecked": "最近核对",
+    "nextUpdate": "下次更新",
+    "updated": "已更新",
+    "published": "发布于",
+    "readMore": "阅读更多",
+    "viewAll": "查看全部",
+    "copy": "复制",
+    "copied": "已复制",
+    "copiedAll": "已全部复制",
+    "copiedToast": "已复制。下一步：把奖励花在主力上 → 打开配装榜或特质页。",
+    "copiedAllToast": "条兑换码已复制（一行一条）。进游戏兑换，再看特质 / 配装榜。",
+    "copyAll": "一键复制全部",
+    "copyAllHint": "点复制，或一次拿走全部可用码",
+    "new": "新",
+    "englishFallback": "正文仍为英文原文。导航和兑换区已中文化；完整译文会陆续补上。",
+    "sources": "权威来源",
+    "sourcesFoot": "非官方指南站——帮你行动（兑换、投资、路线）。数据和版本真相在 Wiki / Discord / Changelog。"
+  },
+  "sources": {
+    "discord": "官方 Discord",
+    "discordNote": "新码通常最先出现",
+    "wikiCodes": "Wiki 兑换码",
+    "wikiCodesNote": "完整归档",
+    "wikiTier": "Wiki 梯队",
+    "wikiTierNote": "权威环境",
+    "changelog": "官方更新日志",
+    "changelogNote": "本季改动",
+    "wiki": "官方 Wiki",
+    "wikiNote": "单位数据"
+  },
+  "codes": {
+    "activeHeading": "当前可用 Anime Vanguards 兑换码",
+    "activeIntro": "点「复制」或「一键复制全部」，再粘贴到游戏里。兑换码区分大小写，很多需要 10 级或 30 级。",
+    "activeCount": "个可用码",
+    "noActive": "暂无可用码",
+    "noActiveListed": "当前列表为空",
+    "noActiveBody": "大版本间隙经常会空窗。先对照这些来源，等下次公告后再回来",
+    "plannedRecheck": "站点计划复查",
+    "afterLastSync": "小时后（上次同步起算）",
+    "discordFirst": "— 新码通常先发这里",
+    "wikiFull": "— 完整归档和实时列表",
+    "archiveHint": "— 刚过期的码，避免重复尝试",
+    "afterRedeem": "兑完之后",
+    "trustLine": "快速兑换列表 · 请对照 Wiki/Discord · 非官方指南 · 复查间隔",
+    "hours": "小时",
+    "colCode": "兑换码",
+    "colRewards": "奖励",
+    "colReq": "要求",
+    "colExpires": "过期",
+    "archiveHeading": "按更新归档",
+    "archiveIntro": "已过期或历史兑换码。看「过期」列确认失效时间，不要再拿去兑换。",
+    "expiredHeading": "已过期兑换码",
+    "expiredIntro": "这些已经不能用，列在这里是避免浪费时间。",
+    "empty": "暂无兑换码。",
+    "homeHeading": "可用兑换码",
+    "homeFull": "完整兑换码页",
+    "homeSeeAll": "查看全部可用码和归档 →",
+    "homeHowTo": "兑换方式 · 过期归档 →",
+    "homeNone": "当前没有可用码",
+    "homeNoneBody": "版本间隙列表可能为空。站点计划复查：",
+    "homeCadence": "小时节奏",
+    "checked": "兑换码已核对",
+    "noneLive": "暂无"
+  },
+  "home": {
+    "metaTitle": "Anime Vanguards 兑换码与配装指南（2026）",
+    "metaDescription": "可用 Anime Vanguards 兑换码（一键复制）、Update 14.x 投资梯队、特质、进化与活动决策。",
+    "title": "Anime Vanguards 兑换码、配装与指南",
+    "lead": "给 Roblox《Anime Vanguards》用的快速中文入口：先兑可用码，再决定养谁。官方数据在 Wiki 和 Changelog，我们把它收成一局里能做完的路径。",
+    "ctaCodes": "领取兑换码",
+    "ctaPity": "召唤保底",
+    "ctaPlay": "去 Roblox 玩",
+    "tools": "工具",
+    "toolsMeta": "先算抽卡，再把特质重置用在主力上。",
+    "rerollOdds": "特质重随概率（Monarch 保底）→",
+    "tierList": "投资梯队 →",
+    "startHere": "从这里开始",
+    "startLead": "大多数玩家一局里会做的三步。",
+    "allGuides": "全部指南",
+    "latestBlog": "最新博客",
+    "latestBlogLead": "短更新说明、刷资源选择、兑码后怎么花。",
+    "allPosts": "全部文章",
+    "why": "这个站做什么",
+    "whyCodes": "兑换码优先 — 单条复制或一键全复制，带等级要求",
+    "whyTier": "投资向梯队 — 告诉你该养谁，不是只堆名字",
+    "whyMobile": "手机上够快 — 对局里快速查一下",
+    "notAffiliated": "与 Roblox 或 Anime Vanguards 开发商无关。兑换码和版本会变，拿不准时以游戏内为准。",
+    "path": [
+      {
+        "step": "1",
+        "href": "/anime-vanguards/codes/",
+        "title": "先兑码",
+        "blurb": "一分钟内复制免费特质重置和货币。",
+        "id": "codes"
+      },
+      {
+        "step": "2",
+        "href": "/anime-vanguards/beginner-guide/",
+        "title": "搞清循环",
+        "blurb": "先刷什么，宝石别乱花。",
+        "id": "beginner"
+      },
+      {
+        "step": "3",
+        "href": "/anime-vanguards/tier-list/",
+        "title": "选投资",
+        "blurb": "谁值得特质、进化材料和卡池。",
+        "id": "tier-list"
+      }
+    ]
+  },
+  "codesAfter": [
+    "免费特质重置用在你会当主力的单位上 — 看配装榜、特质指南和重随概率。",
+    "码兑完还缺 RR？按刷取指南走。大厅里找 Mandra 重随。",
+    "新号走新手路径。隔了一段时间回来，用回归路径。",
+    "在打限时模式？先看活动商店顺序。"
+  ],
+  "related": {
+    "heading": "这局接下来看",
+    "codes": { "title": "可用兑换码", "blurb": "复制免费特质重置、宝石和活动奖励。", "tag": "最快" },
+    "beginner": { "title": "新手路径", "blurb": "前几小时：先刷什么，别浪费什么。", "tag": "萌新" },
+    "returning": { "title": "回归路径", "blurb": "隔一阵回来：先做这 10–30 分钟。", "tag": "回归" },
+    "tier-list": { "title": "单位梯队", "blurb": "宝石和特质重置该砸给谁。", "tag": "环境" },
+    "traits": { "title": "特质与重随", "blurb": "免费兑换码重置先用在哪。", "tag": "战力" },
+    "trait-odds": { "title": "重随概率计算器", "blurb": "Monarch 0.1% + 1500 保底，对照 Wiki。", "tag": "工具" },
+    "summon-pity": { "title": "召唤保底规划", "blurb": "宝石预算、硬保底、卡池成功率。", "tag": "工具" },
+    "farm-rr": { "title": "刷特质重置", "blurb": "Boss 店、Rift 店、挑战、兑换码。", "tag": "刷取" },
+    "lobby": { "title": "大厅指南", "blurb": "Mandra、强化、商店，点哪里。", "tag": "地图" },
+    "trading": { "title": "交易指南", "blurb": "50 级门槛、特质被抹、哪些 RR 能换。", "tag": "交易" },
+    "evolve": { "title": "进化优先级", "blurb": "先进化谁，再去刷一周材料。", "tag": "进度" },
+    "event": { "title": "活动手册", "blurb": "限时内容顺序：先拿免费奖励。", "tag": "限时" },
+    "hub": { "title": "游戏入口", "blurb": "全部 Anime Vanguards 指南。", "tag": "入口" }
+  },
+  "hub": {
+    "heading": "按这局目标逛",
+    "lead": "先兑码，再投资，最后打限时。"
+  },
+  "blog": {
+    "metaTitle": "Anime Vanguards 博客 | 更新、兑换码与刷取",
+    "metaDescription": "短篇 Anime Vanguards 笔记：兑换码、活动、刷取路线、召唤规划和版本准备。",
+    "title": "Anime Vanguards 博客",
+    "lead": "版本、兑换码、刷取选择，以及让每一局更干净的小决策。",
+    "latest": "最新文章",
+    "latestBadge": "最新"
+  },
+  "legal": {
+    "aboutTitle": "关于",
+    "aboutDescription": "关于 AV Guides — Roblox Anime Vanguards 非官方指南。",
+    "privacyTitle": "隐私政策",
+    "privacyDescription": "AV Guides 隐私政策。",
+    "disclaimerTitle": "免责声明",
+    "disclaimerDescription": "AV Guides 免责声明 — 非官方 Anime Vanguards 粉丝内容。",
+    "contactTitle": "联系",
+    "contactDescription": "联系 AV Guides。"
+  },
+  "faq": {
+    "codes": [
+      {
+        "question": "Anime Vanguards 兑换码会过期吗？",
+        "answer": "会。活动和里程碑码窗口通常很短。尽快兑换，每次更新后再对一次本页。"
+      },
+      {
+        "question": "兑换码区分大小写吗？",
+        "answer": "通常区分。用复制按钮粘贴到游戏兑换栏，尽量不要手打。"
+      },
+      {
+        "question": "为什么兑换失败？",
+        "answer": "常见原因：已经兑过、过期、拼写错、等级不够（常见 10 或 30 级）、或服务器太旧。重进新服再试。"
+      },
+      {
+        "question": "新码一般先在哪发？",
+        "answer": "通常先是官方 Discord 公告，然后是 Wiki Codes。本站尽量对照 Wiki 同步——兑换失败时请再交叉核对。"
+      },
+      {
+        "question": "这份列表是官方的吗？",
+        "answer": "不是。这是非官方粉丝站。码来自开发组；完整历史也在官方 Wiki Codes 页。"
+      },
+      {
+        "question": "兑完码接下来做什么？",
+        "answer": "免费特质重置用在你会当主力的单位上（看配装榜和特质指南）。多余货币优先换限时活动商店里的战力，而不是外观。"
+      }
+    ]
+  },
+  "ads": {
+    "label": "广告",
+    "close": "关闭广告"
+  },
+  "version": {
+    "kicker": "当前版本重点",
+    "changelog": "更新日志",
+    "wikiHome": "Wiki 首页",
+    "hot": "本周优先",
+    "items": [
+      {
+        "href": "/anime-vanguards/codes/",
+        "title": "兑换码",
+        "blurb": "先拿免费重置，再花宝石",
+        "tag": "先做"
+      },
+      {
+        "href": "/anime-vanguards/summon-pity/",
+        "title": "召唤保底",
+        "blurb": "抽卡前先算宝石预算",
+        "tag": "工具"
+      },
+      {
+        "href": "/anime-vanguards/farm-trait-rerolls/",
+        "title": "刷特质重置",
+        "blurb": "本周前 3 + RR 现实检查",
+        "tag": "刷取"
+      },
+      {
+        "href": "/anime-vanguards/event/",
+        "title": "活动商店顺序",
+        "blurb": "先 RR 和战力，外观往后放",
+        "tag": "限时"
+      }
+    ]
+  }
+}

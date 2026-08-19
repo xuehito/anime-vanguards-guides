@@ -24,8 +24,8 @@ export function getNextUpdateDate(
   return new Date(base.getTime() + hours * 60 * 60 * 1000);
 }
 
-export function formatNextUpdateLabel(d: Date): string {
-  return d.toLocaleString('en-US', {
+export function formatNextUpdateLabel(d: Date, locale = 'en-US'): string {
+  return d.toLocaleString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -35,16 +35,20 @@ export function formatNextUpdateLabel(d: Date): string {
 }
 
 /** Compact badge text, e.g. "Next update Aug 8 · 12:00 AM" */
-export function formatNextUpdateBadge(d: Date): string {
-  const date = d.toLocaleDateString('en-US', {
+export function formatNextUpdateBadge(
+  d: Date,
+  locale = 'en-US',
+  prefix = 'Next update',
+): string {
+  const date = d.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
   });
-  const time = d.toLocaleTimeString('en-US', {
+  const time = d.toLocaleTimeString(locale, {
     hour: 'numeric',
     minute: '2-digit',
   });
-  return `Next update ${date} · ${time}`;
+  return `${prefix} ${date} · ${time}`;
 }
 
 export function isoFromNowPlusHours(hours: number = CODES_REFRESH_HOURS): string {

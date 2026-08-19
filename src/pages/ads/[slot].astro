@@ -1,0 +1,59 @@
+---
+/**
+ * Isolated Adsterra unit. Own window → own atOptions (do not merge into the app shell).
+ */
+import { AD_SLOTS, getAdKey, type AdSlotId } from '../../config/ads';
+
+export function getStaticPaths() {
+  return (Object.keys(AD_SLOTS) as AdSlotId[]).map((slot) => ({
+    params: { slot },
+  }));
+}
+
+const slot = Astro.params.slot as AdSlotId;
+const def = AD_SLOTS[slot];
+const key = getAdKey(slot);
+
+if (!def) {
+  return new Response('Unknown ad slot', { status: 404 });
+}
+
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>ad</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    {
+      key ? (
+        <script is:inline define:vars={{ key, width: def.width, height: def.height }}>
+          window.atOptions = {
+            key: key,
+            format: 'iframe',
+            height: height,
+            width: width,
+            params: {},
+          };
+          var s = document.createElement('script');
+          s.src = 'https://www.highperformanceformat.com/' + key + '/invoke.js';
+          document.body.appendChild(s);
+        </script>
+      ) : null
+    }
+  </body>
+</html>

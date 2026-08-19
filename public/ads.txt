@@ -1,0 +1,3 @@
+# ads.txt — authorized digital sellers
+# Add Adsterra / AdSense publisher lines after approval.
+# Learn more: https://iabtechlab.com/ads-txt/

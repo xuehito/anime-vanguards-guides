@@ -1,40 +1,47 @@
 ---
+import { getUi } from '../i18n/ui';
+import { localeFromPath, localizePath, stripLocalePrefix } from '../lib/url';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
 const path = Astro.url.pathname;
+const locale = localeFromPath(path);
+const ui = getUi(locale);
+const bare = stripLocalePrefix(path);
 
 const links = [
-  { href: '/anime-vanguards/codes/', label: 'Codes' },
-  { href: '/anime-vanguards/tier-list/', label: 'Tier' },
-  { href: '/anime-vanguards/summon-pity/', label: 'Pity' },
-  { href: '/anime-vanguards/trait-reroll-odds/', label: 'Rerolls' },
-  { href: '/blog/', label: 'Blog' },
-  { href: '/anime-vanguards/', label: 'More' },
+  { href: '/anime-vanguards/codes/', label: ui.nav.codes },
+  { href: '/anime-vanguards/tier-list/', label: ui.nav.tier },
+  { href: '/anime-vanguards/summon-pity/', label: ui.nav.pity },
+  { href: '/anime-vanguards/trait-reroll-odds/', label: ui.nav.rerolls },
+  { href: '/blog/', label: ui.nav.blog },
+  { href: '/anime-vanguards/', label: ui.nav.more },
 ];
 
 function isCurrent(href: string) {
   if (href === '/anime-vanguards/') {
     return (
-      path === '/anime-vanguards/' ||
-      path === '/anime-vanguards' ||
-      path.includes('/evolve') ||
-      path.includes('/event') ||
-      path.includes('/beginner') ||
-      path.includes('/returning') ||
-      path.includes('/traits/') ||
-      path.includes('/farm-') ||
-      path.includes('/lobby') ||
-      path.includes('/trading')
+      bare === '/anime-vanguards/' ||
+      bare === '/anime-vanguards' ||
+      bare.includes('/evolve') ||
+      bare.includes('/event') ||
+      bare.includes('/beginner') ||
+      bare.includes('/returning') ||
+      bare.includes('/traits/') ||
+      bare.includes('/farm-') ||
+      bare.includes('/lobby') ||
+      bare.includes('/trading')
     );
   }
   if (href === '/blog/') {
-    return path === '/blog/' || path.startsWith('/blog/');
+    return bare === '/blog/' || bare.startsWith('/blog/');
   }
-  return path === href || path.startsWith(href);
+  return bare === href || bare.startsWith(href);
 }
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="logo" href="/">AV <span>Guides</span></a>
+    <a class="logo" href={localizePath('/', locale)}>AV <span>Guides</span></a>
     <button
       type="button"
       class="nav-toggle"
@@ -42,17 +49,21 @@ function isCurrent(href: string) {
       aria-controls="site-nav"
       data-nav-toggle
     >
-      <span class="sr-only">Menu</span>
+      <span class="sr-only">{ui.nav.menu}</span>
       <span class="nav-toggle__bars" aria-hidden="true"></span>
     </button>
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       {
         links.map((l) => (
-          <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+          <a
+            href={localizePath(l.href, locale)}
+            aria-current={isCurrent(l.href) ? 'page' : undefined}
+          >
             {l.label}
           </a>
         ))
       }
+      <LanguageSwitcher locale={locale} />
     </nav>
   </div>
 </header>
@@ -83,7 +94,6 @@ function isCurrent(href: string) {
       if (e.key === 'Escape') setOpen(false);
     });
 
-    // Close when resizing back to desktop nav
     window.addEventListener('resize', () => {
       if (window.matchMedia('(min-width: 721px)').matches) setOpen(false);
     });

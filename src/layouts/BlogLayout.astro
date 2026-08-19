@@ -1,6 +1,9 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import { localeFromPath } from '../lib/url';
+import { LOCALE_BCP47 } from '../i18n/routing';
+import { getUi } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -14,14 +17,18 @@ interface Props {
 const { title, description, pubDate, updated, category = 'Guide Notes', tags = [] } =
   Astro.props;
 
-const publishedLabel = new Date(pubDate + 'T12:00:00').toLocaleDateString('en-US', {
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUi(locale);
+const dateLocale = LOCALE_BCP47[locale];
+
+const publishedLabel = new Date(pubDate + 'T12:00:00').toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 
 const updatedLabel = updated
-  ? new Date(updated + 'T12:00:00').toLocaleDateString('en-US', {
+  ? new Date(updated + 'T12:00:00').toLocaleDateString(dateLocale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -55,8 +62,12 @@ const articleLd = {
     <header class="blog-post__header">
       <p class="eyebrow">
         <span class="badge badge--accent">{category}</span>
-        <span class="badge">Published {publishedLabel}</span>
-        {updatedLabel && <span class="badge badge--trust">Updated {updatedLabel}</span>}
+        <span class="badge">{ui.shared.published} {publishedLabel}</span>
+        {updatedLabel && (
+          <span class="badge badge--trust">
+            {ui.shared.updated} {updatedLabel}
+          </span>
+        )}
       </p>
       <h1>{title}</h1>
       <p>{description}</p>

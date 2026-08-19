@@ -1,0 +1,249 @@
+{
+  "site": {
+    "name": "AV Guides",
+    "description": "Unofficial English Anime Vanguards guides: working codes, tier list, traits, evolve, and events.",
+    "tagline": "Fast codes + what to do next",
+    "legalNotice": "Unofficial fan resource for Roblox Anime Vanguards. Not affiliated with Roblox or the game developers.",
+    "unofficial": "Unofficial · EN",
+    "wikiSync": "Syncs from official Wiki"
+  },
+  "nav": {
+    "codes": "Codes",
+    "tier": "Tier",
+    "pity": "Pity",
+    "rerolls": "Rerolls",
+    "blog": "Blog",
+    "more": "More",
+    "menu": "Menu",
+    "home": "Home",
+    "language": "Language"
+  },
+  "footer": {
+    "about": "About",
+    "blog": "Blog",
+    "privacy": "Privacy",
+    "disclaimer": "Disclaimer",
+    "contact": "Contact",
+    "copyright": "Unofficial fan resource for Roblox Anime Vanguards. Not affiliated with Roblox or the game developers."
+  },
+  "shared": {
+    "lastChecked": "Last checked",
+    "nextUpdate": "Next update",
+    "updated": "Updated",
+    "published": "Published",
+    "readMore": "Read more",
+    "viewAll": "View all",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copiedAll": "All copied!",
+    "copiedToast": "Copied. Next: invest rewards wisely → open Tier list or Traits.",
+    "copiedAllToast": "codes copied (one per line). Redeem in-game, then check traits / tier list.",
+    "copyAll": "Copy all active",
+    "copyAllHint": "Tap Copy or grab every code at once",
+    "new": "NEW",
+    "englishFallback": "This page is shown in English. UI chrome is localized; article body still uses the English source until a translation is ready.",
+    "sources": "Sources (authoritative)",
+    "sourcesFoot": "Unofficial fan guides — we help you act (redeem, invest, path). Data & patch truth live on Wiki / Discord / Changelog."
+  },
+  "sources": {
+    "discord": "Official Discord",
+    "discordNote": "Codes drop first",
+    "wikiCodes": "Wiki Codes",
+    "wikiCodesNote": "Full archive",
+    "wikiTier": "Wiki Tier List",
+    "wikiTierNote": "Authority meta",
+    "changelog": "Official Changelog",
+    "changelogNote": "What shipped",
+    "wiki": "Official Wiki",
+    "wikiNote": "Unit data"
+  },
+  "codes": {
+    "activeHeading": "Active Anime Vanguards codes",
+    "activeIntro": "Tap Copy or Copy all active, then paste in-game. Codes are case-sensitive and often need Level 10 or 30.",
+    "activeCount": "active codes",
+    "noActive": "No active codes",
+    "noActiveListed": "No active codes listed right now",
+    "noActiveBody": "Lists often go empty between patch drops. Check these sources, then come back after the next announcement",
+    "plannedRecheck": "planned site re-check",
+    "afterLastSync": "h after last sync",
+    "discordFirst": "— codes usually drop here first",
+    "wikiFull": "— full archive & live list",
+    "archiveHint": "— recently expired codes so you do not re-try dead ones",
+    "afterRedeem": "After you redeem",
+    "trustLine": "Fast redeem list · Cross-check Wiki/Discord · Unofficial fan guide · Re-check every",
+    "hours": "h",
+    "colCode": "Code",
+    "colRewards": "Rewards",
+    "colReq": "Req.",
+    "colExpires": "Expires",
+    "archiveHeading": "Archived by update",
+    "archiveIntro": "Expired or historical codes. Check the Expires column so you know when a code died — not for re-redeeming.",
+    "expiredHeading": "Expired codes",
+    "expiredIntro": "These no longer work. Listed so you can avoid wasting time.",
+    "empty": "No codes listed.",
+    "homeHeading": "Active codes",
+    "homeFull": "Full codes page",
+    "homeSeeAll": "See all active codes & archive →",
+    "homeHowTo": "How to redeem · expired archive →",
+    "homeNone": "No active codes right now",
+    "homeNoneBody": "Between patch drops the live list can be empty. Planned site re-check:",
+    "homeCadence": "h cadence",
+    "checked": "Codes checked",
+    "noneLive": "None live"
+  },
+  "home": {
+    "metaTitle": "Anime Vanguards Codes & Tier List (2026) | Free Rewards Guide",
+    "metaDescription": "Working Anime Vanguards codes with copy buttons, Update 14.x unit tier list, traits, evolve, and event guides for Roblox.",
+    "title": "Anime Vanguards Codes, Tier List & Guides",
+    "lead": "Fast English hub for Anime Vanguards on Roblox. Redeem working codes, see who to invest in, and start strong between matches. Official data lives on the Wiki and Changelog — we turn it into a session path.",
+    "ctaCodes": "Get free codes",
+    "ctaPity": "Summon pity",
+    "ctaPlay": "Play on Roblox",
+    "tools": "Tools",
+    "toolsMeta": "Plan pulls, then spend Trait Rerolls on mains only.",
+    "rerollOdds": "Trait reroll odds (Monarch pity) →",
+    "tierList": "Investment tier list →",
+    "startHere": "Start here",
+    "startLead": "Three steps most players take in one session.",
+    "allGuides": "All guides",
+    "latestBlog": "Latest blog",
+    "latestBlogLead": "Short patch notes, farming choices, and code-spending reminders.",
+    "allPosts": "All posts",
+    "why": "Why this site",
+    "whyCodes": "Codes first — copy one or copy all, with level requirements",
+    "whyTier": "Investment-focused tier list — who to feed, not just a name dump",
+    "whyMobile": "Fast on mobile — built for quick checks between matches",
+    "notAffiliated": "Not affiliated with Roblox or Anime Vanguards developers. Codes and meta change often — verify in-game when in doubt.",
+    "path": [
+      {
+        "step": "1",
+        "href": "/anime-vanguards/codes/",
+        "title": "Grab codes",
+        "blurb": "Copy free Trait Rerolls and currency in under a minute.",
+        "id": "codes"
+      },
+      {
+        "step": "2",
+        "href": "/anime-vanguards/beginner-guide/",
+        "title": "Learn the loop",
+        "blurb": "What to farm first — and what not to waste gems on.",
+        "id": "beginner"
+      },
+      {
+        "step": "3",
+        "href": "/anime-vanguards/tier-list/",
+        "title": "Pick investments",
+        "blurb": "Who is worth Traits, evolution mats, and banners.",
+        "id": "tier-list"
+      }
+    ]
+  },
+  "codesAfter": [
+    "Put free Trait Rerolls on a unit you will actually main — see the tier list, traits guide, and reroll odds.",
+    "Need more RR after codes? Follow the farm guide. Reroll at Mandra in the lobby.",
+    "New account? Follow the beginner path. Back after a break? Use the returning path.",
+    "Playing a limited mode? Read the event shop order."
+  ],
+  "related": {
+    "heading": "Continue your session",
+    "codes": { "title": "Working codes", "blurb": "Copy free Trait Rerolls, Gems, and event rewards.", "tag": "Fast" },
+    "beginner": { "title": "Beginner path", "blurb": "First hours: what to farm, what not to waste.", "tag": "New players" },
+    "returning": { "title": "Returning player path", "blurb": "Back after a break: first 10–30 minutes.", "tag": "Comeback" },
+    "tier-list": { "title": "Unit tier list", "blurb": "Who to invest gems and Trait Rerolls into.", "tag": "Meta" },
+    "traits": { "title": "Traits & rerolls", "blurb": "Where free code rerolls should go first.", "tag": "Power" },
+    "trait-odds": { "title": "Reroll odds calculator", "blurb": "Monarch 0.1% + pity 1500 and other Wiki rates.", "tag": "Tools" },
+    "summon-pity": { "title": "Summon pity planner", "blurb": "Gem budget, hard pity, success chance for banners.", "tag": "Tools" },
+    "farm-rr": { "title": "Farm Trait Rerolls", "blurb": "Boss shop, Rift shop, challenges, codes.", "tag": "Farm" },
+    "lobby": { "title": "Lobby guide", "blurb": "Mandra, upgrades, shops, where to click.", "tag": "Map" },
+    "trading": { "title": "Trading guide", "blurb": "Level 50, traits removed, which RR trade.", "tag": "Trade" },
+    "evolve": { "title": "Evolution priority", "blurb": "Who to evolve before you farm for a week.", "tag": "Progress" },
+    "event": { "title": "Event playbook", "blurb": "Limited content order: free rewards first.", "tag": "Limited" },
+    "hub": { "title": "Game hub", "blurb": "All Anime Vanguards guides in one place.", "tag": "Hub" }
+  },
+  "hub": {
+    "heading": "Browse by session goal",
+    "lead": "Pick a path — codes first, then invest, then limited modes."
+  },
+  "blog": {
+    "metaTitle": "Anime Vanguards Blog | Patch Notes, Codes & Farming Tips",
+    "metaDescription": "Short Anime Vanguards blog notes for codes, events, farming routes, summon planning, and patch prep.",
+    "title": "Anime Vanguards Blog",
+    "lead": "Short notes for patches, codes, farming choices, and the small decisions that make each session cleaner.",
+    "latest": "Latest posts",
+    "latestBadge": "Latest"
+  },
+  "legal": {
+    "aboutTitle": "About",
+    "aboutDescription": "About AV Guides — unofficial guides for Roblox Anime Vanguards.",
+    "privacyTitle": "Privacy Policy",
+    "privacyDescription": "Privacy policy for AV Guides.",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimerDescription": "Disclaimer for AV Guides — unofficial Anime Vanguards fan content.",
+    "contactTitle": "Contact",
+    "contactDescription": "Contact AV Guides."
+  },
+  "faq": {
+    "codes": [
+      {
+        "question": "Do Anime Vanguards codes expire?",
+        "answer": "Yes. Most event and milestone codes expire after a short window. Redeem as soon as you can and re-check this list after each update."
+      },
+      {
+        "question": "Are Anime Vanguards codes case-sensitive?",
+        "answer": "Usually yes. Use the Copy button and paste exactly into the in-game Codes panel — do not retype by hand if you can avoid it."
+      },
+      {
+        "question": "Why doesn’t an Anime Vanguards code work?",
+        "answer": "Common reasons: already redeemed, expired, wrong spelling, level requirement not met (often Level 10 or 30), or an old server. Rejoin a fresh server and try again."
+      },
+      {
+        "question": "Where do new codes drop first?",
+        "answer": "Usually official Discord announcements, then Wiki Codes. This site syncs from the Wiki when possible — always cross-check if a redeem fails."
+      },
+      {
+        "question": "Is this codes list official?",
+        "answer": "No. This is an unofficial fan site. Codes originate from the developers; full archives also live on the official Wiki Codes page."
+      },
+      {
+        "question": "What should I do after redeeming codes?",
+        "answer": "Spend free Trait Rerolls on a unit you will main (see the tier list and traits guide). Extra currency can go into limited event shops before cosmetics."
+      }
+    ]
+  },
+  "ads": {
+    "label": "Advertisement",
+    "close": "Close ad"
+  },
+  "version": {
+    "kicker": "Current patch focus",
+    "changelog": "Changelog",
+    "wikiHome": "Wiki home",
+    "hot": "Hot this week",
+    "items": [
+      {
+        "href": "/anime-vanguards/codes/",
+        "title": "Redeem codes",
+        "blurb": "Free rerolls before you spend gems",
+        "tag": "Do first"
+      },
+      {
+        "href": "/anime-vanguards/summon-pity/",
+        "title": "Summon pity",
+        "blurb": "Gem budget before you pull",
+        "tag": "Tools"
+      },
+      {
+        "href": "/anime-vanguards/farm-trait-rerolls/",
+        "title": "Farm Trait Rerolls",
+        "blurb": "Top 3 + RR reality check",
+        "tag": "Farm"
+      },
+      {
+        "href": "/anime-vanguards/event/",
+        "title": "Event shop order",
+        "blurb": "RR and power before cosmetics",
+        "tag": "Limited"
+      }
+    ]
+  }
+}

@@ -2,49 +2,53 @@
 /**
  * Authority sources — learn from official wiki/site, stay the decision layer.
  */
+import { getUi } from '../i18n/ui';
+import { localeFromPath } from '../lib/url';
+
 interface Props {
   /** Highlight context: codes | tier | general */
   context?: 'codes' | 'tier' | 'general';
 }
 
 const { context = 'general' } = Astro.props;
+const ui = getUi(localeFromPath(Astro.url.pathname));
 
 const links = [
   {
     href: 'https://discord.com/invite/animevanguards',
-    label: 'Official Discord',
-    note: 'Codes drop first',
+    label: ui.sources.discord,
+    note: ui.sources.discordNote,
     show: true,
   },
   {
     href: 'https://wiki.vanguards.gg/Codes',
-    label: 'Wiki Codes',
-    note: 'Full archive',
+    label: ui.sources.wikiCodes,
+    note: ui.sources.wikiCodesNote,
     show: context === 'codes' || context === 'general',
   },
   {
     href: 'https://wiki.vanguards.gg/Tier_List',
-    label: 'Wiki Tier List',
-    note: 'Authority meta',
+    label: ui.sources.wikiTier,
+    note: ui.sources.wikiTierNote,
     show: context === 'tier' || context === 'general',
   },
   {
     href: 'https://vanguards.gg/changelog',
-    label: 'Official Changelog',
-    note: 'What shipped',
+    label: ui.sources.changelog,
+    note: ui.sources.changelogNote,
     show: true,
   },
   {
     href: 'https://wiki.vanguards.gg/Anime_Vanguards_Wiki',
-    label: 'Official Wiki',
-    note: 'Unit data',
+    label: ui.sources.wiki,
+    note: ui.sources.wikiNote,
     show: context === 'general',
   },
 ].filter((l) => l.show);
 ---
 
-<aside class="source-strip" aria-label="Official sources">
-  <p class="source-strip__label">Sources (authoritative)</p>
+<aside class="source-strip" aria-label={ui.shared.sources}>
+  <p class="source-strip__label">{ui.shared.sources}</p>
   <ul class="source-strip__list">
     {
       links.map((l) => (
@@ -58,7 +62,6 @@ const links = [
     }
   </ul>
   <p class="source-strip__foot">
-    Unofficial fan guides — we help you <strong>act</strong> (redeem, invest, path). Data &amp; patch
-    truth live on Wiki / Discord / Changelog.
+    {ui.shared.sourcesFoot}
   </p>
 </aside>

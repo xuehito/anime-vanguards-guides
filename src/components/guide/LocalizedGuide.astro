@@ -1,0 +1,63 @@
+---
+import { getEntry, render } from 'astro:content';
+import GuideLayout from '../../layouts/GuideLayout.astro';
+import HubCategories from '../HubCategories.astro';
+import SummonPityCalculator from '../SummonPityCalculator.astro';
+import TopUnits from '../TopUnits.astro';
+import RerollCalculator from '../RerollCalculator.astro';
+import { defaultLocale, type Locale } from '../../i18n/routing';
+import { guideBySlug } from '../../lib/guides';
+
+interface Props {
+  slug: string;
+  locale: Locale;
+}
+
+const { slug, locale } = Astro.props;
+const def = guideBySlug(slug);
+if (!def) {
+  throw new Error(`Unknown guide slug: ${slug}`);
+}
+
+const entry = await getEntry('guides', def.contentId);
+if (!entry) throw new Error(`Missing content: ${def.contentId}`);
+const { Content } = await render(entry);
+const {
+  title,
+  description,
+  updated,
+  nextUpdate,
+  type,
+  patch,
+  activeCodes,
+  expiredCodes,
+  archivedByUpdate,
+} = entry.data;
+
+const extras = def.extras ?? [];
+const showFallbackNotice = locale !== defaultLocale && type !== 'codes';
+---
+
+<GuideLayout
+  title={title}
+  description={description}
+  updated={updated}
+  nextUpdate={nextUpdate}
+  type={type}
+  patch={patch}
+  activeCodes={activeCodes}
+  expiredCodes={expiredCodes}
+  archivedByUpdate={archivedByUpdate}
+  showFallbackNotice={showFallbackNotice}
+>
+  {extras.includes('hub') && (
+    <>
+      <HubCategories />
+      <SummonPityCalculator compact id="hub-summon-pity" />
+    </>
+  )}
+  {extras.includes('top-units') && <TopUnits />}
+  {extras.includes('summon-pity') && <SummonPityCalculator />}
+  {extras.includes('reroll') && <RerollCalculator />}
+  {type !== 'codes' && <Content />}
+</GuideLayout>
