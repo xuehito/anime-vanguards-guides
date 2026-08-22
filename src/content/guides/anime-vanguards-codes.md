@@ -2,8 +2,8 @@
 title: "Anime Vanguards Codes (August 2026) — Working + Copy"
 description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
-updated: "2026-08-18"
-nextUpdate: "2026-08-19T02:30:00.000Z"
+updated: "2026-08-22"
+nextUpdate: "2026-08-23T12:21:49.998Z"
 type: codes
 order: 2
 patch: "Update 14.5"
@@ -13,17 +13,14 @@ activeCodes:
     requirement: "Level 30"
     expires: "Aug 23, 2026"
     expiresAt: "2026-08-23"
-    new: true
   - code: "2BVisits"
     rewards: "200 Trait Rerolls, 200 Memoria Shards"
     requirement: "Level 30"
     expires: "Aug 23, 2026"
     expiresAt: "2026-08-23"
-    new: true
   - code: "Prepare"
-    rewards: "1 Red Key"
+    rewards: "Red Key 1 To obtain the Red Key, you must complete the Ant Island Dungeon . It has a 10% chance to drop. A crimson-stain"
     requirement: "Level 30"
-    new: true
 archivedByUpdate:
   - update: "Update 14.5 (25th Hour)"
     codes:
