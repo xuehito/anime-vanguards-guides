@@ -1,30 +1,47 @@
 ---
-title: "Anime Vanguards Codes (August 2026) — Working + Copy"
+title: "Anime Vanguards Codes (September 2026) — Working + Copy"
 description: "Working Anime Vanguards codes with one-tap copy and copy-all. Free Trait Rerolls, Gems, Memoria Shards. Updated regularly."
 label: "Codes"
-updated: "2026-08-18"
-nextUpdate: "2026-08-19T02:30:00.000Z"
+updated: "2026-09-04"
+nextUpdate: "2026-09-05T15:30:47.575Z"
 type: codes
 order: 2
 patch: "Update 14.5"
 activeCodes:
-  - code: "Miniupdate1"
-    rewards: "50 Trait Rerolls, 50 Memoria Shards"
+  - code: "MiniUpd2"
+    rewards: "200 Trait Rerolls, 50,000 Gems"
     requirement: "Level 30"
-    expires: "Aug 23, 2026"
-    expiresAt: "2026-08-23"
+    expires: "Sep 12, 2026"
+    expiresAt: "2026-09-12"
     new: true
-  - code: "2BVisits"
-    rewards: "200 Trait Rerolls, 200 Memoria Shards"
+  - code: "Wrath"
+    rewards: "200 Memoria Shards, 50,000 Gems"
     requirement: "Level 30"
-    expires: "Aug 23, 2026"
-    expiresAt: "2026-08-23"
+    expires: "Sep 12, 2026"
+    expiresAt: "2026-09-12"
+    new: true
+  - code: "Retribution"
+    rewards: "20,000 Gems, 50 Trait Rerolls, 50 Memoria Shards"
+    requirement: "Level 10"
+    expires: "Sep 12, 2026"
+    expiresAt: "2026-09-12"
     new: true
   - code: "Prepare"
-    rewards: "1 Red Key"
+    rewards: "Red Key 1 To obtain the Red Key, you must complete the Ant Island Dungeon . It has a 10% chance to drop. A crimson-stain"
     requirement: "Level 30"
-    new: true
 archivedByUpdate:
+  - update: "Auto-archived 2026-09-04 (Update 14.5)"
+    codes:
+      - code: "Miniupdate1"
+        rewards: "50 Trait Rerolls, 50 Memoria Shards"
+        requirement: "Level 30"
+        expires: "Aug 23, 2026"
+        expiresAt: "2026-08-23"
+      - code: "2BVisits"
+        rewards: "200 Trait Rerolls, 200 Memoria Shards"
+        requirement: "Level 30"
+        expires: "Aug 23, 2026"
+        expiresAt: "2026-08-23"
   - update: "Update 14.5 (25th Hour)"
     codes:
       - code: "1DayDelay"
